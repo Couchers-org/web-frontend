@@ -1,7 +1,7 @@
 # https://nextjs.org/docs/deployment#docker-image
 
 # Install dependencies only when needed
-FROM node:14.19.0-alpine 
+FROM node:14.19.0-alpine
 
 # https://github.com/yarnpkg/yarn/issues/8242
 RUN yarn config set network-timeout 300000
@@ -14,6 +14,7 @@ RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
 COPY . .
+RUN rm .env.local || true
 ARG environment=production
 ARG version
 COPY .env.${environment} .env.production
