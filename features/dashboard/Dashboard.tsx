@@ -14,8 +14,8 @@ import { DASHBOARD, GLOBAL } from "i18n/namespaces";
 import { blogRoute } from "routes";
 
 import CommunitiesSection from "./CommunitiesSection";
-import CoverBlock from "./CoverBlock/CoverBlock";
 import DashboardUserProfileSummary from "./DashboardUserProfileSummary";
+import Hero from "./Hero";
 import MyEvents from "./MyEvents";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <CoverBlock />
+      <Hero />
 
       {/* this view uses a container, instead of it coming from the route layout,
         because the cover block is full viewport width */}
