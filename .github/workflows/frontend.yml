@@ -87,6 +87,5 @@ jobs:
       - uses: ./.github/actions/setup-env
       - uses: ./.github/actions/helm-deploy
         with:
-          module-name: frontend
           environment-slug: ${{ needs.set-env.outputs.environment_slug }}
           environment-name: ${{ needs.set-env.outputs.environment_name }}
