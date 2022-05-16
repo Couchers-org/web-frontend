@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/generate-protos
-        run: |
+      - run: |
           yarn install
           yarn test-ci
 
@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/generate-protos
-        run: |
+      - run: |
           yarn install
           yarn prettier --check *
 
@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/generate-protos
-        run: |
+      - run: |
           yarn install
           yarn build-storybook
 
