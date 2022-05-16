@@ -36,8 +36,8 @@ runs:
         helm dependency update || true
 
         echo "Helm diff..."
-        helm diff upgrade --allow-unreleased --namespace $K8S_NAMESPACE $HELM_UPDIFF_EXTRA_ARGS ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS
+        helm diff upgrade --allow-unreleased --namespace $K8S_NAMESPACE $HELM_UPDIFF_EXTRA_ARGS $CURRENT_HELM_CHART ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS
 
         # Timeout argument is only for the current implementation of the frontend container which builds the nextjs app before running
         echo "Helm upgrade..."
-        helm upgrade --install --atomic --timeout 600s --namespace $K8S_NAMESPACE ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS
+        helm upgrade --install --atomic --timeout 600s --namespace $K8S_NAMESPACE $CURRENT_HELM_CHART ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS
