@@ -3,4 +3,3 @@ runs:
   steps:
     - run: ./generate_protos.sh
       shell: bash
-      working-directory: app
