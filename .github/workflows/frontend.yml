@@ -58,7 +58,7 @@ jobs:
 
   deploy-dev:
     runs-on: [self-hosted, master]
-    needs: release
+    needs: [test-web, test-web-prettier, test-storybook]
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-env
