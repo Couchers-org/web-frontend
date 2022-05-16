@@ -8,7 +8,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: ./.github/actions/pre-tasks
+    - uses: ./.github/actions/setup-env
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1

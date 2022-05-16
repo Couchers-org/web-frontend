@@ -1,9 +1,6 @@
-# Anything that is required before most other tasks for couchers.
-
 runs:
   using: 'composite'
   steps:
-    - uses: ./.github/actions/setup-env
     - run: ./generate_protos.sh
       shell: bash
       working-directory: app

@@ -1,7 +1,11 @@
 # Deploys a helm chart
 
 inputs:
-  environment:
+  environment-slug:
+    required: true
+  envionment-name:
+    required: true
+  environment-url:
     required: true
   module-name:
     required: true
@@ -9,16 +13,22 @@ inputs:
 
 runs:
   using: 'composite'
+
+  environment:
+    name: ${{ inputs.environment-name }}
+    url: ${{ inputs.environment-url }}
+
   steps:
-    - uses: ./.github/actions/pre-tasks
+    - uses: ./.github/actions/generate-protos
+    - uses: ./.github/actions/setup-env
     - shell: bash
       run: |
         # Setup
         cd deployment
 
         # Defining env vars
-        export K8S_NAMESPACE=${{ inputs.environment }}
-        export CURRENT_HELM_CHART=${{ inputs.module-name }}
+        export K8S_NAMESPACE=${{ inputs.environment-name }}
+        export CURRENT_HELM_CHART=frontend
 
         # Creating namespace if necessary
         kubectl create namespace $K8S_NAMESPACE || true
@@ -34,8 +44,8 @@ runs:
         helm dependency update $CURRENT_HELM_CHART || true
 
         echo "Helm diff..."
-        helm diff upgrade --allow-unreleased --namespace $K8S_NAMESPACE $HELM_UPDIFF_EXTRA_ARGS $CURRENT_HELM_CHART ./$CURRENT_HELM_CHART -f $CURRENT_HELM_CHART/values.yaml -f $CURRENT_HELM_CHART/values-$K8S_NAMESPACE.yaml $HELM_EXTRA_ARGS
+        helm diff upgrade --allow-unreleased --namespace $K8S_NAMESPACE $HELM_UPDIFF_EXTRA_ARGS $CURRENT_HELM_CHART ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS
 
         # Timeout argument is only for the current implementation of the frontend container which builds the nextjs app before running
         echo "Helm upgrade..."
-        helm upgrade --install --atomic --timeout 600s --namespace $K8S_NAMESPACE $CURRENT_HELM_CHART ./$CURRENT_HELM_CHART -f $CURRENT_HELM_CHART/values.yaml -f $CURRENT_HELM_CHART/values-$K8S_NAMESPACE.yaml $HELM_EXTRA_ARGS
+        helm upgrade --install --atomic --timeout 600s --namespace $K8S_NAMESPACE $CURRENT_HELM_CHART ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS

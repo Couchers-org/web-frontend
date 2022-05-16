@@ -2,12 +2,9 @@ name: Frontend CI
 
 on:
   push:
-    paths:
-      - app/proto/**
-      - app/web/**
-      - deployment/frontend/**
-      - .github/workflows/frontend.yml
-      - .github/actions/**
+    branches-ignore:
+      - master
+      - master-hotfix
 
 defaults:
   run:
@@ -29,7 +26,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/pre-tasks
+      - uses: ./.github/actions/generate-protos
       - working-directory: app/web
         run: |
           yarn install
@@ -40,7 +37,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/pre-tasks
+      - uses: ./.github/actions/generate-protos
       - working-directory: app/web
         run: |
           yarn install
@@ -51,22 +48,11 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/pre-tasks
+      - uses: ./.github/actions/generate-protos
       - working-directory: app/web
         run: |
           yarn install
           yarn build-storybook
-
-
-
-  release:
-    runs-on: [self-hosted, master]
-    needs: [test-web, test-web-prettier, test-storybook]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/retag-release-ecr
-        with:
-          module-name: web
 
 
   deploy-dev:
@@ -74,17 +60,10 @@ jobs:
     needs: release
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup-env
       - uses: ./.github/actions/helm-deploy
         with:
           module-name: frontend
-          environment: dev
-
-  deploy-staging:
-    runs-on: [self-hosted, master]
-    needs: release
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/helm-deploy
-        with:
-          module-name: frontend
-          environment: staging
+          environment-slug: dev
+          environment-name: ${{ env.ENV_NAME }}
+          environment-url: ${{ env.ENV_URL }}
