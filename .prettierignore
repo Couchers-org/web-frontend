@@ -1,4 +1,5 @@
 proto/
+proto_src/
 /markdown/
 node_modules
 **/locales/*.json
@@ -12,3 +13,4 @@ ci-build-protos.sh
 yarn.lock
 Dockerfile
 generate_protos.sh
+deployment/
