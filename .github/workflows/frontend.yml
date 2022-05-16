@@ -12,56 +12,81 @@ defaults:
 
 jobs:
 
-  build:
+  # build:
+  #   runs-on: [self-hosted, master]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/build-push-ecr
+  #       with:
+  #         module-name: frontend
+  #         src-path: ./
+  #
+  #
+  # test-web:
+  #   runs-on: [self-hosted, master]
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/generate-protos
+  #     - run: |
+  #         yarn install
+  #         yarn test-ci
+  #
+  # test-web-prettier:
+  #   runs-on: [self-hosted, master]
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/generate-protos
+  #     - run: |
+  #         yarn install
+  #         yarn prettier --check *
+  #
+  # test-storybook:
+  #   runs-on: [self-hosted, master]
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/generate-protos
+  #     - run: |
+  #         yarn install
+  #         yarn build-storybook
+
+  set-env:
     runs-on: [self-hosted, master]
+    needs: [test-web, test-web-prettier, test-storybook]
+    outputs:
+      environment_name: ${{ steps.set-envs.outputs.envname }}
+      environment_url: ${{ steps.set-envs.outputs.envurl }}
+      environment_slug: "dev"
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-push-ecr
+      - uses: FranzDiebold/github-env-vars-action@v2
+      # Figure out the namespace and environment name, which should be up to 63 chars in length for Kubernetes
+      - uses: web3j/substr-action@v1.2
+        id: substring-env-name
         with:
-          module-name: frontend
-          src-path: ./
-
-
-  test-web:
-    runs-on: [self-hosted, master]
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/generate-protos
-      - run: |
-          yarn install
-          yarn test-ci
-
-  test-web-prettier:
-    runs-on: [self-hosted, master]
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/generate-protos
-      - run: |
-          yarn install
-          yarn prettier --check *
-
-  test-storybook:
-    runs-on: [self-hosted, master]
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/generate-protos
-      - run: |
-          yarn install
-          yarn build-storybook
+          value: "${{ env.CI_REPOSITORY_NAME }}-${{ env.CI_REF_NAME_SLUG }}"
+          start: '0'
+          length: '63'
+      - id: set-envs
+        run: |
+          # This will strip tailing dash characters, necessary because we can't have dash suffixed strings in Kubernetes
+          export STRIPPED_STRING=`echo "${{ steps.substring-env-name.outputs.result }}" | sed 's/-*$//g'`
+          echo "::set-output name=envname::$STRIPPED_STRING"
+          echo "::set-output name=envurl::https://${STRIPPED_STRING}-dev.rvillage.com"
 
 
   deploy-dev:
     runs-on: [self-hosted, master]
-    needs: [test-web, test-web-prettier, test-storybook]
+    needs: set-env
+    environment:
+      name: ${{ needs.set-env.outputs.environment_name }}
+      url: ${{ needs.set-env.outputs.environment_url }}
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-env
       - uses: ./.github/actions/helm-deploy
         with:
           module-name: frontend
-          environment-slug: dev
-          environment-name: ${{ env.ENV_NAME }}
-          environment-url: ${{ env.ENV_URL }}
+          environment-slug: ${{ needs.set-env.outputs.environment_slug }}
+          environment-name: ${{ needs.set-env.outputs.environment_url }}

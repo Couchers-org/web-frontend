@@ -5,18 +5,12 @@ inputs:
     required: true
   envionment-name:
     required: true
-  environment-url:
-    required: true
   module-name:
     required: true
 
 
 runs:
   using: 'composite'
-
-  environment:
-    name: ${{ inputs.environment-name }}
-    url: ${{ inputs.environment-url }}
 
   steps:
     - uses: ./.github/actions/generate-protos
