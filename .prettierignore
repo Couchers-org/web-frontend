@@ -10,3 +10,5 @@ ci-build-protos.sh
 *.Dockerfile
 *.log
 yarn.lock
+Dockerfile
+generate_protos.sh
