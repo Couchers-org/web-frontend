@@ -3,7 +3,7 @@
 inputs:
   environment-slug:
     required: true
-  envionment-name:
+  environment-name:
     required: true
   module-name:
     required: true

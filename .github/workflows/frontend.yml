@@ -89,4 +89,4 @@ jobs:
         with:
           module-name: frontend
           environment-slug: ${{ needs.set-env.outputs.environment_slug }}
-          environment-name: ${{ needs.set-env.outputs.environment_url }}
+          environment-name: ${{ needs.set-env.outputs.environment_name }}
