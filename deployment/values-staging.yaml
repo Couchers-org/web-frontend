@@ -1,9 +1,10 @@
 deployment:
   ingress:
     hosts:
-      - host: staging.couchers.dev 
+      - host: '{{ (include "namespace" .) }}.staging.couchers.dev'
         paths:
           - /
-      - host: next.couchershq.org
+      - host: '{{ (include "namespace" .) }}.next.couchershq.org'
         paths:
           - /
+envFile: .env.staging
