@@ -12,49 +12,49 @@ defaults:
 
 jobs:
 
-  # build:
-  #   runs-on: [self-hosted, master]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: ./.github/actions/build-push-ecr
-  #       with:
-  #         module-name: frontend
-  #         src-path: ./
-  #
-  #
-  # test-web:
-  #   runs-on: [self-hosted, master]
-  #   needs: build
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: ./.github/actions/generate-protos
-  #     - run: |
-  #         yarn install
-  #         yarn test-ci
-  #
-  # test-web-prettier:
-  #   runs-on: [self-hosted, master]
-  #   needs: build
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: ./.github/actions/generate-protos
-  #     - run: |
-  #         yarn install
-  #         yarn prettier --check *
-  #
-  # test-storybook:
-  #   runs-on: [self-hosted, master]
-  #   needs: build
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: ./.github/actions/generate-protos
-  #     - run: |
-  #         yarn install
-  #         yarn build-storybook
+  build:
+    runs-on: [self-hosted, master]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/build-push-ecr
+        with:
+          module-name: frontend
+          src-path: ./
+
+
+  test-web:
+    runs-on: [self-hosted, master]
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/generate-protos
+      - run: |
+          yarn install
+          yarn test-ci
+
+  test-web-prettier:
+    runs-on: [self-hosted, master]
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/generate-protos
+      - run: |
+          yarn install
+          yarn prettier --check *
+
+  test-storybook:
+    runs-on: [self-hosted, master]
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/generate-protos
+      - run: |
+          yarn install
+          yarn build-storybook
 
   set-env:
     runs-on: [self-hosted, master]
-    #needs: [test-web, test-web-prettier, test-storybook]
+    needs: [test-web, test-web-prettier, test-storybook]
     outputs:
       environment_name: ${{ steps.set-envs.outputs.envname }}
       environment_url: ${{ steps.set-envs.outputs.envurl }}
