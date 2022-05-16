@@ -1,7 +1,4 @@
 # Set up all of the CI env vars required for Couchers
-outputs:
-  environment_name: ${{ steps.set-envs.outputs.envname }}
-  environment_url: ${{ steps.set-envs.outputs.envurl }}
 runs:
   using: "composite"
   steps:
