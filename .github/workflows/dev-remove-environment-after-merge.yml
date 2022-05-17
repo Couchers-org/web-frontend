@@ -1,8 +1,4 @@
 name: Dev - After Merge Into Master, Cleanup
-​
-defaults:
-  run:
-    shell: bash
 
 #####################################
 # We only want to run this job if...
@@ -16,6 +12,10 @@ on:
     types: [closed]
     branches: [master]
 ​
+defaults:
+  run:
+    shell: bash
+
 jobs:
 ​
   # Our job to cleanup and remove via helm
