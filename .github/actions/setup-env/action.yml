@@ -17,5 +17,5 @@ runs:
         echo "SLUG=$CI_SHA" >> $GITHUB_ENV
         # This will strip tailing dash characters, necessary because we can't have dash suffixed strings in Kubernetes
         export STRIPPED_STRING=`echo "${{ steps.substring-env-name.outputs.result }}" | sed 's/-*$//g'`
-        echo "ENV_NAME=$STRIPPED_STRING >> $GITHUB_ENV"
-        echo "ENV_URL=https://${STRIPPED_STRING}.couchers.dev >> $GITHUB_ENV"
+        echo "ENV_NAME=$STRIPPED_STRING" >> $GITHUB_ENV
+        echo "ENV_URL=https://${STRIPPED_STRING}.couchers.dev" >> $GITHUB_ENV
