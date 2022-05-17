@@ -11,20 +11,20 @@ on:
   pull_request:
     types: [closed]
     branches: [master]
-​
+
 defaults:
   run:
     shell: bash
 
 jobs:
-​
+
   # Our job to cleanup and remove via helm
   cleanup-dev-environment:
     if: github.event.pull_request.merged == true
-​
+    
     # Use our local runner, for faster runs and docker layer caching
     runs-on: [self-hosted, master]
-​
+
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-env
@@ -32,13 +32,13 @@ jobs:
         run: |
           # Setup
           cd deployment
-​
+
           # Defining env vars
           export K8S_NAMESPACE=`echo "${{ env.ENV_NAME }}" | sed 's/-*$//g'`
           export CURRENT_HELM_CHART=frontend
-​
+
           echo "Change to our namespace..."
           kubens $K8S_NAMESPACE || true
-​
+
           echo "Uninstalling $CURRENT_HELM_CHART ..."
           helm --namespace $K8S_NAMESPACE uninstall $CURRENT_HELM_CHART
