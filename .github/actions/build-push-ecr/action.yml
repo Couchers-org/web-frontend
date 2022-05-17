@@ -17,7 +17,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: ./.github/actions/generate-protos
     - uses: ./.github/actions/setup-env
     # https://github.com/aws-actions/amazon-ecr-login
     - name: Login to Amazon ECR

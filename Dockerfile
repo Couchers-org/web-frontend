@@ -19,10 +19,6 @@ ARG environment=production
 ARG version
 COPY .env.${environment} .env.local
 ENV NEXT_PUBLIC_VERSION=$version
-RUN yarn build
-
-# Production image, copy all the files and run next
-ENV NODE_ENV production
 
 EXPOSE 3000
 ENV PORT 3000
@@ -32,4 +28,4 @@ ENV PORT 3000
 # Uncomment the following line in case you want to disable telemetry.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-CMD ["/bin/sh", "-c", "yarn build && yarn install --production --ignore-scripts --prefer-offline && node_modules/.bin/next start"]
+CMD ["/bin/sh", "-c", "node_modules/.bin/next dev"]
