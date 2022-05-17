@@ -40,4 +40,4 @@ runs:
 
         # Timeout argument is only for the current implementation of the frontend container which builds the nextjs app before running
         echo "Helm upgrade..."
-        helm upgrade --install --atomic --timeout 600s --namespace $K8S_NAMESPACE $CURRENT_HELM_CHART ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS
+        helm upgrade --install --atomic --namespace $K8S_NAMESPACE $CURRENT_HELM_CHART ./ -f values.yaml -f values-${{ inputs.environment-slug }}.yaml $HELM_EXTRA_ARGS

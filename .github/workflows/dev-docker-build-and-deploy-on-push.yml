@@ -1,4 +1,4 @@
-name: Frontend CI
+name: Dev - Deploy Frontend on Push
 
 on:
   push:
@@ -53,6 +53,10 @@ jobs:
   #         yarn install
   #         yarn build-storybook
 
+
+
+  # We need to use the deployment name and url in the 'environment' section of the deployment job below
+  # We need then as job outputs to workaround a limitation of github actions: https://github.com/actions/runner/issues/998
   set-env:
     runs-on: [self-hosted, master]
     needs: build # [test-web, test-web-prettier, test-storybook]
@@ -61,20 +65,11 @@ jobs:
       environment_url: ${{ steps.set-envs.outputs.envurl }}
       environment_slug: "dev"
     steps:
-      - uses: FranzDiebold/github-env-vars-action@v2
-      # Figure out the namespace and environment name, which should be up to 63 chars in length for Kubernetes
-      - uses: web3j/substr-action@v1.2
-        id: substring-env-name
-        with:
-          value: "${{ env.CI_REPOSITORY_NAME }}-${{ env.CI_REF_NAME_SLUG }}"
-          start: '0'
-          length: '63'
+      - uses: ./.github/actions/setup-env
       - id: set-envs
         run: |
-          # This will strip tailing dash characters, necessary because we can't have dash suffixed strings in Kubernetes
-          export STRIPPED_STRING=`echo "${{ steps.substring-env-name.outputs.result }}" | sed 's/-*$//g'`
-          echo "::set-output name=envname::$STRIPPED_STRING"
-          echo "::set-output name=envurl::https://${STRIPPED_STRING}-dev.rvillage.com"
+          echo "::set-output name=envname::${{env.ENV_NAME}}"
+          echo "::set-output name=envurl::${{env.ENV_URL}}"
 
 
   deploy-dev:
