@@ -65,6 +65,7 @@ jobs:
       environment_url: ${{ steps.set-envs.outputs.envurl }}
       environment_slug: "dev"
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-env
       - id: set-envs
         run: |
