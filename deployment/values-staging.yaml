@@ -1,10 +1,18 @@
 deployment:
   ingress:
     hosts:
-      - host: '{{ (include "namespace" .) }}.staging.couchers.dev'
+      - host: '{{ (include "namespace" .) }}.couchers.dev'
         paths:
           - /
-      - host: '{{ (include "namespace" .) }}.next.couchershq.org'
+
+  ingress_secondary:
+    enabled: true
+    name: app-frontend-staging-redirect
+    hosts:
+      - host: next.couchershq.org
         paths:
           - /
+    annotations:
+      nginx.ingress.kubernetes.io/permanent-redirect: https://staging.couchers.dev
+
 envFile: .env.staging

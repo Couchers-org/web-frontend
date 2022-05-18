@@ -1,7 +1,7 @@
 deployment:
   ingress:
     hosts:
-      - host: '{{ (include "namespace" .) }}.couchers.dev'
+      - host: couchers.dev
         paths:
           - /
 envFile: .env.development
