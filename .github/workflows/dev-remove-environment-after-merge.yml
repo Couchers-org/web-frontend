@@ -10,7 +10,8 @@ name: Dev - After Merge Into Master, Cleanup
 on:
   pull_request:
     types: [closed]
-    branches: [master]
+    branches: [ci_github_actions]
+    # branches: [master]
 
 defaults:
   run:
@@ -21,7 +22,7 @@ jobs:
   # Our job to cleanup and remove via helm
   cleanup-dev-environment:
     if: github.event.pull_request.merged == true
-    
+
     # Use our local runner, for faster runs and docker layer caching
     runs-on: [self-hosted, master]
 
