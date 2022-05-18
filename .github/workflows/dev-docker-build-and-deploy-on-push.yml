@@ -60,7 +60,7 @@ jobs:
   # We need then as job outputs to workaround a limitation of github actions: https://github.com/actions/runner/issues/998
   set-env:
     runs-on: [self-hosted, master]
-    needs: build # [test-web, test-web-prettier, test-storybook]
+    needs: [test-web, test-web-prettier, test-storybook]
     outputs:
       environment_name: ${{ steps.set-envs.outputs.envname }}
       environment_url: ${{ steps.set-envs.outputs.envurl }}
