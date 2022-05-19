@@ -12,8 +12,19 @@ defaults:
 
 jobs:
 
+  build:
+    runs-on: [self-hosted, master]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/generate-protos
+      - uses: ./.github/actions/build-push-ecr
+        with:
+          module-name: frontend
+          src-path: ./
+
   deploy-staging:
     runs-on: [self-hosted, master]
+    needs: build
     environment:
       name: staging
       url: next.couchershq.org
