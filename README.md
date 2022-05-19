@@ -103,4 +103,4 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `yarn storybook`
 
-Runs storybook, good for testing and developing components in isolation. 
+Runs storybook, good for testing and developing components in isolation.
