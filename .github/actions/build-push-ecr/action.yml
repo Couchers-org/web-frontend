@@ -31,9 +31,10 @@ runs:
         IMAGE_NAME=${INPUT_IMAGE_NAME:-$INPUT_MODULE_NAME} # Use image-name if it's supplied, otherwise use module-name as image name
         SRC_PATH=${INPUT_SRC_PATH:-$PATH_BASE$INPUT_MODULE_NAME} # Use src-path if it's supplied, otherwise use module-name as the folder
         REPO_IMAGE=${{ steps.login-ecr.outputs.registry }}/$IMAGE_NAME
+        DOCKER_BUILDKIT=1
         aws ecr create-repository --repository-name $IMAGE_NAME || true # Just let this fail if the repo already exists
         cd $SRC_PATH
         docker pull $REPO_IMAGE:latest || true
         docker pull $REPO_IMAGE:${{ env.SLUG }}  || true
-        docker build ${{ inputs.extra-build-args }} --build-arg version=${{ env.SLUG }} --cache-from $REPO_IMAGE:latest -t $REPO_IMAGE:${{ env.SLUG }} .
+        docker build ${{ inputs.extra-build-args }} --build-arg version=${{ env.SLUG }} --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $REPO_IMAGE:latest --cache-from $REPO_IMAGE:${{ env.SLUG }} -t $REPO_IMAGE:${{ env.SLUG }} .
         docker push $REPO_IMAGE:${{ env.SLUG }}
