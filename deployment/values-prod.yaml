@@ -13,4 +13,12 @@ deployment:
   autoscaling:
     enabled: true
 
+  resources:
+    limits:
+     cpu: 200m
+     memory: 256Mi
+    requests:
+     cpu: 100m
+     memory: 256Mi
+
 envFile: .env.production
