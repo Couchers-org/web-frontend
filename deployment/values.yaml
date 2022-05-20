@@ -51,11 +51,11 @@ deployment:
   #       Requests are "soft" limits and are what affects HPA (autoscaling) aggressiveness if HPA is enabled
   resources:
     limits:
-     cpu: 2000m
-     memory: 4096Mi
+     cpu: 1000m
+     memory: 3072Mi
     requests:
-     cpu: 500m
-     memory: 512Mi
+     cpu: 200m
+     memory: 3072Mi
 
   # Enable autoscaling (prod only usually, if needed)
   autoscaling:

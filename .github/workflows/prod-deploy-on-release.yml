@@ -1,9 +1,8 @@
-name: Staging - Deploy Frontend on Merge
+name: Prod - Deploy Frontend on Release
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [master]
+  release:
+    types: [published]
 
 defaults:
   run:
@@ -11,7 +10,7 @@ defaults:
 
 jobs:
 
-  build:
+  build-prod:
     runs-on: [self-hosted, master]
     steps:
       - uses: actions/checkout@v2
@@ -19,18 +18,20 @@ jobs:
       - uses: ./.github/actions/build-push-ecr
         with:
           module-name: frontend
+          extra-build-args: -f prod.Dockerfile
+          image-name: frontend-prod
           src-path: ./
 
-  deploy-staging:
+  deploy-prod:
     runs-on: [self-hosted, master]
-    needs: build
+    needs: build-prod
     environment:
-      name: staging
-      url: staging.couchers.dev
+      name: prod
+      url: couchers.org
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-env
       - uses: ./.github/actions/helm-deploy
         with:
-          environment-slug: staging
-          environment-name: staging
+          environment-slug: prod
+          environment-name: prod
