@@ -1,0 +1,16 @@
+deployment:
+  image:
+    repository: 694904428454.dkr.ecr.us-east-1.amazonaws.com/frontend-prod
+
+  ingress:
+    hosts:
+      - host: couchers.org
+        paths:
+          - /
+      - host: prod.couchers.org
+        paths:
+          - /
+  autoscaling:
+    enabled: true
+
+envFile: .env.production

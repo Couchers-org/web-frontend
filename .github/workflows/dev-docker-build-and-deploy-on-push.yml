@@ -23,6 +23,18 @@ jobs:
           module-name: frontend
           src-path: ./
 
+  build-prod:
+    runs-on: [self-hosted, master]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/generate-protos
+      - uses: ./.github/actions/build-push-ecr
+        with:
+          module-name: frontend
+          extra-build-args: -f prod.Dockerfile
+          image-name: frontend-prod
+          src-path: ./
+
 
   test-web:
     runs-on: [self-hosted, master]
