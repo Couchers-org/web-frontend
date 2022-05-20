@@ -3,8 +3,7 @@ name: Staging - Deploy Frontend on Merge
 on:
   pull_request:
     types: [closed]
-    branches: [ci_github_actions]
-    # branches: [master]
+    branches: [master]
 
 defaults:
   run:
