@@ -14,3 +14,4 @@ yarn.lock
 Dockerfile
 generate_protos.sh
 deployment/
+Makefile
