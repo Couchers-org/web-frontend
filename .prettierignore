@@ -15,3 +15,5 @@ Dockerfile
 generate_protos.sh
 deployment/
 Makefile
+README.md
+docker-compose.yaml
