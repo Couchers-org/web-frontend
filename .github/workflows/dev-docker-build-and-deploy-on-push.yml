@@ -61,7 +61,7 @@ jobs:
         run: |
           REPO_IMAGE_AND_TAG=${{ steps.login-ecr.outputs.registry }}/frontend:development-${{ env.SLUG }}-stage
           docker pull $REPO_IMAGE_AND_TAG
-          docker run $REPO_IMAGE_AND_TAG yarn prettier --check *
+          docker run $REPO_IMAGE_AND_TAG yarn prettier --check \*
 
   test-storybook:
     runs-on: [self-hosted, master]
