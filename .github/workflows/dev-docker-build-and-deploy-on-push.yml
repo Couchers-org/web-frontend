@@ -45,7 +45,9 @@ jobs:
           REPO_IMAGE=${{ steps.login-ecr.outputs.registry }}/frontend
           TEST_IMAGE_TAG=development-${{ env.SLUG }}-stage
           REPO_IMAGE_AND_TAG=$REPO_IMAGE:$TEST_IMAGE_TAG
+          echo "docker pull $REPO_IMAGE_AND_TAG"
           docker pull $REPO_IMAGE_AND_TAG
+          echo "docker run $REPO_IMAGE_AND_TAG yarn test-ci"
           docker run $REPO_IMAGE_AND_TAG yarn test-ci
 
 
