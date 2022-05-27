@@ -19,6 +19,7 @@ jobs:
       - uses: ./.github/actions/build-push-ecr
         with:
           module-name: frontend
+          extra-build-args: --build-arg BUILD_FOR_ENVIRONMENT=staging
           src-path: ./
 
   deploy-staging:

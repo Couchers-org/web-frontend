@@ -36,5 +36,6 @@ runs:
         cd $SRC_PATH
         docker pull $REPO_IMAGE:latest || true
         docker pull $REPO_IMAGE:${{ env.SLUG }}  || true
+        echo "Running: \n  docker build ${{ inputs.extra-build-args }} --build-arg version=${{ env.SLUG }} --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $REPO_IMAGE:latest --cache-from $REPO_IMAGE:${{ env.SLUG }} -t $REPO_IMAGE:${{ env.SLUG }} ."
         docker build ${{ inputs.extra-build-args }} --build-arg version=${{ env.SLUG }} --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $REPO_IMAGE:latest --cache-from $REPO_IMAGE:${{ env.SLUG }} -t $REPO_IMAGE:${{ env.SLUG }} .
         docker push $REPO_IMAGE:${{ env.SLUG }}
