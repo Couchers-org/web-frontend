@@ -10,14 +10,9 @@ inputs:
   extra-build-args:
     description: "Extra args passed to 'docker build'."
     required: false
-  image-name:
-    description: "Name to give the built image."
-    required: false
   src-path:
-    description: "Where to find the Dockerfile."
+    description: "What folder to be (generally to find the Dockerfile in) default is root of repo"
     required: false
-
-
 
 
 runs:
@@ -31,12 +26,9 @@ runs:
     - shell: bash
       run: |
         # Env var parsing
-        PATH_BASE=app/
         INPUT_SRC_PATH=${{ inputs.src-path }}
-        INPUT_MODULE_NAME=${{ inputs.module-name }}
-        INPUT_IMAGE_NAME=${{ inputs.image-name }}
-        IMAGE_NAME=${INPUT_IMAGE_NAME:-$INPUT_MODULE_NAME} # Use image-name if it's supplied, otherwise use module-name as image name
-        SRC_PATH=${INPUT_SRC_PATH:-$PATH_BASE$INPUT_MODULE_NAME} # Use src-path if it's supplied, otherwise use module-name as the folder
+        IMAGE_NAME=${{ inputs.module-name }}
+        SRC_PATH=${INPUT_SRC_PATH:-"./"}
         REPO_IMAGE=${{ steps.login-ecr.outputs.registry }}/$IMAGE_NAME
         DOCKER_BUILDKIT=1
         ENVIRONMENT=${{ inputs.build-for-environment }}

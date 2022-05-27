@@ -20,7 +20,6 @@ jobs:
         with:
           module-name: frontend
           build-for-environment: development
-          src-path: ./
 
   # build-prod:
   #   runs-on: [self-hosted, master]
@@ -38,10 +37,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-env
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
       - shell: bash
         run: |
+          REPO_IMAGE=${{ steps.login-ecr.outputs.registry }}/${{ inputs.module-name }}
           TEST_IMAGE_TAG=development-${{ env.SLUG }}-stage
-          docker run -ti $TEST_IMAGE_TAG yarn test-ci
+          REPO_IMAGE_AND_TAG=$REPO_IMAGE:$TEST_IMAGE_TAG
+          docker pull $REPO_IMAGE_AND_TAG
+          docker run $REPO_IMAGE_AND_TAG yarn test-ci
 
 
   # test-web-prettier:
