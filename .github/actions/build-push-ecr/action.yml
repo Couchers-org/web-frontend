@@ -40,13 +40,13 @@ runs:
         REPO_IMAGE=${{ steps.login-ecr.outputs.registry }}/$IMAGE_NAME
         DOCKER_BUILDKIT=1
         ENVIRONMENT=${{ inputs.build-for-environment }}
-        echo "ENVIRONMENT: $ENVIRONMENT"
+        # echo "ENVIRONMENT: $ENVIRONMENT"
         BRANCH_NAME=${{env.ENV_NAME}}
-        echo "BranchName: $BRANCH_NAME"
+        # echo "BranchName: $BRANCH_NAME"
         IMAGE_TAG=$ENVIRONMENT-${{ env.SLUG }}
-        echo "ImageTag: $IMAGE_TAG"
+        # echo "ImageTag: $IMAGE_TAG"
         STAGED_IMAGE_TAG=$ENVIRONMENT-`cat package.json | md5sum | awk '{ print $1 }'`
-        echo "StagedTag: $STAGED_IMAGE_TAG"
+        # echo "StagedTag: $STAGED_IMAGE_TAG"
 
         # Create repo if needed
         aws ecr create-repository --repository-name $IMAGE_NAME || true # Just let this fail if the repo already exists
@@ -60,19 +60,19 @@ runs:
         BUILD_ARGS="--build-arg BUILD_FOR_ENVIRONMENT=$ENVIRONMENT --build-arg IMAGE_TAG=$IMAGE_TAG --build-arg BUILDKIT_INLINE_CACHE=1"
 
         # Running stage1 build, cached based on the SHA sum of package.json
-        echo "Running: \n    docker build ${{ inputs.extra-build-args }} -f Dockerfile.stage $BUILD_ARGS $CACHE_FROM_ARGS -t $REPO_IMAGE:$STAGED_IMAGE_TAG ."
+        # echo "Running: \n    docker build ${{ inputs.extra-build-args }} -f Dockerfile.stage $BUILD_ARGS $CACHE_FROM_ARGS -t $REPO_IMAGE:$STAGED_IMAGE_TAG ."
         docker build ${{ inputs.extra-build-args }} -f Dockerfile.stage $BUILD_ARGS $CACHE_FROM_ARGS -t $REPO_IMAGE:$STAGED_IMAGE_TAG .
-        echo "Running: \n    docker push $REPO_IMAGE:$STAGED_IMAGE_TAG"
+        # echo "Running: \n    docker push $REPO_IMAGE:$STAGED_IMAGE_TAG"
         docker push $REPO_IMAGE:$STAGED_IMAGE_TAG
 
         # Also cache based on this branch name to help cache hits
         docker tag $REPO_IMAGE:$STAGED_IMAGE_TAG $REPO_IMAGE:$ENVIRONMENT-$BRANCH_NAME
-        echo "Running: \n    docker tag $REPO_IMAGE:$STAGED_IMAGE_TAG $REPO_IMAGE:$ENVIRONMENT-$BRANCH_NAME"
+        # echo "Running: \n    docker tag $REPO_IMAGE:$STAGED_IMAGE_TAG $REPO_IMAGE:$ENVIRONMENT-$BRANCH_NAME"
         docker push $REPO_IMAGE:$ENVIRONMENT-$BRANCH_NAME
-        echo "Running: \n    docker push $REPO_IMAGE:$ENVIRONMENT-$BRANCH_NAME"
+        # echo "Running: \n    docker push $REPO_IMAGE:$ENVIRONMENT-$BRANCH_NAME"
 
         # Finally, build our runner container
         docker build ${{ inputs.extra-build-args }} -f Dockerfile $BUILD_ARGS $CACHE_FROM_ARGS -t $REPO_IMAGE:$IMAGE_TAG .
-        echo "Running: \n    docker build ${{ inputs.extra-build-args }} -f Dockerfile $BUILD_ARGS $CACHE_FROM_ARGS -t $REPO_IMAGE:$IMAGE_TAG ."
+        # echo "Running: \n    docker build ${{ inputs.extra-build-args }} -f Dockerfile $BUILD_ARGS $CACHE_FROM_ARGS -t $REPO_IMAGE:$IMAGE_TAG ."
         docker push $REPO_IMAGE:$IMAGE_TAG
-        echo "Running: \n    docker push $REPO_IMAGE:$IMAGE_TAG"
+        # echo "Running: \n    docker push $REPO_IMAGE:$IMAGE_TAG"
