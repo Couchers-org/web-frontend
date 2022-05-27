@@ -12,7 +12,6 @@ runs:
   using: 'composite'
 
   steps:
-    - uses: ./.github/actions/generate-protos
     - uses: ./.github/actions/setup-env
     - shell: bash
       run: |
