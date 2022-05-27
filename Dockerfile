@@ -61,14 +61,14 @@ RUN apt-get -y update && \
     rm -rf /usr/local/share/.cache
 
 # Copy over needed files
+COPY . .
+
+# Copy built files
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/package.json ./package.json
+RUN rm .env.*
 COPY --from=builder /app/.env.local ./
-COPY --from=builder /app/next-i18next.config.js ./
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/i18n ./i18n
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
