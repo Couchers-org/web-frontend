@@ -1,0 +1,39 @@
+####################################################################
+# Multi-Stage Docker Image for Couchers Frontend with Next.js
+#
+# Note: This is intentionally the first half of the Dockerfile.
+#   This is used for caching purposes to speed up builds
+#
+#  Original Author: Farley
+####################################################################
+
+ARG BUILD_FOR_ENVIRONMENT=development
+ARG BUILD_IMAGE=node:14-buster
+ARG RUNTIME_IMAGE=node:14-slim
+
+###################################
+# First, using a NodeJS builder container build our frontend assets
+FROM $BUILD_IMAGE as builder
+
+# Setup
+WORKDIR /app
+# Next.js collects completely anonymous telemetry data about general usage, disable this
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Install deps for layer caching
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+# Now copy the source code and build when needed against the env type
+ARG BUILD_FOR_ENVIRONMENT
+COPY . .
+# And add our pre-compiled protos since we won't be updating our backend any more
+ADD http://couchers-dev-assets.s3.amazonaws.com/proto_may_27_2022.tar.gz /app/
+
+# Expand our protos into place, set the right env vars into place, then build our static assets
+RUN tar -xf proto_may_27_2022.tar.gz && \
+    rm -f proto_may_27_2022.tar.gz && \
+    cp .env.${BUILD_FOR_ENVIRONMENT} /tmp/saved-temporarily && \
+    rm .env.* && \
+    mv /tmp/saved-temporarily .env.local && \
+    yarn build

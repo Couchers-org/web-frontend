@@ -4,11 +4,12 @@
 # Taken bits for this Dockerfile from various places, for next.js from here
 #      See: https://www.koyeb.com/tutorials/how-to-dockerize-and-deploy-a-next-js-application-on-koyeb
 #
+# WARNING: If you change the first stage of this file, you must update Dockerfile.stage as well or things won't cache
+#
 #  Original Author: Farley
 ####################################################################
 
 ARG BUILD_FOR_ENVIRONMENT=development
-# ARG NODE_ENV=production
 ARG BUILD_IMAGE=node:14-buster
 ARG RUNTIME_IMAGE=node:14-slim
 
@@ -17,9 +18,9 @@ ARG RUNTIME_IMAGE=node:14-slim
 FROM $BUILD_IMAGE as builder
 
 # Setup
-# NOTE/TODO: OUR CODE CURRENTLY REQUIRES DEVELOPMENT PACKAGE INSTALLS, PLEASE FIX ME...
-# ARG NODE_ENV=development
 WORKDIR /app
+# Next.js collects completely anonymous telemetry data about general usage, disable this
+ENV NEXT_TELEMETRY_DISABLED 1
 
 # Install deps for layer caching
 COPY package.json yarn.lock ./
@@ -45,8 +46,9 @@ RUN tar -xf proto_may_27_2022.tar.gz && \
 FROM $RUNTIME_IMAGE as runner
 
 # Prepare / Setup / Defaults
-## ENV NODE_ENV=${NODE_ENV}
 WORKDIR /app
+# Next.js collects completely anonymous telemetry data about general usage, disable this
+ENV NEXT_TELEMETRY_DISABLED 1
 
 # Re-run and install only production/runtime dependencies
 COPY --from=builder /app/package.json ./
@@ -62,18 +64,16 @@ RUN apt-get -y update && \
 
 # Copy over needed files
 COPY . .
+RUN rm .env.*
 
 # Copy built files
-COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
-RUN rm .env.*
 COPY --from=builder /app/.env.local ./
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry.
-ENV NEXT_TELEMETRY_DISABLED 1
+# This allows next to tell us/users what version this is
+ARG IMAGE_TAG=unknown-or-local
+ENV NEXT_PUBLIC_VERSION=${IMAGE_TAG}
 
 EXPOSE 3000
 CMD ["yarn", "start"]
