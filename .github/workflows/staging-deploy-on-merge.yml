@@ -18,8 +18,7 @@ jobs:
       - uses: ./.github/actions/build-push-ecr
         with:
           module-name: frontend
-          extra-build-args: --build-arg BUILD_FOR_ENVIRONMENT=staging
-          src-path: ./
+          build-for-environment: staging
 
   deploy-staging:
     runs-on: [self-hosted, master]
@@ -34,3 +33,4 @@ jobs:
         with:
           environment-slug: staging
           environment-name: staging
+          image-tag: staging-${{ env.SLUG }}

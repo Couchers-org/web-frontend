@@ -17,9 +17,7 @@ jobs:
       - uses: ./.github/actions/build-push-ecr
         with:
           module-name: frontend
-          extra-build-args: --build-arg BUILD_FOR_ENVIRONMENT=production
-          image-name: frontend-prod
-          src-path: ./
+          build-for-environment: production
 
   deploy-prod:
     runs-on: [self-hosted, master]
@@ -34,6 +32,7 @@ jobs:
         with:
           environment-slug: prod
           environment-name: prod
+          image-tag: production-${{ env.SLUG }}
 
   notify-slack:
     runs-on: [self-hosted, master]
