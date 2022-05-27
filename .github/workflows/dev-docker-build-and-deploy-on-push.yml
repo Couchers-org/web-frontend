@@ -22,74 +22,76 @@ jobs:
           build-for-environment: development
           src-path: ./
 
-  build-prod:
-    runs-on: [self-hosted, master]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-push-ecr
-        with:
-          module-name: frontend
-          build-for-environment: production
-          src-path: ./
+  # build-prod:
+  #   runs-on: [self-hosted, master]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/build-push-ecr
+  #       with:
+  #         module-name: frontend
+  #         build-for-environment: production
+  #         src-path: ./
 
   test-web:
     runs-on: [self-hosted, master]
     needs: build
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          yarn install
-          yarn test-ci
-
-  test-web-prettier:
-    runs-on: [self-hosted, master]
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          yarn install
-          yarn prettier --check *
-
-  test-storybook:
-    runs-on: [self-hosted, master]
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          yarn install
-          yarn build-storybook
-
-
-
-  # We need to use the deployment name and url in the 'environment' section of the deployment job below
-  # We need then as job outputs to workaround a limitation of github actions: https://github.com/actions/runner/issues/998
-  set-env:
-    runs-on: [self-hosted, master]
-    needs: [test-web, test-web-prettier, test-storybook]
-    outputs:
-      environment_name: ${{ steps.set-envs.outputs.envname }}
-      environment_url: ${{ steps.set-envs.outputs.envurl }}
-      environment_slug: "dev"
-    steps:
-      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-env
-      - id: set-envs
+      - shell: bash
         run: |
-          echo "::set-output name=envname::${{env.ENV_NAME}}"
-          echo "::set-output name=envurl::${{env.ENV_URL}}"
+          TEST_IMAGE_TAG=development-${{ env.SLUG }}-stage
+          docker run -ti $TEST_IMAGE_TAG yarn test-ci
 
 
-  deploy-dev:
-    runs-on: [self-hosted, master]
-    needs: set-env
-    environment:
-      name: ${{ needs.set-env.outputs.environment_name }}
-      url: ${{ needs.set-env.outputs.environment_url }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/setup-env
-      - uses: ./.github/actions/helm-deploy
-        with:
-          environment-slug: ${{ needs.set-env.outputs.environment_slug }}
-          environment-name: ${{ needs.set-env.outputs.environment_name }}
-          image-tag: development-${{ env.SLUG }}
+  # test-web-prettier:
+  #   runs-on: [self-hosted, master]
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: |
+  #         yarn install
+  #         yarn prettier --check *
+  #
+  # test-storybook:
+  #   runs-on: [self-hosted, master]
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: |
+  #         yarn install
+  #         yarn build-storybook
+  #
+  #
+  #
+  # # We need to use the deployment name and url in the 'environment' section of the deployment job below
+  # # We need then as job outputs to workaround a limitation of github actions: https://github.com/actions/runner/issues/998
+  # set-env:
+  #   runs-on: [self-hosted, master]
+  #   needs: [test-web, test-web-prettier, test-storybook]
+  #   outputs:
+  #     environment_name: ${{ steps.set-envs.outputs.envname }}
+  #     environment_url: ${{ steps.set-envs.outputs.envurl }}
+  #     environment_slug: "dev"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/setup-env
+  #     - id: set-envs
+  #       run: |
+  #         echo "::set-output name=envname::${{env.ENV_NAME}}"
+  #         echo "::set-output name=envurl::${{env.ENV_URL}}"
+  #
+  #
+  # deploy-dev:
+  #   runs-on: [self-hosted, master]
+  #   needs: set-env
+  #   environment:
+  #     name: ${{ needs.set-env.outputs.environment_name }}
+  #     url: ${{ needs.set-env.outputs.environment_url }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/setup-env
+  #     - uses: ./.github/actions/helm-deploy
+  #       with:
+  #         environment-slug: ${{ needs.set-env.outputs.environment_slug }}
+  #         environment-name: ${{ needs.set-env.outputs.environment_name }}
+  #         image-tag: development-${{ env.SLUG }}
