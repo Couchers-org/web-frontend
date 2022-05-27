@@ -41,7 +41,7 @@ runs:
         DOCKER_BUILDKIT=1
         ENVIRONMENT=${{ inputs.build-for-environment }}
         echo "ENVIRONMENT: $ENVIRONMENT"
-        BRANCH_NAME=${{ inputs.environment-name }}
+        BRANCH_NAME=${{env.ENV_NAME}}
         echo "BranchName: $BRANCH_NAME"
         IMAGE_TAG=$ENVIRONMENT-${{ env.SLUG }}
         echo "ImageTag: $IMAGE_TAG"
