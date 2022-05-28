@@ -40,13 +40,13 @@ jobs:
     steps:
       - uses: slackapi/slack-github-action@v1.18.0
         with:
-           # C03GZ4K7C7R = Channel #deployment-notifications
+           # C03GZ5JKHP1 = Channel #deployment-notifications
           payload: |
             {
               "username": "Github Actions - Deploy Notification",
               "icon_url": "https://avatars.githubusercontent.com/u/44036562?s=280&v=4",
               "text": "${{ github.repository }} was Deployed to Production",
-              "channel": "C03GZ4K7C7R",
+              "channel": "C03GZ5JKHP1",
               "blocks": [
                 {
                   "type": "section",
