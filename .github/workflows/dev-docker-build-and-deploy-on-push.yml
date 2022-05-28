@@ -30,7 +30,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "${{ github.actor }} has just deployed <https://github.com/${{ github.repository }}|${{ github.repository }}> to <https://couchers.org|Development>.\n*Ref:* <https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}>"
+                  "text": "We have just deployed <https://github.com/${{ github.repository }}|${{ github.repository }}> to <https://couchers.org|Development>.\n*User*: <https://github.com/${{ github.actor }}|${{ github.actor }}>\n*Ref:* <https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}>"
                 }
               }
             ]
