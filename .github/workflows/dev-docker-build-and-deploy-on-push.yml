@@ -15,6 +15,7 @@ jobs:
   #TEMPTEST
   notify-slack:
     runs-on: [self-hosted, master]
+    steps:
     - uses: slackapi/slack-github-action@v1.18.0
       with:
          # C03GZ4K7C7R = Channel #deployment-notifications
