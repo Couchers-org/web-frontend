@@ -17,6 +17,8 @@ deployment:
   extraEnvs:
     - name: NODE_OPTIONS
       value: "--max-old-space-size=200" # Testing at 50% of maximum of 2000M below
+    - name: NODE_DEBUG
+      value: "http,fs,cluster,child_process,module"
 
   resources:
     limits:
