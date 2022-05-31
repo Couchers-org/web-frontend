@@ -16,13 +16,13 @@ Communication with the backend is via [protobuf messages](https://github.com/pro
 
 4. Do some code! It is good to commit regularly, but if possible your code should successfully compile with each commit.
 
-5. Create a pull request and request a code review from someone. It can be good to open a PR before you are finished, make it a draft PR in that case.
+5. Create a pull request and request a code review from the web team, `Couchers-org/web`. It can be good to open a PR before you are finished, make it a draft PR in that case.
 
 6. Listen to the feedback and make any necessary changes. Remember, code review can sometimes seem very direct if your are not accustomed to it, but we are all learning and all comments are intended to be kind and constructive. :)
 
 7. Remember to also get review on your post-review changes.
 
-8. Once everything is resolved, you can merge the PR if you feel confident, or ask someone to merge for you. If there are merge conflicts, merge the base branch (probably `develop`) into your branch first, and make sure everything is still okay.
+8. Once everything is resolved, you can merge the PR if you feel confident, or ask someone to merge for you. If there are merge conflicts, merge the base branch (probably `master`) into your branch first, and make sure everything is still okay.
 
 ## Setting up the dev environment
 
@@ -37,7 +37,7 @@ _hint_: You can find a set of users for logging in at the [dummy data loaded in 
 If you don't want to install docker, you can target the live preview api and backend. However, you will first need to download the auto-generated gRPC code, since normally this is done by docker.
 
 - Go to the [CI pipelines](https://gitlab.com/couchers/couchers/-/pipelines/).
-- Search for the branch you want to generate the gRPC code from (usually `develop`).
+- Search for the branch you want to generate the gRPC code from (usually `master`).
 - Click the pipeline number.
 - Click the first pipeline step, "protos".
 - Click "download artifacts" on the right. This is a copy of the repo, but it has the generated gRPC code in it, so you can copy that from `couchers/app/web/src/proto` to your local clone of the repo.
