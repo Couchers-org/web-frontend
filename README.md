@@ -34,14 +34,9 @@ _hint_: You can find a set of users for logging in at the [dummy data loaded in 
 
 ### Option 2: Target the preview api and backend
 
-If you don't want to install docker, you can target the live preview api and backend. However, you will first need to download the auto-generated gRPC code, since normally this is done by docker.
+If you don't want to install docker, you can target the live preview api and backend.
 
-- Go to the [CI pipelines of the repository with the backend API](https://gitlab.com/couchers/couchers/-/pipelines/).
-- Search for the branch you want to generate the gRPC code from (usually `develop`).
-- Click the pipeline number.
-- Click the first pipeline step, "protos".
-- Click "Download Artifacts" on the right. This is a copy of the repo, but it has the generated gRPC code in it.
-- Copy the `app/web/proto` folder and its contents from the downloaded repo into your local web repository. It's gitignored.
+There's a copy of the auto-generated gRPC code in this repository, compressed in a file `proto_*.tag.gz`. Uncompress the file. It should output a folder called `proto` in your local web repository.
 
 Then, target the dev preview and API with the following command, instead of using `yarn start`, when running the app:
 
