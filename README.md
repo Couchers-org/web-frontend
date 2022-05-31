@@ -36,8 +36,8 @@ _hint_: You can find a set of users for logging in at the [dummy data loaded in 
 
 If you don't want to install docker, you can target the live preview api and backend. However, you will first need to download the auto-generated gRPC code, since normally this is done by docker.
 
-- Go to the [CI pipelines](https://gitlab.com/couchers/couchers/-/pipelines/).
-- Search for the branch you want to generate the gRPC code from (usually `master`).
+- Go to the [CI pipelines of the repository with the backend API](https://gitlab.com/couchers/couchers/-/pipelines/).
+- Search for the branch you want to generate the gRPC code from (usually `develop`).
 - Click the pipeline number.
 - Click the first pipeline step, "protos".
 - Click "download artifacts" on the right. This is a copy of the repo, but it has the generated gRPC code in it, so you can copy that from `couchers/app/web/src/proto` to your local clone of the repo.
