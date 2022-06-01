@@ -20,7 +20,6 @@ It is recommended that while running the frontend locally, you target the hosted
 A makefile is provided which will run the frontend in docker-compose, using your local source code. In general you'll need to run these commands to get started:
 _Windows users: you may need to install [MinGW](https://www.mingw-w64.org/) for some commands to work properly._
 
-- `make generate-protos` - Generate gRPC code
 - `make build` - Build the docker image for running the frontend
 - `make run` - Launch the frontend in docker-compose and attach to logs
 - `make stop` - Stop running containers
@@ -32,9 +31,8 @@ Other commands:
 | `make build` | Build docker images using layer cache etc. |
 | `make rebuild` | Completely rebuild docker images. |
 | `make logs` | (Re)Attach to the docker-compose logs. |
-| `make shell` | Open an interactive shell in the main web-frontent container |
+| `make shell` | Open an interactive shell in the main web-frontent container. |
 | `make run-foreground` | Run the docker images without detaching. |
-| `make generate-protos-win` | Generate gRPC code on a Windows machine. |
 
 _**Note:** The frontend might take a while to start up the first time you `make run`. This is because it runs `yarn install` at runtime, so that dependencies are always up to date._
 

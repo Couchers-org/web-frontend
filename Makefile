@@ -1,4 +1,4 @@
-.PHONY: remove-docker-image generate-protos generate-protos-win build rebuild run start run-background run-foreground stop logs shell
+.PHONY: remove-docker-image build rebuild run start run-background run-foreground stop logs shell
 
 .DEFAULT_GOAL := help
 
@@ -6,15 +6,9 @@
 remove-docker-image:
 	docker-compose down
 
-# This will generate the proto files required for linux/mac
-generate-protos:
-	docker run --pull always --rm -w /app -v $(shell pwd):/app registry.gitlab.com/couchers/grpc ./generate_protos.sh
-
-generate-protos-win:
-	docker run --pull always --rm -w /app -v %cd%:/app registry.gitlab.com/couchers/grpc sh -c "cat generate_protos.sh | dos2unix | sh"
-
 # This will simply build, which should re-use layer caches and such
 build:
+	tar -xf proto_may_27_2022.tar.gz
 	docker-compose build
 
 # This will completely rebuild the docker image

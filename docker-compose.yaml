@@ -4,12 +4,12 @@ services:
   ########################
   # Service Dependencies #
   ########################
-  # NONE - Todo, allow hosting of our "backend" (typescript) here if desired
+  # NONE - Todo, allow hosting of our "backend" here if desired
 
 
-  ##################################
-  # Typescript GraphQL API Service #
-  ##################################
+  ############################
+  # NextJS Frontend services #
+  ############################
   web-frontend:
     image: web-frontend
     platform: linux/x86_64 # Helps ensure consistency even when used on an M1 Mac
@@ -18,10 +18,12 @@ services:
       dockerfile: Dockerfile
     entrypoint:
       - "/bin/sh"
+    environment:
+      - NODE_ENV=development
     command:
       - "-c"
       #- "sleep 10000000000"
-      - "yarn install && node_modules/.bin/next dev"
+      - "yarn config set network-timeout 300000 && yarn install && node_modules/.bin/next dev"
     healthcheck:
         test: "curl --verbose --fail --max-time 2000 -s http://localhost:3000"
         start_period: 220s # It should do its initial compile by this time in the tests from Farley, make this larger if needed for slower computers
