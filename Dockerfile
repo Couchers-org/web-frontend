@@ -53,16 +53,15 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 # Re-run and install only production/runtime dependencies
 COPY --from=builder /app/package.json ./
-# RUN apt-get -y update && \
-#     apt-get -y --no-install-recommends install git ca-certificates && \
-#     yarn install --production --ignore-scripts --prefer-offline && \
-#     apt-get -y remove git && \
-#     apt-get -y autoremove && \
-#     apt-get -y clean && \
-#     rm -rf /var/lib/apt/lists/* && \
-#     rm -rf /var/tmp/* && \
-#     rm -rf /usr/local/share/.cache
-# ^^^ TODO: This doesn't work because our production modules aren't correct or are unstable.  We must run in "dev" mode for some reason, please someone fix this
+RUN apt-get -y update && \
+    apt-get -y --no-install-recommends install git ca-certificates && \
+    yarn install --production --ignore-scripts --prefer-offline && \
+    apt-get -y remove git && \
+    apt-get -y autoremove && \
+    apt-get -y clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/tmp/* && \
+    rm -rf /usr/local/share/.cache
 
 # Copy over needed files
 COPY . .
@@ -72,6 +71,8 @@ RUN rm .env.*
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/.env.local ./
+COPY --from=builder /app/proto ./proto
+
 
 # TODO: This should not be necessary we should be able to yarn start and not "dev" but this doesn't work work because our production modules aren't correct or are unstable.  We must run in "dev" mode for some reason, please someone fix this
 COPY --from=builder /app/node_modules ./node_modules
@@ -88,8 +89,4 @@ ENV NEXT_PUBLIC_VERSION=${IMAGE_TAG}
 
 EXPOSE 3000
 
-
-# TODO: This should not be necessary we should be able to yarn start and not "dev" but this doesn't work work because our production modules aren't correct or are unstable.  We must run in "dev" mode for some reason, please someone fix this
-CMD ["yarn", "dev"]
-
-# CMD ["yarn", "start"]
+CMD ["yarn", "start"]
