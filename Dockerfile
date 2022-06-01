@@ -89,4 +89,4 @@ ENV NEXT_PUBLIC_VERSION=${IMAGE_TAG}
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["yarn", "serve"]
