@@ -73,16 +73,6 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/.env.local ./
 COPY --from=builder /app/proto ./proto
 
-
-# TODO: This should not be necessary we should be able to yarn start and not "dev" but this doesn't work work because our production modules aren't correct or are unstable.  We must run in "dev" mode for some reason, please someone fix this
-COPY --from=builder /app/node_modules ./node_modules
-
-# Todo, should be able to use above logic
-RUN apk add --no-cache libc6-compat git && \
-    yarn build && yarn install --production --ignore-scripts --prefer-offline && \
-    apk delete git && \
-    rm -rf /usr/local/share/.cache || true
-
 # This allows next to tell us/users what version this is
 ARG IMAGE_TAG=unknown-or-local
 ENV NEXT_PUBLIC_VERSION=${IMAGE_TAG}
