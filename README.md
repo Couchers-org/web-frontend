@@ -24,7 +24,6 @@ _Windows users: you may need to install [MinGW](https://www.mingw-w64.org/) for 
   - CTRL+C will detach you from the logs, but leave the containers running. Use `make logs` to reattach.
   - `make shell` will put you in a shell inside the frontend container - useful for running commands in the container itself.
 - `make stop` - Stop running containers.
-- `make install` - Will install the required node/next dependencies in case you needed to change them.
 - `make rebuild` - Will delete the containers and force a new build of them.
 - `make run-foreground` - Will start the containers without detaching.
 

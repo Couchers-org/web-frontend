@@ -1,4 +1,4 @@
-.PHONY: remove-docker-image install rebuild run start run-background run-foreground stop logs shell
+.PHONY: remove-docker-image rebuild run start run-background run-foreground stop logs shell
 
 DOCKER_COMMAND := $(shell docker-compose -v > /dev/null 2>&1; \
 							            if [ $$? -eq 0 ]; then \
@@ -20,13 +20,9 @@ endif
 remove-docker-image: deps
 	$(DOCKER_COMMAND) down
 
-# This will install node depends (in case the dev changes requirements)
-install: deps
-	$(DOCKER_COMMAND) run --rm install
-
 # This will completely rebuild the docker image
 rebuild: remove-docker-image deps
-	$(DOCKER_COMMAND) build
+	$(DOCKER_COMMAND) build 
 
 # This is our default logic for "make run" or "make start", to use the backgrounded
 run: run-background logs
@@ -36,13 +32,13 @@ start: run-background logs
 # NOTE: Re-run this to update the container if you changed the docker compose
 #       Or re-run build if you changes the package.json dependencies
 run-background: deps
-	$(DOCKER_COMMAND) up -d web-frontend
+	$(DOCKER_COMMAND) up -d
 
 # This will run a dev-friendly (foregrounded) version of our app in dev mode
 # NOTE: Re-run this to update the container if you changed the docker compose
 #       Or re-run build if you changes the package.json dependencies
 run-foreground: deps
-	$(DOCKER_COMMAND) up web-frontend
+	$(DOCKER_COMMAND) up
 
 # This is to stop
 stop: deps

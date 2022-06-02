@@ -23,7 +23,7 @@ services:
     command:
       - "-c"
       #- "sleep 10000000000"
-      - "node_modules/.bin/next dev"
+      - "yarn install && node_modules/.bin/next dev"
     healthcheck:
         test: "curl --verbose --fail --max-time 2000 -s http://localhost:3000"
         start_period: 220s # It should do its initial compile by this time in the tests from Farley, make this larger if needed for slower computers
@@ -42,11 +42,6 @@ services:
       - .:/app/
     ports:
       - '3000:3000'
-
-  install:
-    extends:
-      service: web-frontend
-    command: -c "yarn install --check-files"
 
 volumes:
   nodemodules:
