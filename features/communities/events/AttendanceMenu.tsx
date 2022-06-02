@@ -87,7 +87,9 @@ export default function AttendanceMenu({
         }}
       >
         <MenuItem
-          onClick={() => handleChange(AttendanceState.ATTENDANCE_STATE_GOING)}
+          onClick={() => {
+            handleChange(AttendanceState.ATTENDANCE_STATE_GOING);
+          }}
           classes={{ root: classes.menuListItem }}
         >
           <ListItemText primary={t("communities:going_to_event")} />
@@ -96,9 +98,9 @@ export default function AttendanceMenu({
           )}
         </MenuItem>
         <MenuItem
-          onClick={() =>
-            handleChange(AttendanceState.ATTENDANCE_STATE_NOT_GOING)
-          }
+          onClick={() => {
+            handleChange(AttendanceState.ATTENDANCE_STATE_NOT_GOING);
+          }}
           classes={{ root: classes.menuListItem }}
         >
           <ListItemText primary={t("communities:not_going_to_event")} />
