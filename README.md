@@ -6,35 +6,27 @@ Communication with the backend is via [protobuf messages](https://github.com/pro
 
 ## Setup
 
-- Install [the GitHub Desktop App](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop) (or alternatively, the [git CLI](https://git-scm.com/). This varies by platform but on Mac/Linux you should use a package manager.)
+- Install [the GitHub Desktop App](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop) (or alternatively, the [git CLI](https://git-scm.com/). This varies by platform but on Mac/Linux you should use your package manager.)
 - Install docker and docker compose
   - It's recommended you install [Docker Desktop](https://www.docker.com/products/docker-desktop/) as it includes both.
   - If you don't want docker desktop, you can follow [these instructions](https://docs.docker.com/compose/install/) to install docker compose.
-- Install an editor of your choice. Good examples are [Atom]() or [Visual Studio Code]() which both have extensions for Typescript/Javascript etc.
+- Install an editor of your choice. Good examples are [Atom](https://atom.io) or [Visual Studio Code](https://code.visualstudio.com/) which both have extensions for Typescript/Javascript etc.
 - Clone this repository with `git clone https://github.com/Couchers-org/web-frontend.git`
 
 ## Setting up the dev environment
 
 It is recommended that while running the frontend locally, you target the hosted dev API and backend - this is the default behaviour. If you'd like to run the backend locally too, see the note below.
 
-A makefile is provided which will run the frontend in docker-compose, using your local source code. In general you'll need to run these commands to get started:
-_Windows users: you may need to install [MinGW](https://www.mingw-w64.org/) for some commands to work properly._
+A makefile is provided which will run the frontend in docker-compose, using your local source code. You only need to run `make run` to get started, but here's a more in-depth description of a typical workflow:
+_Windows users: you may need to install [MinGW](https://www.mingw-w64.org/) for some commands (like `make`) to work properly._
 
-- `make build` - Build the docker image for running the frontend
-- `make run` - Launch the frontend in docker-compose and attach to logs
-- `make stop` - Stop running containers
-
-Other commands:
-
-| Command | Description |
-| --- | --- |
-| `make build` | Build docker images using layer cache etc. |
-| `make rebuild` | Completely rebuild docker images. |
-| `make logs` | (Re)Attach to the docker-compose logs. |
-| `make shell` | Open an interactive shell in the main web-frontent container. |
-| `make run-foreground` | Run the docker images without detaching. |
-
-_**Note:** The frontend might take a while to start up the first time you `make run`. This is because it runs `yarn install` at runtime, so that dependencies are always up to date._
+- `make run` - Launch the frontend in docker-compose and attach to logs.
+  - CTRL+C will detach you from the logs, but leave the containers running. Use `make logs` to reattach.
+  - `make shell` will put you in a shell inside the frontend container - useful for running commands in the container itself.
+- `make stop` - Stop running containers.
+- `make install` - Will install the required node/next dependencies in case you needed to change them.
+- `make rebuild` - Will delete the containers and force a new build of them.
+- `make run-foreground` - Will start the containers without detaching.
 
 
 #### Run the backend, proxy and database locally

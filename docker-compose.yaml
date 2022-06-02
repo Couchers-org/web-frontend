@@ -38,6 +38,7 @@ services:
     # Uses a volume for node_modules because these are not cross-platform
     volumes:
       - nodemodules:/app/node_modules
+      - protos:/app/proto
       - .:/app/
     ports:
       - '3000:3000'
@@ -49,3 +50,4 @@ services:
 
 volumes:
   nodemodules:
+  protos:
