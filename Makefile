@@ -9,7 +9,9 @@ remove-docker-image:
 # This will simply build, which should re-use layer caches and such
 build:
 	tar -xf proto_may_27_2022.tar.gz
+	docker volume create nodemodules
 	docker-compose build
+	docker-compose run --rm install
 
 # This will completely rebuild the docker image
 rebuild: remove-docker-image build
@@ -22,13 +24,13 @@ start: run-background logs
 # NOTE: Re-run this to update the container if you changed the docker compose
 #       Or re-run build if you changes the package.json dependencies
 run-background:
-	docker-compose up -d
+	docker-compose up -d web-frontend
 
 # This will run a dev-friendly (foregrounded) version of our app in dev mode
 # NOTE: Re-run this to update the container if you changed the docker compose
 #       Or re-run build if you changes the package.json dependencies
 run-foreground:
-	docker-compose up
+	docker-compose up web-frontend
 
 # This is to stop
 stop:

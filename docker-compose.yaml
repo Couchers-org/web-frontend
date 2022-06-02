@@ -15,7 +15,7 @@ services:
     platform: linux/x86_64 # Helps ensure consistency even when used on an M1 Mac
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.stage
     entrypoint:
       - "/bin/sh"
     environment:
@@ -23,7 +23,7 @@ services:
     command:
       - "-c"
       #- "sleep 10000000000"
-      - "yarn config set network-timeout 300000 && yarn install && node_modules/.bin/next dev"
+      - "node_modules/.bin/next dev"
     healthcheck:
         test: "curl --verbose --fail --max-time 2000 -s http://localhost:3000"
         start_period: 220s # It should do its initial compile by this time in the tests from Farley, make this larger if needed for slower computers
@@ -34,23 +34,19 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 30
-    # This is the magic to help the autoheal sidecar to work properly
-    labels:
-      autoheal: "true"
-      autoheal.stop.timeout: 30
     # Mount our current directories into place for "hot-compiling" support so you can work on this codebase
-    # Note: Comment this out and comment out "entrypoint/cmd" if you wish to try the pre-built static version of this container/image
+    # Uses a volume for node_modules because these are not cross-platform
     volumes:
-      - "./:/app/"
+      - nodemodules:/app/node_modules
+      - .:/app/
     ports:
       - '3000:3000'
 
+  install:
+    extends:
+      service: web-frontend
+    command: -c "yarn install --check-files"
 
-  ###############################################################
-  # Internal Docker-Compose Auto-Restart on Health Check helper #
-  ###############################################################
-  # A magic auto-restarter incase invalid syntax or fatal errors in the containers above
-  # autoheal:
-  #   image: willfarrell/autoheal
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  nodemodules:
+    external: true
