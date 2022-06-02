@@ -241,7 +241,9 @@ export default function EventPage({
                     href={routeToEditEvent(event.eventId, event.slug)}
                     passHref
                   >
-                    <Button component="a">{t("communities:edit_event")}</Button>
+                    <Button component="a" variant="outlined">
+                      {t("communities:edit_event")}
+                    </Button>
                   </Link>
                 ) : null}
 
