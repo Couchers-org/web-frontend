@@ -230,7 +230,9 @@ export default function EditProfileForm() {
               name="hostingStatus"
               render={({ onChange, value }) => (
                 <>
-                  <Typography variant="h2">{HOSTING_STATUS}</Typography>
+                  <Typography variant="h2" id="hosting_status">
+                    {HOSTING_STATUS}
+                  </Typography>
                   <RadioGroup
                     row
                     aria-label={HOSTING_STATUS}
