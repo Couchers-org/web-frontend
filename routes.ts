@@ -58,8 +58,6 @@ export function routeToEditProfile(tab?: EditUserTab) {
   return `${profileBaseRoute}/edit${tab ? `/${tab}` : ""}`;
 }
 
-export const routeToBecomeAHost = `${routeToEditProfile()}#hosting_status`;
-
 // user
 const userBaseRoute = "/user";
 
