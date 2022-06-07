@@ -47,6 +47,8 @@ RUN tar -xf proto_may_27_2022.tar.gz && \
 ###################################
 # Second, use a compact runner for quicker deployments / scale-ups / etc
 FROM $RUNTIME_IMAGE as runner
+# Add necessary package for sharp to work
+RUN apk add --no-cache libc6-compat
 
 # Prepare / Setup / Defaults
 WORKDIR /app
