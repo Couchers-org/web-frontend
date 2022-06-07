@@ -11,7 +11,7 @@
 
 ARG BUILD_FOR_ENVIRONMENT=development
 ARG BUILD_IMAGE=node:14-buster
-ARG RUNTIME_IMAGE=node:14-alpine
+ARG RUNTIME_IMAGE=node:14-slim
 
 ###################################
 # First, using a NodeJS builder container build our frontend assets
@@ -47,8 +47,6 @@ RUN tar -xf proto_may_27_2022.tar.gz && \
 ###################################
 # Second, use a compact runner for quicker deployments / scale-ups / etc
 FROM $RUNTIME_IMAGE as runner
-# Add necessary package for sharp to work
-RUN apk add --no-cache libc6-compat
 
 # Prepare / Setup / Defaults
 WORKDIR /app
