@@ -1,9 +1,10 @@
 import { Alert } from "@material-ui/lab";
-import { INVALID_STEP } from "features/profile/constants";
 import Appropriate from "features/profile/view/leaveReference/formSteps/Appropriate";
 import Rating from "features/profile/view/leaveReference/formSteps/Rating";
 import SubmitReference from "features/profile/view/leaveReference/formSteps/submit/SubmitReference";
 import Text from "features/profile/view/leaveReference/formSteps/Text";
+import { useTranslation } from "i18n";
+import { GLOBAL, PROFILE } from "i18n/namespaces";
 import { useState } from "react";
 import { ReferenceStep } from "routes";
 import makeStyles from "utils/makeStyles";
@@ -72,6 +73,8 @@ export default function ReferenceForm({
   hostRequestId,
   step,
 }: ReferenceRouteParams) {
+  const { t } = useTranslation([GLOBAL, PROFILE]);
+  t;
   const [referenceData, setReferenceData] = useState<ReferenceContextFormData>({
     text: "",
     wasAppropriate: "",
@@ -114,6 +117,6 @@ export default function ReferenceForm({
       userId={userId}
     />
   ) : (
-    <Alert severity="error">{INVALID_STEP}</Alert>
+    <Alert severity="error">{t("profile:leave_reference.invalid_step")}</Alert>
   );
 }

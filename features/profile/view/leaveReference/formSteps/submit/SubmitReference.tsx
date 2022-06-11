@@ -8,13 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "components/Dialog";
-import {
-  HOST_REQUEST_REFERENCE_EXPLANATION,
-  HOST_REQUEST_REFERENCE_SUCCESS_DIALOG,
-  OKAY,
-  REFERENCE_SUCCESS,
-  SUBMIT,
-} from "features/profile/constants";
+import { HOST_REQUEST_REFERENCE_SUCCESS_DIALOG } from "features/profile/constants";
 import {
   useWriteFriendReference,
   useWriteHostReference,
@@ -25,6 +19,8 @@ import {
   useReferenceStyles,
 } from "features/profile/view/leaveReference/ReferenceForm";
 import { useUser } from "features/userQueries/useUsers";
+import { useTranslation } from "i18n";
+import { GLOBAL, PROFILE } from "i18n/namespaces";
 import { useRouter } from "next/router";
 import { ReferenceType } from "proto/references_pb";
 import { useState } from "react";
@@ -55,6 +51,8 @@ export default function SubmitReference({
   hostRequestId,
   userId,
 }: SubmitReferenceProps) {
+  const { t } = useTranslation([GLOBAL, PROFILE]);
+
   const {
     writeFriendReference,
     reset: resetFriendReferenceWriting,
@@ -172,7 +170,7 @@ export default function SubmitReference({
             type="submit"
             loading={isFriendReferenceLoading || isHostRequestReferenceLoading}
           >
-            {SUBMIT}
+            {t("global:submit")}
           </Button>
         </div>
       </form>
@@ -182,15 +180,15 @@ export default function SubmitReference({
         onClose={redirectToHome}
       >
         <DialogTitle id={HOST_REQUEST_REFERENCE_SUCCESS_DIALOG}>
-          {REFERENCE_SUCCESS}
+          {t("profile:leave_reference.reference_success")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {HOST_REQUEST_REFERENCE_EXPLANATION}
+            {t("profile:leave_reference.host_request_reference_explanation")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={redirectToHome}>{OKAY}</Button>
+          <Button onClick={redirectToHome}>{t("global:ok")}</Button>
         </DialogActions>
       </Dialog>
     </>

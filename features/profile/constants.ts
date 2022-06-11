@@ -220,8 +220,15 @@ export const parkingDetailsLabels = (t: typeof tFunction) => ({
   [ParkingDetails.PARKING_DETAILS_UNKNOWN]: t("profile:unspecified_info"),
 });
 
-export default function booleanConversion(value: boolean | undefined) {
-  return value === undefined ? UNSURE : value ? "Yes" : "No";
+export function booleanConversion(
+  t: typeof tFunction,
+  value: boolean | undefined
+) {
+  return value === undefined
+    ? t("profile:info_unanswered")
+    : value
+    ? t("global:yes")
+    : t("global:no");
 }
 
 export const referencesQueryStaleTime = 10 * 60 * 1000;

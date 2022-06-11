@@ -73,6 +73,7 @@
   },
   "error": {
     "fatal_message": "This shouldn't have happened. Please contact us and tell us what you were doing to help us prevent this error in the future.",
+    "unknown": "Unknown error",
     "fallback": {
       "title": "Ooops... that's an unknown error",
       "subtitle": "Please use the 'Report a problem' button and tell us what you were doing to help us prevent this error in the future.",

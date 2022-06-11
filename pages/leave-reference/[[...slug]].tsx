@@ -1,6 +1,7 @@
 import { appGetLayout } from "components/AppRoute";
 import NotFoundPage from "features/NotFoundPage";
 import LeaveReferencePageComponent from "features/profile/view/leaveReference/LeaveReferencePage";
+import { GLOBAL, PROFILE } from "i18n/namespaces";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import nextI18nextConfig from "next-i18next.config";
@@ -16,7 +17,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(
       locale ?? "en",
-      ["global", "profile"],
+      [GLOBAL, PROFILE],
       nextI18nextConfig
     )),
   },
