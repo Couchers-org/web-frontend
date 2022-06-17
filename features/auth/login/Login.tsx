@@ -9,14 +9,11 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import vercelLogo from "resources/vercel.svg";
 import { dashboardRoute, signupRoute } from "routes";
-import makeStyles from "utils/makeStyles";
 import stringOrFirstString from "utils/stringOrFirstString";
 
 import { useAuthContext } from "../AuthProvider";
 import useAuthStyles from "../useAuthStyles";
-import LoginForm from "./LoginForm";
-
-const useStyles = makeStyles((theme) => ({}));
+import LoginFormRest from "./LoginFormRest";
 
 export default function Login() {
   const { t } = useTranslation([AUTH, GLOBAL]);
@@ -30,7 +27,6 @@ export default function Login() {
   const urlToken = stringOrFirstString(router.query.token);
 
   const authClasses = useAuthStyles();
-  const classes = useStyles();
 
   useEffect(() => {
     if (authenticated) {
@@ -75,7 +71,7 @@ export default function Login() {
                 {error}
               </Alert>
             )}
-            <LoginForm />
+            <LoginFormRest />
             <Typography>
               <Trans t={t} i18nKey="auth:login_page.no_account_prompt">
                 No account yet?{" "}
