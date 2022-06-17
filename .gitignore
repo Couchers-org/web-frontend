@@ -37,6 +37,8 @@ yarn-error.log*
 *.tsbuildinfo
 
 proto/**
+/api/**
+/openapitools.json
 
 storybook-static/
 

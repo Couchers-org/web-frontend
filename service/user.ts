@@ -14,6 +14,7 @@ import {
 } from "proto/api_pb";
 import { AuthReq, CompleteTokenLoginReq } from "proto/auth_pb";
 import client from "service/client";
+import newClient from "service/newClient";
 import { ProtoToJsTypes } from "utils/types";
 
 type RequiredUpdateProfileReq = Required<UpdateProfileReq.AsObject>;
@@ -55,12 +56,17 @@ export type HostingPreferenceData = Omit<
  * Login user using password
  */
 export async function passwordLogin(username: string, password: string) {
-  const req = new AuthReq();
-  req.setUser(username);
-  req.setPassword(password);
+  const res = await newClient.login.loginCreate({
+    tokenCreate: { email: username, password },
+  });
+  //type for this endpoint is incorrect in the schema
 
-  const res = await client.auth.authenticate(req);
-  return res.toObject();
+  // const req = new AuthReq();
+  // req.setUser(username);
+  // req.setPassword(password);
+
+  // const res = await client.auth.authenticate(req);
+  // return res.toObject();
 }
 
 /**
