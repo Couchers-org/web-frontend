@@ -98,14 +98,18 @@ export default function useAuthStore() {
         setError(null);
         setLoading(true);
         try {
-          const auth = await service.user.passwordLogin(username, password);
-          setUserId(auth.userId);
-          Sentry.setUser({ id: auth.userId.toString() });
+          const { userId } = await service.user.passwordLogin(
+            username,
+            password
+          );
+          setUserId(userId);
+          Sentry.setUser({ id: userId.toString() });
 
           //this must come after setting the userId, because calling setQueryData
           //will also cause that query to be background fetched, and it needs
           //userId to be set.
-          setJailed(auth.jailed);
+          const jailed = false; // @todo, read this from `user` once the response type is fixed or we figure out
+          setJailed(jailed);
           setAuthenticated(true);
         } catch (e) {
           Sentry.captureException(e, {
