@@ -1,9 +1,9 @@
+import { User } from "api";
 import { userKey } from "features/queryKeys";
 import { userStaleTime } from "features/userQueries/constants";
-import { User } from "proto/api_pb";
 import { useCallback, useEffect, useRef } from "react";
 import { useQueries, useQueryClient } from "react-query";
-import { service } from "service";
+import client from "service/rest/client";
 import { arrayEq } from "utils/arrayEq";
 
 export default function useUsers(
@@ -33,11 +33,11 @@ export default function useUsers(
     }
   });
 
-  const queries = useQueries<User.AsObject, Error>(
+  const queries = useQueries<User, Error>(
     ids
       .filter((id): id is number => !!id)
       .map((id) => ({
-        queryFn: () => service.user.getUser(id.toString()),
+        queryFn: () => client.users.usersRetrieve({ id }),
         queryKey: userKey(id),
         staleTime: userStaleTime,
       }))

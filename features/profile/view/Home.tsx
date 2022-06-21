@@ -1,4 +1,5 @@
 import { Typography } from "@material-ui/core";
+import { User } from "api";
 import Divider from "components/Divider";
 import LabelAndText from "components/LabelAndText";
 import Markdown from "components/Markdown";
@@ -31,7 +32,6 @@ import booleanConversion, {
   UNSURE,
   WHEELCHAIR,
 } from "features/profile/constants";
-import { User } from "proto/api_pb";
 import makeStyles from "utils/makeStyles";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,8 +51,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const getLabel = (
+  labelsByKey: { [key: string]: string },
+  key: string | null
+): string => {
+  if (key == null) {
+    return UNSURE;
+  }
+  return labelsByKey[key];
+};
+
 interface HomeProps {
-  user: User.AsObject;
+  user: User;
 }
 
 export default function Home({ user }: HomeProps) {
@@ -65,78 +75,76 @@ export default function Home({ user }: HomeProps) {
           <Typography variant="h1">{HOSTING_PREFERENCES}</Typography>
           <LabelAndText
             label={LAST_MINUTE}
-            text={booleanConversion(user.lastMinute?.value)}
+            text={booleanConversion(user.lastMinute)}
           />
           <LabelAndText
             label={WHEELCHAIR}
-            text={booleanConversion(user.wheelchairAccessible?.value)}
+            text={booleanConversion(user.wheelchairAccessible)}
           />
           <LabelAndText
             label={ACCEPT_CAMPING}
-            text={booleanConversion(user.campingOk?.value)}
+            text={booleanConversion(user.campingOk)}
           />
           <LabelAndText
             label={MAX_GUESTS}
-            text={`${user.maxGuests?.value || UNSURE}`}
+            text={`${user.maxGuests || UNSURE}`}
           />
           <LabelAndText
             label={ACCEPT_KIDS}
-            text={booleanConversion(user.acceptsKids?.value)}
+            text={booleanConversion(user.acceptsKids)}
           />
           <LabelAndText
             label={ACCEPT_PETS}
-            text={booleanConversion(user.acceptsPets?.value)}
+            text={booleanConversion(user.acceptsPets)}
           />
           <LabelAndText
             label={ACCEPT_DRINKING}
-            text={booleanConversion(user.drinkingAllowed?.value)}
+            text={booleanConversion(user.drinkingAllowed)}
           />
           <LabelAndText
             label={ACCEPT_SMOKING}
-            text={`${smokingLocationLabels[user.smokingAllowed]}`}
+            text={getLabel(smokingLocationLabels, user.smokingAllowed)}
           />
         </div>
         <div className={classes.info}>
           <Typography variant="h1">{MY_HOME}</Typography>
           <LabelAndText
             label={SPACE}
-            text={`${sleepingArrangementLabels[user.sleepingArrangement]}`}
+            text={getLabel(sleepingArrangementLabels, user.sleepingArrangement)}
           />
           <LabelAndText
             label={PARKING}
-            text={booleanConversion(user.parking?.value)}
+            text={booleanConversion(user.parking)}
           />
           <LabelAndText
             label={PARKING_DETAILS}
-            text={parkingDetailsLabels[user.parkingDetails]}
+            text={getLabel(parkingDetailsLabels, user.parkingDetails)}
           />
           <LabelAndText
             label={HAS_HOUSEMATES}
-            text={`${booleanConversion(user.hasHousemates?.value)}${
-              user.housemateDetails?.value
-                ? `, ${user.housemateDetails?.value}`
-                : ""
+            text={`${booleanConversion(user.hasHousemates)}${
+              user.housemateDetails ? `, ${user.housemateDetails}` : ""
             }`}
           />
           <LabelAndText
             label={HOST_KIDS}
-            text={`${booleanConversion(user.hasKids?.value)}${
-              user.kidDetails?.value ? `, ${user.kidDetails?.value}` : ""
+            text={`${booleanConversion(user.hasKids)}${
+              user.kidDetails ? `, ${user.kidDetails}` : ""
             }`}
           />
           <LabelAndText
             label={HOST_PETS}
-            text={`${booleanConversion(user.hasPets?.value)}${
-              user.petDetails?.value ? `, ${user.petDetails?.value}` : ""
+            text={`${booleanConversion(user.hasPets)}${
+              user.petDetails ? `, ${user.petDetails}` : ""
             }`}
           />
           <LabelAndText
             label={HOST_DRINKING}
-            text={booleanConversion(user.drinksAtHome?.value)}
+            text={booleanConversion(user.drinksAtHome)}
           />
           <LabelAndText
             label={HOST_SMOKING}
-            text={booleanConversion(user.smokesAtHome?.value)}
+            text={booleanConversion(user.smokesAtHome)}
           />
         </div>
       </div>
@@ -151,28 +159,28 @@ export default function Home({ user }: HomeProps) {
       {user.area && (
         <>
           <Typography variant="h1">{LOCAL_AREA}</Typography>
-          <Markdown source={user.area?.value} />
+          <Markdown source={user.area} />
           <Divider className={classes.marginTop3} />
         </>
       )}
       {user.sleepingDetails && (
         <>
           <Typography variant="h1">{SLEEPING_ARRANGEMENT}</Typography>
-          <Markdown source={user.sleepingDetails?.value} />
+          <Markdown source={user.sleepingDetails} />
           <Divider className={classes.marginTop3} />
         </>
       )}
       {user.houseRules && (
         <>
           <Typography variant="h1">{HOUSE_RULES}</Typography>
-          <Markdown source={user.houseRules?.value} />
+          <Markdown source={user.houseRules} />
           <Divider className={classes.marginTop3} />
         </>
       )}
       {user.otherHostInfo && (
         <>
           <Typography variant="h1">{ADDITIONAL}</Typography>
-          <Markdown source={user.otherHostInfo?.value} />
+          <Markdown source={user.otherHostInfo} />
         </>
       )}
     </>

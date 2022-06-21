@@ -1,9 +1,9 @@
 import { Avatar as MuiAvatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Skeleton } from "@material-ui/lab";
+import { User } from "api";
 import classNames from "classnames";
 import Link from "next/link";
-import { User } from "proto/api_pb";
 import React from "react";
 import { routeToUser } from "routes";
 
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface AvatarProps {
   children?: React.ReactNode;
-  user?: User.AsObject;
+  user?: User;
   grow?: boolean;
   className?: string;
   isProfileLink?: boolean;
@@ -60,6 +60,11 @@ export default function Avatar({
 }: AvatarProps) {
   const classes = useStyles();
 
+  const username = user?.username ?? "";
+  const name = user?.name ?? "";
+
+  const avatarUrl = ""; /* @todo: avatar URL not being returned yet */
+
   return (
     <div
       className={classNames(
@@ -72,27 +77,19 @@ export default function Avatar({
     >
       {user ? (
         isProfileLink ? (
-          <Link href={routeToUser(user.username)}>
+          <Link href={routeToUser(username)}>
             <a
               className={classes.link}
-              aria-label={getProfileLinkA11yLabel(user.name)}
+              aria-label={getProfileLinkA11yLabel(name)}
             >
-              <MuiAvatar
-                className={classes.avatar}
-                alt={user.name}
-                src={user.avatarUrl}
-              >
-                {user.name.split(/\s+/).map((name) => name[0])}
+              <MuiAvatar className={classes.avatar} alt={name} src={avatarUrl}>
+                {name.split(/\s+/).map((name) => name[0])}
               </MuiAvatar>
             </a>
           </Link>
         ) : (
-          <MuiAvatar
-            className={classes.avatar}
-            alt={user.name}
-            src={user.avatarUrl}
-          >
-            {user.name.split(/\s+/).map((name) => name[0])}
+          <MuiAvatar className={classes.avatar} alt={name} src={avatarUrl}>
+            {name.split(/\s+/).map((name) => name[0])}
           </MuiAvatar>
         )
       ) : otherProps.children ? (

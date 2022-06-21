@@ -11,7 +11,7 @@ import mediaQuery from "css-mediaquery";
 import sentryTestkit from "sentry-testkit";
 import i18n from "test/i18n";
 
-import user from "./fixtures/defaultUser.json";
+import user from "./fixtures/defaultUser";
 
 jest.mock("service");
 jest.mock("next/dist/client/router", () => require("next-router-mock"));

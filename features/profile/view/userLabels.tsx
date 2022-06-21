@@ -1,3 +1,4 @@
+import { User } from "api";
 import LabelAndText from "components/LabelAndText";
 import {
   AGE_GENDER,
@@ -16,38 +17,44 @@ import { useLanguages } from "features/profile/hooks/useLanguages";
 import { responseRateKey } from "features/queryKeys";
 import { useTranslation } from "i18n";
 import { COMMUNITIES, GLOBAL } from "i18n/namespaces";
-import { User } from "proto/api_pb";
 import { useQuery } from "react-query";
 import { service } from "service";
-import { dateTimeFormatter, timestamp2Date } from "utils/date";
+import calculateAge from "utils/calculateAge";
+import { dateTimeFormatter } from "utils/date";
 import dayjs from "utils/dayjs";
 import { hourMillis, lessThanHour, timeAgo } from "utils/timeAgo";
 
 interface Props {
-  user: User.AsObject;
+  user: User;
 }
 
-export const ReferencesLastActiveLabels = ({ user }: Props) => (
-  <>
-    <LabelAndText label={REFERENCES} text={`${user.numReferences || 0}`} />
-    <LabelAndText
-      label={LAST_ACTIVE}
-      text={
-        user.lastActive
-          ? timeAgo(timestamp2Date(user.lastActive), {
-              millis: hourMillis,
-              text: lessThanHour,
-            })
-          : LAST_ACTIVE_FALSE
-      }
-    />
-  </>
-);
+export const ReferencesLastActiveLabels = ({ user }: Props) => {
+  /* @todo: fetch the num references using endpoint or whenever it's added to `user` */
+  const numReferences = 0;
+  /* @todo: read lastActive from user when it's made available */
+  const lastActive = new Date();
+  return (
+    <>
+      <LabelAndText label={REFERENCES} text={`${numReferences || 0}`} />
+      <LabelAndText
+        label={LAST_ACTIVE}
+        text={
+          lastActive
+            ? timeAgo(lastActive, {
+                millis: hourMillis,
+                text: lessThanHour,
+              })
+            : LAST_ACTIVE_FALSE
+        }
+      />
+    </>
+  );
+};
 
 export const ResponseRateLabel = ({ user }: Props) => {
   const { t } = useTranslation("profile");
-  const query = useQuery(responseRateKey(user.userId), () =>
-    service.requests.getResponseRate(user.userId)
+  const query = useQuery(responseRateKey(user.id), () =>
+    service.requests.getResponseRate(user.id)
   );
 
   let rateText = undefined;
@@ -99,15 +106,18 @@ export const ResponseRateLabel = ({ user }: Props) => {
 export const AgeGenderLanguagesLabels = ({ user }: Props) => {
   const { languages } = useLanguages();
 
+  const age = user.birthdate ? calculateAge(user.birthdate) : undefined;
+
   return (
     <>
       <LabelAndText
         label={AGE_GENDER}
-        text={`${user.age} / ${user.gender} ${
+        text={`${age || "-"} / ${user.gender} ${
           user.pronouns ? `(${user.pronouns})` : ""
         }`}
       />
-      {languages && (
+      {/* @todo: fetch languages */}
+      {/* {languages && (
         <LabelAndText
           label={LANGUAGES_FLUENT}
           text={
@@ -116,7 +126,7 @@ export const AgeGenderLanguagesLabels = ({ user }: Props) => {
               .join(", ") || LANGUAGES_FLUENT_FALSE
           }
         />
-      )}
+      )} */}
     </>
   );
 };
@@ -125,23 +135,37 @@ export const RemainingAboutLabels = ({ user }: Props) => {
   const {
     i18n: { language: locale },
   } = useTranslation([GLOBAL, COMMUNITIES]);
+
+  /* @todo: read timezone from user when it's made available */
+  const timezone = "";
+
+  console.log("user.createdAt", { value: user.createdAt });
+
   return (
     <>
-      <LabelAndText label={HOMETOWN} text={user.hometown} />
-      <LabelAndText label={OCCUPATION} text={user.occupation} />
-      <LabelAndText label={EDUCATION} text={user.education} />
-      <LabelAndText
-        label={JOINED}
-        text={
-          user.joined
-            ? dateTimeFormatter(locale).format(timestamp2Date(user.joined))
-            : ""
-        }
-      />
-      <LabelAndText
-        label={LOCAL_TIME}
-        text={dayjs().tz(user.timezone).format("LT")}
-      />
+      {user.hometown && <LabelAndText label={HOMETOWN} text={user.hometown} />}
+      {user.occupation && (
+        <LabelAndText label={OCCUPATION} text={user.occupation} />
+      )}
+      {user.education && (
+        <LabelAndText label={EDUCATION} text={user.education} />
+      )}
+      {user.createdAt && (
+        <LabelAndText
+          label={JOINED}
+          text={
+            user.createdAt
+              ? dateTimeFormatter(locale).format(new Date(user.createdAt))
+              : ""
+          }
+        />
+      )}
+      {timezone && (
+        <LabelAndText
+          label={LOCAL_TIME}
+          text={dayjs().tz(timezone).format("LT")}
+        />
+      )}
     </>
   );
 };

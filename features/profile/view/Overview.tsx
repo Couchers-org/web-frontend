@@ -1,3 +1,4 @@
+import { HostingStatusEnum } from "api";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import { useAuthContext } from "features/auth/AuthProvider";
@@ -9,7 +10,6 @@ import UserOverview from "features/profile/view/UserOverview";
 import { PROFILE } from "i18n/namespaces";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { HostingStatus } from "proto/api_pb";
 import { useState } from "react";
 import {
   connectionsRoute,
@@ -62,8 +62,7 @@ function DefaultActions({
 }) {
   const classes = useStyles();
   const user = useProfileUser();
-  const disableHosting =
-    user.hostingStatus === HostingStatus.HOSTING_STATUS_CANT_HOST;
+  const disableHosting = user.hostingStatus === HostingStatusEnum.CantHost;
 
   const [mutationError, setMutationError] = useState("");
 
@@ -78,8 +77,8 @@ function DefaultActions({
 
       <FlagButton
         className={classes.flagButton}
-        contentRef={`profile/${user.userId}`}
-        authorUser={user.userId}
+        contentRef={`profile/${user.id}`}
+        authorUser={user.id}
       />
 
       {mutationError && <Alert severity="error">{mutationError}</Alert>}
@@ -100,7 +99,7 @@ export default function Overview({ setIsRequesting, tab }: OverviewProps) {
     <UserOverview
       showHostAndMeetAvailability
       actions={
-        user.userId === currentUserId ? (
+        user.id === currentUserId ? (
           <LoggedInUserActions tab={tab} />
         ) : (
           <DefaultActions setIsRequesting={setIsRequesting} />

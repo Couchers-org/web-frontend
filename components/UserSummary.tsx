@@ -1,11 +1,12 @@
 import { ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+import { User } from "api";
 import classNames from "classnames";
 import Avatar from "components/Avatar";
 import { LinkIcon } from "components/Icons";
 import StyledLink from "components/StyledLink";
-import { User } from "proto/api_pb";
 import { routeToUser } from "routes";
+import calculateAge from "utils/calculateAge";
 import makeStyles from "utils/makeStyles";
 
 export const useStyles = makeStyles((theme) => ({
@@ -53,7 +54,7 @@ export interface UserSummaryProps {
   smallAvatar?: boolean;
   nameOnly?: boolean;
   headlineComponent?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  user?: User.AsObject;
+  user?: User;
   titleIsLink?: boolean;
 }
 
@@ -67,6 +68,8 @@ export default function UserSummary({
   titleIsLink = false,
 }: UserSummaryProps) {
   const classes = useStyles();
+
+  const age = user && user.birthdate ? calculateAge(user.birthdate) : undefined;
 
   const title = (
     <Typography
@@ -83,7 +86,7 @@ export default function UserSummary({
       ) : nameOnly ? (
         user.name
       ) : (
-        `${user.name}, ${user.age}`
+        `${user.name}, ${age || "-"}`
       )}
     </Typography>
   );
@@ -110,7 +113,7 @@ export default function UserSummary({
         className={classes.titleAndBarContainer}
         disableTypography
         primary={
-          titleIsLink && user ? (
+          titleIsLink && user && user.username ? (
             <StyledLink
               href={routeToUser(user.username)}
               className={classes.link}

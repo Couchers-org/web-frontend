@@ -1,11 +1,11 @@
 import {
-  HostingStatus,
-  MeetupStatus,
-  ParkingDetails,
-  SleepingArrangement,
-  SmokingLocation,
+  HostingStatusEnum,
+  MeetupStatusEnum,
+  ParkingDetailsEnum,
+  SleepingArrangementEnum,
+  SmokingAllowedEnum,
   User,
-} from "proto/api_pb";
+} from "api";
 import { ReferenceType } from "proto/references_pb";
 import { firstName } from "utils/names";
 
@@ -145,58 +145,50 @@ export const WAS_APPROPRIATE_REQUIRED =
   "To help us keep our community safe, this question is required.";
 
 export const smokingLocationLabels = {
-  [SmokingLocation.SMOKING_LOCATION_NO]: "No",
-  [SmokingLocation.SMOKING_LOCATION_OUTSIDE]: "Outside",
-  [SmokingLocation.SMOKING_LOCATION_WINDOW]: "Window",
-  [SmokingLocation.SMOKING_LOCATION_YES]: "Yes",
-  [SmokingLocation.SMOKING_LOCATION_UNKNOWN]: UNSURE,
-  [SmokingLocation.SMOKING_LOCATION_UNSPECIFIED]: UNSURE,
+  [SmokingAllowedEnum.No]: "No",
+  [SmokingAllowedEnum.Outside]: "Outside",
+  [SmokingAllowedEnum.Window]: "Window",
+  [SmokingAllowedEnum.Yes]: "Yes",
 };
 
 export const hostingStatusLabels = {
-  [HostingStatus.HOSTING_STATUS_CAN_HOST]: ACCEPTING,
-  [HostingStatus.HOSTING_STATUS_MAYBE]: MAYBE_ACCEPTING,
-  [HostingStatus.HOSTING_STATUS_CANT_HOST]: NOT_ACCEPTING,
-  [HostingStatus.HOSTING_STATUS_UNSPECIFIED]: UNSURE,
-  [HostingStatus.HOSTING_STATUS_UNKNOWN]: UNSURE,
+  [HostingStatusEnum.CanHost]: ACCEPTING,
+  [HostingStatusEnum.CantHost]: MAYBE_ACCEPTING,
+  [HostingStatusEnum.Maybe]: MAYBE_ACCEPTING,
 };
 
 export const meetupStatusLabels = {
-  [MeetupStatus.MEETUP_STATUS_WANTS_TO_MEETUP]: MEETUP,
-  [MeetupStatus.MEETUP_STATUS_OPEN_TO_MEETUP]: MAYBE_MEETUP,
-  [MeetupStatus.MEETUP_STATUS_DOES_NOT_WANT_TO_MEETUP]: NO_MEETUP,
-  [MeetupStatus.MEETUP_STATUS_UNSPECIFIED]: UNSURE,
-  [MeetupStatus.MEETUP_STATUS_UNKNOWN]: UNSURE,
+  [MeetupStatusEnum.WantsToMeetup]: MEETUP,
+  [MeetupStatusEnum.OpenToMeetup]: MAYBE_MEETUP,
+  [MeetupStatusEnum.DoesNotWantToMeetup]: NO_MEETUP,
 };
 
 export const sleepingArrangementLabels = {
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_UNSPECIFIED]: UNSURE,
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_UNKNOWN]: UNSURE,
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_PRIVATE]: "Private",
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_COMMON]: "Common",
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_SHARED_ROOM]: "Shared room",
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_SHARED_SPACE]: "Shared space",
+  [SleepingArrangementEnum.Private]: "Private",
+  [SleepingArrangementEnum.Common]: "Common",
+  [SleepingArrangementEnum.SharedRoom]: "Shared room",
+  [SleepingArrangementEnum.SharedSpace]: "Shared space",
 };
 
 export const parkingDetailsLabels = {
-  [ParkingDetails.PARKING_DETAILS_UNSPECIFIED]: UNSURE,
-  [ParkingDetails.PARKING_DETAILS_UNKNOWN]: UNSURE,
-  [ParkingDetails.PARKING_DETAILS_FREE_ONSITE]: "Free onsite parking",
-  [ParkingDetails.PARKING_DETAILS_FREE_OFFSITE]: "Free offsite parking",
-  [ParkingDetails.PARKING_DETAILS_PAID_ONSITE]: "Paid onsite parking",
-  [ParkingDetails.PARKING_DETAILS_PAID_OFFSITE]: "Paid offsite parking",
+  [ParkingDetailsEnum.FreeOnsite]: "Free onsite parking",
+  [ParkingDetailsEnum.FreeOffsite]: "Free offsite parking",
+  [ParkingDetailsEnum.PaidOnsite]: "Paid onsite parking",
+  [ParkingDetailsEnum.PaidOffsite]: "Paid offsite parking",
 };
 
-export default function booleanConversion(value: boolean | undefined) {
-  return value === undefined ? UNSURE : value ? "Yes" : "No";
+export default function booleanConversion(value: boolean | undefined | null) {
+  return value == null ? UNSURE : value ? "Yes" : "No";
 }
 
 export const referencesQueryStaleTime = 10 * 60 * 1000;
 
-export const aboutText = (user: User.AsObject) => {
-  const missingAbout = user.aboutMe.length === 0;
+export const aboutText = (user: User) => {
+  const missingAbout = user.aboutMe == null || user.aboutMe.length === 0;
   return missingAbout
-    ? `${firstName(user?.name)} hasn't said anything about themselves yet`
+    ? `${firstName(
+        user?.name || "User"
+      )} hasn't said anything about themselves yet`
     : user.aboutMe.length < 300
     ? user.aboutMe
     : user.aboutMe.substring(0, 300) + "...";

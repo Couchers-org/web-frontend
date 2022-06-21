@@ -3,12 +3,12 @@ import { userKey } from "features/queryKeys";
 import useUsers, { useUser } from "features/userQueries/useUsers";
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { service } from "service";
+import client from "service/rest/client";
 import users from "test/fixtures/users.json";
 import { getUser } from "test/serviceMockDefaults";
 import { mockConsoleError } from "test/utils";
 
-const getUserMock = service.user.getUser as jest.Mock;
+const getUserMock = client.users.usersRetrieve as jest.Mock;
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const client = new QueryClient({

@@ -1,16 +1,16 @@
 import { Typography } from "@material-ui/core";
+import { User } from "api";
 import Divider from "components/Divider";
 import Markdown from "components/Markdown";
 import { useTranslation } from "i18n";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
-import { User } from "proto/api_pb";
 import makeStyles from "utils/makeStyles";
 
 import { useRegions } from "../hooks/useRegions";
 import { AgeGenderLanguagesLabels, RemainingAboutLabels } from "./userLabels";
 
 interface AboutProps {
-  user: User.AsObject;
+  user: User;
 }
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +59,8 @@ export default function About({ user }: AboutProps) {
         </>
       )}
       <Typography variant="h1">{t("profile:travel_section_title")}</Typography>
-      <Typography variant="body1">
+      {/* @todo: uncomment this, add loading for regions */}
+      {/* <Typography variant="body1">
         {regions && user.regionsVisitedList.length > 0
           ? user.regionsVisitedList
               .map((country) => regions[country])
@@ -72,7 +73,7 @@ export default function About({ user }: AboutProps) {
         {regions && user.regionsLivedList.length > 0
           ? user.regionsLivedList.map((country) => regions[country]).join(`, `)
           : t("profile:regions_empty_state")}
-      </Typography>
+      </Typography> */}
     </div>
   );
 }
