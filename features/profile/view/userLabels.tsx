@@ -113,7 +113,7 @@ export const AgeGenderLanguagesLabels = ({ user }: Props) => {
           user.pronouns ? `(${user.pronouns})` : ""
         }`}
       />
-      {/* @todo: fetch languages */}
+      {/* @todo: uncomment once we have user.languageAbilitiesList available */}
       {/* {languages && (
         <LabelAndText
           label={LANGUAGES_FLUENT}
