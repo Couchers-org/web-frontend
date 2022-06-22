@@ -59,6 +59,7 @@ const client = {
     });
   },
   users: new apis.UsersApi(configuration),
+  languages: new apis.LanguagesApi(configuration),
 };
 
 export default client;

@@ -19,7 +19,6 @@ import { useTranslation } from "i18n";
 import { COMMUNITIES, GLOBAL } from "i18n/namespaces";
 import { useQuery } from "react-query";
 import { service } from "service";
-import calculateAge from "utils/calculateAge";
 import { dateTimeFormatter } from "utils/date";
 import dayjs from "utils/dayjs";
 import { hourMillis, lessThanHour, timeAgo } from "utils/timeAgo";
@@ -106,13 +105,11 @@ export const ResponseRateLabel = ({ user }: Props) => {
 export const AgeGenderLanguagesLabels = ({ user }: Props) => {
   const { languages } = useLanguages();
 
-  const age = user.birthdate ? calculateAge(user.birthdate) : undefined;
-
   return (
     <>
       <LabelAndText
         label={AGE_GENDER}
-        text={`${age || "-"} / ${user.gender} ${
+        text={`${user.age || "-"} / ${user.gender} ${
           user.pronouns ? `(${user.pronouns})` : ""
         }`}
       />
@@ -136,11 +133,6 @@ export const RemainingAboutLabels = ({ user }: Props) => {
     i18n: { language: locale },
   } = useTranslation([GLOBAL, COMMUNITIES]);
 
-  /* @todo: read timezone from user when it's made available */
-  const timezone = "";
-
-  console.log("user.createdAt", { value: user.createdAt });
-
   return (
     <>
       {user.hometown && <LabelAndText label={HOMETOWN} text={user.hometown} />}
@@ -160,10 +152,10 @@ export const RemainingAboutLabels = ({ user }: Props) => {
           }
         />
       )}
-      {timezone && (
+      {user.timezoneArea && (
         <LabelAndText
           label={LOCAL_TIME}
-          text={dayjs().tz(timezone).format("LT")}
+          text={dayjs().tz(user.timezoneArea).format("LT")}
         />
       )}
     </>
