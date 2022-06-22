@@ -5,6 +5,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { HostingStatusEnum, MeetupStatusEnum, PatchedUser } from "api";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import CircularProgress from "components/CircularProgress";
@@ -44,11 +45,9 @@ import { userKey } from "features/queryKeys";
 import useCurrentUser from "features/userQueries/useCurrentUser";
 import { useTranslation } from "i18n";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
-import { HostingStatus, LanguageAbility, MeetupStatus } from "proto/api_pb";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useQueryClient } from "react-query";
-import { service, UpdateUserProfileData } from "service/index";
 import {
   useIsMounted,
   useSafeState,
@@ -61,7 +60,7 @@ import {
 } from "./constants";
 import useStyles from "./styles";
 
-type FormValues = Omit<UpdateUserProfileData, "languageAbilities"> & {
+type FormValues = Omit<PatchedUser, "languageAbilities"> & {
   fluentLanguages: string[];
 };
 
@@ -84,7 +83,7 @@ export default function EditProfileForm() {
   const { control, errors, register, handleSubmit, setValue, formState } =
     useForm<FormValues>({
       defaultValues: {
-        city: user?.city,
+        city: user?.city ?? undefined,
         lat: user?.lat,
         lng: user?.lng,
         radius: user?.radius,
@@ -124,30 +123,34 @@ export default function EditProfileForm() {
   const { languages, languagesLookup } = useLanguages();
 
   const onSubmit = handleSubmit(
-    ({ regionsLived, regionsVisited, fluentLanguages, ...data }) => {
+    ({ /* regionsLived, regionsVisited, */ fluentLanguages, ...data }) => {
       resetUpdate();
       updateUserProfile(
         {
           profileData: {
             ...data,
-            regionsVisited: regionsVisited.map(
-              (region) => (regionsLookup || {})[region]
-            ),
-            regionsLived: regionsLived.map(
-              (region) => (regionsLookup || {})[region]
-            ),
-            languageAbilities: {
-              valueList: fluentLanguages.map((language) => ({
-                code: (languagesLookup || {})[language],
-                fluency: LanguageAbility.Fluency.FLUENCY_FLUENT,
-              })),
-            },
-            aboutMe: DEFAULT_ABOUT_ME_HEADINGS.includes(data.aboutMe)
-              ? ""
-              : data.aboutMe,
-            thingsILike: DEFAULT_HOBBIES_HEADINGS.includes(data.thingsILike)
-              ? ""
-              : data.thingsILike,
+            /* @todo: uncomment when we have regions visited, regions lived,  and language abilities */
+            // regionsVisited: regionsVisited.map(
+            //   (region) => (regionsLookup || {})[region]
+            // ),
+            // regionsLived: regionsLived.map(
+            //   (region) => (regionsLookup || {})[region]
+            // ),
+            // languageAbilities: {
+            //   valueList: fluentLanguages.map((language) => ({
+            //     code: (languagesLookup || {})[language],
+            //     fluency: LanguageAbility.Fluency.FLUENCY_FLUENT,
+            //   })),
+            // },
+            aboutMe:
+              data.aboutMe && DEFAULT_ABOUT_ME_HEADINGS.includes(data.aboutMe)
+                ? ""
+                : data.aboutMe,
+            thingsILike:
+              data.thingsILike &&
+              DEFAULT_HOBBIES_HEADINGS.includes(data.thingsILike)
+                ? ""
+                : data.thingsILike,
           },
           setMutationError: setErrorMessage,
         },
@@ -162,7 +165,7 @@ export default function EditProfileForm() {
     // All field validation errors should scroll to their respective field
     // Except the avatar, so this scrolls to top on avatar validation error
     (errors) =>
-      errors.avatarKey && window.scroll({ top: 0, behavior: "smooth" })
+      errors.avatarUrl && window.scroll({ top: 0, behavior: "smooth" })
   );
 
   return (
@@ -170,8 +173,8 @@ export default function EditProfileForm() {
       {updateError && (
         <Alert severity="error">{errorMessage || "Unknown error"}</Alert>
       )}
-      {errors.avatarKey && (
-        <Alert severity="error">{errors.avatarKey?.message || ""}</Alert>
+      {errors.avatarUrl && (
+        <Alert severity="error">{errors.avatarUrl?.message || ""}</Alert>
       )}
       {user ? (
         <>
@@ -182,11 +185,11 @@ export default function EditProfileForm() {
               id="profile-picture"
               name="avatarKey"
               initialPreviewSrc={user.avatarUrl}
-              userName={user.name}
+              userName={user?.name || ""}
               type="avatar"
               onSuccess={async (data) => {
                 await service.user.updateAvatar(data.key);
-                if (user) queryClient.invalidateQueries(userKey(user.userId));
+                if (user) queryClient.invalidateQueries(userKey(user.id));
               }}
             />
             <ProfileTextInput
@@ -206,12 +209,16 @@ export default function EditProfileForm() {
             render={() => (
               <EditLocationMap
                 showRadiusSlider
-                initialLocation={{
-                  address: user.city,
-                  lat: user.lat,
-                  lng: user.lng,
-                  radius: user.radius,
-                }}
+                initialLocation={
+                  user.city && user.lat && user.lng && user.radius
+                    ? {
+                        address: user.city,
+                        lat: user.lat,
+                        lng: user.lng,
+                        radius: user.radius,
+                      }
+                    : undefined
+                }
                 updateLocation={(location) => {
                   if (location) {
                     setValue("city", location.address, { shouldDirty: true });
@@ -236,21 +243,21 @@ export default function EditProfileForm() {
                     aria-label={HOSTING_STATUS}
                     name="hostingStatus"
                     value={value}
-                    onChange={(event) => onChange(Number(event.target.value))}
+                    onChange={(event) => onChange(event.target.value)}
                     className={classes.radioButtons}
                   >
                     <FormControlLabel
-                      value={HostingStatus.HOSTING_STATUS_CAN_HOST}
+                      value={HostingStatusEnum.CanHost}
                       control={<Radio />}
                       label={ACCEPTING}
                     />
                     <FormControlLabel
-                      value={HostingStatus.HOSTING_STATUS_MAYBE}
+                      value={HostingStatusEnum.Maybe}
                       control={<Radio />}
                       label={MAYBE_ACCEPTING}
                     />
                     <FormControlLabel
-                      value={HostingStatus.HOSTING_STATUS_CANT_HOST}
+                      value={HostingStatusEnum.CantHost}
                       control={<Radio />}
                       label={NOT_ACCEPTING}
                     />
@@ -270,21 +277,21 @@ export default function EditProfileForm() {
                     aria-label={MEETUP_STATUS}
                     name="meetupStatus"
                     value={value}
-                    onChange={(event) => onChange(Number(event.target.value))}
+                    onChange={(event) => onChange(event.target.value)}
                     className={classes.radioButtons}
                   >
                     <FormControlLabel
-                      value={MeetupStatus.MEETUP_STATUS_WANTS_TO_MEETUP}
+                      value={MeetupStatusEnum.WantsToMeetup}
                       control={<Radio />}
                       label={MEETUP}
                     />
                     <FormControlLabel
-                      value={MeetupStatus.MEETUP_STATUS_OPEN_TO_MEETUP}
+                      value={MeetupStatusEnum.OpenToMeetup}
                       control={<Radio />}
                       label={MAYBE_MEETUP}
                     />
                     <FormControlLabel
-                      value={MeetupStatus.MEETUP_STATUS_DOES_NOT_WANT_TO_MEETUP}
+                      value={MeetupStatusEnum.DoesNotWantToMeetup}
                       control={<Radio />}
                       label={NO_MEETUP}
                     />
@@ -340,9 +347,13 @@ export default function EditProfileForm() {
             {languages && (
               <Controller
                 control={control}
-                defaultValue={user.languageAbilitiesList.map(
-                  (ability) => languages[ability.code]
-                )}
+                defaultValue={
+                  /* @todo: uncomment once we have user.languageAbilitiesList available */
+                  // user.languageAbilitiesList.map(
+                  //   (ability) => languages[ability.code]
+                  // )
+                  []
+                }
                 name="fluentLanguages"
                 render={({ onChange, value }) => (
                   <ProfileTagInput
@@ -399,11 +410,12 @@ export default function EditProfileForm() {
               id="additionalInformation"
               label={ADDITIONAL}
               name="additionalInformation"
-              defaultValue={user.additionalInformation}
+              defaultValue={user.additionalInformation || ""}
               control={control}
               className={classes.field}
             />
-            {regions ? (
+            {/* @todo: uncomment when we have regions visited available */}
+            {/* {regions ? (
               <>
                 <Controller
                   control={control}
@@ -438,7 +450,7 @@ export default function EditProfileForm() {
                   )}
                 />
               </>
-            ) : null}
+            ) : null} */}
 
             <div className={classes.buttonContainer}>
               <Button

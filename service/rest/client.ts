@@ -12,14 +12,14 @@ const AUTH_COOKIE_NAME = "couchers_auth_token";
 
 class AuthTokenMiddleware implements Middleware {
   public async pre(context: ResponseContext): Promise<FetchParams | void> {
-    const accessToken = this.acquireToken();
+    const accessToken = await this.acquireToken();
     return {
       url: context.url,
       init: {
         ...context.init,
         headers: new Headers({
           ...context.init.headers,
-          Authorization: `Bearer ${accessToken}`,
+          ...(accessToken ? { Authorization: `Token ${accessToken}` } : {}),
         }),
       },
     };
@@ -29,10 +29,10 @@ class AuthTokenMiddleware implements Middleware {
     return Promise.resolve(context.response);
   }
 
-  private acquireToken(): Promise<string> {
+  private acquireToken(): Promise<string | undefined> {
     return Promise.resolve().then(() => {
       const authToken = getCookie(AUTH_COOKIE_NAME);
-      return `Token ${authToken}`;
+      return authToken;
     });
   }
 }

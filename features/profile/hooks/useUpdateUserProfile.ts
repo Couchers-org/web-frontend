@@ -1,14 +1,14 @@
+import { PatchedUser, User } from "api";
 import { useAuthContext } from "features/auth/AuthProvider";
 import { accountInfoQueryKey, userKey } from "features/queryKeys";
-import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { useRouter } from "next/router";
 import { useMutation, useQueryClient } from "react-query";
 import { routeToProfile } from "routes";
-import { service, UpdateUserProfileData } from "service/index";
+import client from "service/rest/client";
 import { SetMutationError } from "utils/types";
 
 interface UpdateUserProfileVariables {
-  profileData: UpdateUserProfileData;
+  profileData: PatchedUser;
   setMutationError: SetMutationError;
 }
 
@@ -22,8 +22,10 @@ export default function useUpdateUserProfile() {
     isLoading,
     isError,
     status,
-  } = useMutation<Empty, Error, UpdateUserProfileVariables>(
-    ({ profileData }) => service.user.updateProfile(profileData),
+  } = useMutation<User, Error, UpdateUserProfileVariables>(
+    ({ profileData }) => {
+      return client.users.usersMePartialUpdate({ patchedUser: profileData });
+    },
     {
       onError: (error, { setMutationError }) => {
         setMutationError(error.message);
