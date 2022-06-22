@@ -63,8 +63,6 @@ export default function Avatar({
   const username = user?.username ?? "";
   const name = user?.name ?? "";
 
-  const avatarUrl = ""; /* @todo: avatar URL not being returned yet */
-
   return (
     <div
       className={classNames(
@@ -82,13 +80,21 @@ export default function Avatar({
               className={classes.link}
               aria-label={getProfileLinkA11yLabel(name)}
             >
-              <MuiAvatar className={classes.avatar} alt={name} src={avatarUrl}>
+              <MuiAvatar
+                className={classes.avatar}
+                alt={name}
+                src={user?.avatarUrl}
+              >
                 {name.split(/\s+/).map((name) => name[0])}
               </MuiAvatar>
             </a>
           </Link>
         ) : (
-          <MuiAvatar className={classes.avatar} alt={name} src={avatarUrl}>
+          <MuiAvatar
+            className={classes.avatar}
+            alt={name}
+            src={user?.avatarUrl}
+          >
             {name.split(/\s+/).map((name) => name[0])}
           </MuiAvatar>
         )

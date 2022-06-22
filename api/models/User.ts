@@ -100,10 +100,10 @@ export interface User {
     readonly pronouns: string | null;
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof User
      */
-    readonly birthdate: Date | null;
+    readonly age: string;
     /**
      * 
      * @type {string}
@@ -308,6 +308,18 @@ export interface User {
      * @memberof User
      */
     readonly campingOk: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    readonly avatarUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    readonly timezoneArea: string;
 }
 
 export function UserFromJSON(json: any): User {
@@ -328,7 +340,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'name': json['name'],
         'gender': json['gender'],
         'pronouns': json['pronouns'],
-        'birthdate': (json['birthdate'] === null ? null : new Date(json['birthdate'])),
+        'age': json['age'],
         'fullName': json['full_name'],
         'hostingStatus': HostingStatusEnumFromJSON(json['hosting_status']),
         'meetupStatus': MeetupStatusEnumFromJSON(json['meetup_status']),
@@ -363,6 +375,8 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'parking': json['parking'],
         'parkingDetails': PatchedUserParkingDetailsFromJSON(json['parking_details']),
         'campingOk': json['camping_ok'],
+        'avatarUrl': json['avatar_url'],
+        'timezoneArea': json['timezone_area'],
     };
 }
 

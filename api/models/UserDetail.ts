@@ -73,7 +73,7 @@ export interface UserDetail {
      * @type {string}
      * @memberof UserDetail
      */
-    password: string;
+    password?: string | null;
     /**
      * 
      * @type {string}
@@ -416,6 +416,24 @@ export interface UserDetail {
      * @memberof UserDetail
      */
     newNotificationsEnabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDetail
+     */
+    readonly avatarUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDetail
+     */
+    readonly timezoneArea: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDetail
+     */
+    readonly age: string;
 }
 
 export function UserDetailFromJSON(json: any): UserDetail {
@@ -431,7 +449,7 @@ export function UserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'id': json['id'],
         'username': !exists(json, 'username') ? undefined : json['username'],
         'email': json['email'],
-        'password': json['password'],
+        'password': !exists(json, 'password') ? undefined : json['password'],
         'phone': !exists(json, 'phone') ? undefined : json['phone'],
         'geom': !exists(json, 'geom') ? undefined : json['geom'],
         'geomRadius': !exists(json, 'geom_radius') ? undefined : json['geom_radius'],
@@ -489,6 +507,9 @@ export function UserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'stripeCustomerId': json['stripe_customer_id'],
         'stripeCustomerIdOld': json['stripe_customer_id_old'],
         'newNotificationsEnabled': !exists(json, 'new_notifications_enabled') ? undefined : json['new_notifications_enabled'],
+        'avatarUrl': json['avatar_url'],
+        'timezoneArea': json['timezone_area'],
+        'age': json['age'],
     };
 }
 

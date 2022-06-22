@@ -100,10 +100,10 @@ export interface PatchedUser {
     readonly pronouns?: string | null;
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof PatchedUser
      */
-    readonly birthdate?: Date | null;
+    readonly age?: string;
     /**
      * 
      * @type {string}
@@ -308,6 +308,18 @@ export interface PatchedUser {
      * @memberof PatchedUser
      */
     readonly campingOk?: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUser
+     */
+    readonly avatarUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUser
+     */
+    readonly timezoneArea?: string;
 }
 
 export function PatchedUserFromJSON(json: any): PatchedUser {
@@ -328,7 +340,7 @@ export function PatchedUserFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'name': !exists(json, 'name') ? undefined : json['name'],
         'gender': !exists(json, 'gender') ? undefined : json['gender'],
         'pronouns': !exists(json, 'pronouns') ? undefined : json['pronouns'],
-        'birthdate': !exists(json, 'birthdate') ? undefined : (json['birthdate'] === null ? null : new Date(json['birthdate'])),
+        'age': !exists(json, 'age') ? undefined : json['age'],
         'fullName': !exists(json, 'full_name') ? undefined : json['full_name'],
         'hostingStatus': !exists(json, 'hosting_status') ? undefined : HostingStatusEnumFromJSON(json['hosting_status']),
         'meetupStatus': !exists(json, 'meetup_status') ? undefined : MeetupStatusEnumFromJSON(json['meetup_status']),
@@ -363,6 +375,8 @@ export function PatchedUserFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'parking': !exists(json, 'parking') ? undefined : json['parking'],
         'parkingDetails': !exists(json, 'parking_details') ? undefined : PatchedUserParkingDetailsFromJSON(json['parking_details']),
         'campingOk': !exists(json, 'camping_ok') ? undefined : json['camping_ok'],
+        'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
+        'timezoneArea': !exists(json, 'timezone_area') ? undefined : json['timezone_area'],
     };
 }
 

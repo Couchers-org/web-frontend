@@ -6,7 +6,6 @@ import Avatar from "components/Avatar";
 import { LinkIcon } from "components/Icons";
 import StyledLink from "components/StyledLink";
 import { routeToUser } from "routes";
-import calculateAge from "utils/calculateAge";
 import makeStyles from "utils/makeStyles";
 
 export const useStyles = makeStyles((theme) => ({
@@ -69,8 +68,6 @@ export default function UserSummary({
 }: UserSummaryProps) {
   const classes = useStyles();
 
-  const age = user && user.birthdate ? calculateAge(user.birthdate) : undefined;
-
   const title = (
     <Typography
       component={headlineComponent}
@@ -86,7 +83,7 @@ export default function UserSummary({
       ) : nameOnly ? (
         user.name
       ) : (
-        `${user.name}, ${age || "-"}`
+        `${user.name}, ${user.age || "-"}`
       )}
     </Typography>
   );
