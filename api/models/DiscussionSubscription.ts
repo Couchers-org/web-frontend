@@ -27,18 +27,6 @@ export interface DiscussionSubscription {
     readonly id: number;
     /**
      * 
-     * @type {number}
-     * @memberof DiscussionSubscription
-     */
-    readonly user: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiscussionSubscription
-     */
-    readonly discussion: number;
-    /**
-     * 
      * @type {Date}
      * @memberof DiscussionSubscription
      */
@@ -49,6 +37,18 @@ export interface DiscussionSubscription {
      * @memberof DiscussionSubscription
      */
     readonly deletedAt: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiscussionSubscription
+     */
+    readonly user: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiscussionSubscription
+     */
+    readonly discussion: number;
 }
 
 export function DiscussionSubscriptionFromJSON(json: any): DiscussionSubscription {
@@ -62,10 +62,10 @@ export function DiscussionSubscriptionFromJSONTyped(json: any, ignoreDiscriminat
     return {
         
         'id': json['id'],
-        'user': json['user'],
-        'discussion': json['discussion'],
         'createdAt': (new Date(json['created_at'])),
         'deletedAt': (new Date(json['deleted_at'])),
+        'user': json['user'],
+        'discussion': json['discussion'],
     };
 }
 

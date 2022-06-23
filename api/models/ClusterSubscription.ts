@@ -34,6 +34,12 @@ export interface ClusterSubscription {
     readonly id: number;
     /**
      * 
+     * @type {RoleEnum}
+     * @memberof ClusterSubscription
+     */
+    role: RoleEnum;
+    /**
+     * 
      * @type {number}
      * @memberof ClusterSubscription
      */
@@ -43,13 +49,7 @@ export interface ClusterSubscription {
      * @type {number}
      * @memberof ClusterSubscription
      */
-    readonly cluster: number;
-    /**
-     * 
-     * @type {RoleEnum}
-     * @memberof ClusterSubscription
-     */
-    role: RoleEnum;
+    cluster: number;
 }
 
 export function ClusterSubscriptionFromJSON(json: any): ClusterSubscription {
@@ -63,9 +63,9 @@ export function ClusterSubscriptionFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'id': json['id'],
+        'role': RoleEnumFromJSON(json['role']),
         'user': json['user'],
         'cluster': json['cluster'],
-        'role': RoleEnumFromJSON(json['role']),
     };
 }
 
@@ -79,6 +79,7 @@ export function ClusterSubscriptionToJSON(value?: ClusterSubscription | null): a
     return {
         
         'role': RoleEnumToJSON(value.role),
+        'cluster': value.cluster,
     };
 }
 

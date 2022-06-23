@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface AccountDeletionToken {
     /**
      * 
+     * @type {number}
+     * @memberof AccountDeletionToken
+     */
+    readonly id: number;
+    /**
+     * 
      * @type {string}
      * @memberof AccountDeletionToken
      */
@@ -55,6 +61,7 @@ export function AccountDeletionTokenFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
+        'id': json['id'],
         'token': !exists(json, 'token') ? undefined : json['token'],
         'createdAt': (new Date(json['created_at'])),
         'expiresAt': (new Date(json['expires_at'])),

@@ -47,416 +47,416 @@ import {
 /**
  * 
  * @export
- * @interface UserDetail
+ * @interface PatchedUserDetail
  */
-export interface UserDetail {
+export interface PatchedUserDetail {
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly id: number;
+    readonly id?: number;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     username?: string | null;
     /**
      * Required
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    email: string;
+    email?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     password?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     phone?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     geom?: string | null;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     geomRadius?: number | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     city?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     hometown?: string | null;
     /**
      * 
      * @type {Date}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly createdAt: Date;
+    readonly createdAt?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly updatedAt: Date;
+    readonly updatedAt?: Date;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     lastNotifiedMessageId?: number;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     lastNotifiedRequestMessageId?: number;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     name?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     gender?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     pronouns?: string | null;
     /**
      * 
      * @type {Date}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     birthdate?: Date | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     fullName?: string | null;
     /**
      * 
      * @type {HostingStatusEnum}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     hostingStatus?: HostingStatusEnum;
     /**
      * 
      * @type {MeetupStatusEnum}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     meetupStatus?: MeetupStatusEnum;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     communityStanding?: number | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     occupation?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     education?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     aboutMe?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     myTravels?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     thingsILike?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     aboutPlace?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     additionalInformation?: string | null;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     maxGuests?: number | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     lastMinute?: boolean | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     hasPets?: boolean | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     acceptsPets?: boolean | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     petDetails?: string | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     hasKids?: boolean | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     acceptsKids?: boolean | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     kidDetails?: string | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     hasHousemates?: boolean | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     housemateDetails?: string | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     wheelchairAccessible?: boolean | null;
     /**
      * 
      * @type {PatchedUserDetailSmokingAllowed}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     smokingAllowed?: PatchedUserDetailSmokingAllowed | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     smokesAtHome?: boolean | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     drinkingAllowed?: boolean | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     drinksAtHome?: boolean | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     otherHostInfo?: string | null;
     /**
      * 
      * @type {PatchedUserDetailSleepingArrangement}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     sleepingArrangement?: PatchedUserDetailSleepingArrangement | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     sleepingDetails?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     area?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     houseRules?: string | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     parking?: boolean | null;
     /**
      * 
      * @type {PatchedUserDetailParkingDetails}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     parkingDetails?: PatchedUserDetailParkingDetails | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     campingOk?: boolean | null;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     acceptedTos?: number;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     acceptedCommunityGuidelines?: number;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     filledContributorForm?: boolean;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     onboardingEmailsSent?: number;
     /**
      * 
      * @type {Date}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly lastOnboardingEmailSentAt: Date | null;
+    readonly lastOnboardingEmailSentAt?: Date | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     addedToMailingList?: boolean;
     /**
      * 
      * @type {Date}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     lastDigestSentAt?: Date | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly stripeCustomerId: string | null;
+    readonly stripeCustomerId?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly stripeCustomerIdOld: string | null;
+    readonly stripeCustomerIdOld?: string | null;
     /**
      * 
      * @type {boolean}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
     newNotificationsEnabled?: boolean;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly avatarUrl: string;
+    readonly avatarUrl?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly timezoneArea: string;
+    readonly timezoneArea?: string;
     /**
      * 
      * @type {number}
-     * @memberof UserDetail
+     * @memberof PatchedUserDetail
      */
-    readonly age: number;
+    readonly age?: number;
 }
 
-export function UserDetailFromJSON(json: any): UserDetail {
-    return UserDetailFromJSONTyped(json, false);
+export function PatchedUserDetailFromJSON(json: any): PatchedUserDetail {
+    return PatchedUserDetailFromJSONTyped(json, false);
 }
 
-export function UserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserDetail {
+export function PatchedUserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean): PatchedUserDetail {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'id': json['id'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
         'username': !exists(json, 'username') ? undefined : json['username'],
-        'email': json['email'],
+        'email': !exists(json, 'email') ? undefined : json['email'],
         'password': !exists(json, 'password') ? undefined : json['password'],
         'phone': !exists(json, 'phone') ? undefined : json['phone'],
         'geom': !exists(json, 'geom') ? undefined : json['geom'],
         'geomRadius': !exists(json, 'geom_radius') ? undefined : json['geom_radius'],
         'city': !exists(json, 'city') ? undefined : json['city'],
         'hometown': !exists(json, 'hometown') ? undefined : json['hometown'],
-        'createdAt': (new Date(json['created_at'])),
-        'updatedAt': (new Date(json['updated_at'])),
+        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
+        'updatedAt': !exists(json, 'updated_at') ? undefined : (new Date(json['updated_at'])),
         'lastNotifiedMessageId': !exists(json, 'last_notified_message_id') ? undefined : json['last_notified_message_id'],
         'lastNotifiedRequestMessageId': !exists(json, 'last_notified_request_message_id') ? undefined : json['last_notified_request_message_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
@@ -501,19 +501,19 @@ export function UserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'acceptedCommunityGuidelines': !exists(json, 'accepted_community_guidelines') ? undefined : json['accepted_community_guidelines'],
         'filledContributorForm': !exists(json, 'filled_contributor_form') ? undefined : json['filled_contributor_form'],
         'onboardingEmailsSent': !exists(json, 'onboarding_emails_sent') ? undefined : json['onboarding_emails_sent'],
-        'lastOnboardingEmailSentAt': (json['last_onboarding_email_sent_at'] === null ? null : new Date(json['last_onboarding_email_sent_at'])),
+        'lastOnboardingEmailSentAt': !exists(json, 'last_onboarding_email_sent_at') ? undefined : (json['last_onboarding_email_sent_at'] === null ? null : new Date(json['last_onboarding_email_sent_at'])),
         'addedToMailingList': !exists(json, 'added_to_mailing_list') ? undefined : json['added_to_mailing_list'],
         'lastDigestSentAt': !exists(json, 'last_digest_sent_at') ? undefined : (json['last_digest_sent_at'] === null ? null : new Date(json['last_digest_sent_at'])),
-        'stripeCustomerId': json['stripe_customer_id'],
-        'stripeCustomerIdOld': json['stripe_customer_id_old'],
+        'stripeCustomerId': !exists(json, 'stripe_customer_id') ? undefined : json['stripe_customer_id'],
+        'stripeCustomerIdOld': !exists(json, 'stripe_customer_id_old') ? undefined : json['stripe_customer_id_old'],
         'newNotificationsEnabled': !exists(json, 'new_notifications_enabled') ? undefined : json['new_notifications_enabled'],
-        'avatarUrl': json['avatar_url'],
-        'timezoneArea': json['timezone_area'],
-        'age': json['age'],
+        'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
+        'timezoneArea': !exists(json, 'timezone_area') ? undefined : json['timezone_area'],
+        'age': !exists(json, 'age') ? undefined : json['age'],
     };
 }
 
-export function UserDetailToJSON(value?: UserDetail | null): any {
+export function PatchedUserDetailToJSON(value?: PatchedUserDetail | null): any {
     if (value === undefined) {
         return undefined;
     }

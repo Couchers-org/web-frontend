@@ -27,6 +27,12 @@ export interface EventOrganizer {
     readonly id: number;
     /**
      * 
+     * @type {Date}
+     * @memberof EventOrganizer
+     */
+    readonly createdAt: Date;
+    /**
+     * 
      * @type {number}
      * @memberof EventOrganizer
      */
@@ -37,12 +43,6 @@ export interface EventOrganizer {
      * @memberof EventOrganizer
      */
     readonly event: number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof EventOrganizer
-     */
-    readonly createdAt: Date;
 }
 
 export function EventOrganizerFromJSON(json: any): EventOrganizer {
@@ -56,9 +56,9 @@ export function EventOrganizerFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'id': json['id'],
+        'createdAt': (new Date(json['created_at'])),
         'user': json['user'],
         'event': json['event'],
-        'createdAt': (new Date(json['created_at'])),
     };
 }
 

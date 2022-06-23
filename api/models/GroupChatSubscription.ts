@@ -34,18 +34,6 @@ export interface GroupChatSubscription {
     readonly id: number;
     /**
      * 
-     * @type {number}
-     * @memberof GroupChatSubscription
-     */
-    readonly user: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof GroupChatSubscription
-     */
-    readonly groupChat: number;
-    /**
-     * 
      * @type {Date}
      * @memberof GroupChatSubscription
      */
@@ -74,6 +62,18 @@ export interface GroupChatSubscription {
      * @memberof GroupChatSubscription
      */
     role: RoleEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof GroupChatSubscription
+     */
+    readonly user: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GroupChatSubscription
+     */
+    readonly groupChat: number;
 }
 
 export function GroupChatSubscriptionFromJSON(json: any): GroupChatSubscription {
@@ -87,13 +87,13 @@ export function GroupChatSubscriptionFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'id': json['id'],
-        'user': json['user'],
-        'groupChat': json['group_chat'],
         'createdAt': (new Date(json['created_at'])),
         'leftAt': !exists(json, 'left_at') ? undefined : (json['left_at'] === null ? null : new Date(json['left_at'])),
         'unmuteAt': !exists(json, 'unmute_at') ? undefined : (new Date(json['unmute_at'])),
         'lastSeenMessageId': !exists(json, 'last_seen_message_id') ? undefined : json['last_seen_message_id'],
         'role': RoleEnumFromJSON(json['role']),
+        'user': json['user'],
+        'groupChat': json['group_chat'],
     };
 }
 

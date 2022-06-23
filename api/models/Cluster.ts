@@ -27,12 +27,6 @@ export interface Cluster {
     readonly id: number;
     /**
      * 
-     * @type {number}
-     * @memberof Cluster
-     */
-    readonly parentNode: number;
-    /**
-     * 
      * @type {string}
      * @memberof Cluster
      */
@@ -55,6 +49,12 @@ export interface Cluster {
      * @memberof Cluster
      */
     officialCluster: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Cluster
+     */
+    readonly parentNode: number;
 }
 
 export function ClusterFromJSON(json: any): Cluster {
@@ -68,11 +68,11 @@ export function ClusterFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     return {
         
         'id': json['id'],
-        'parentNode': json['parent_node'],
         'name': json['name'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'createdAt': (new Date(json['created_at'])),
         'officialCluster': json['official_cluster'],
+        'parentNode': json['parent_node'],
     };
 }
 

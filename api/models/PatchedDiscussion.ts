@@ -60,7 +60,7 @@ export interface PatchedDiscussion {
      * @type {number}
      * @memberof PatchedDiscussion
      */
-    ownerCluster?: number;
+    readonly ownerCluster?: number;
 }
 
 export function PatchedDiscussionFromJSON(json: any): PatchedDiscussion {
@@ -95,7 +95,6 @@ export function PatchedDiscussionToJSON(value?: PatchedDiscussion | null): any {
         'title': value.title,
         'content': value.content,
         'thread': value.thread,
-        'owner_cluster': value.ownerCluster,
     };
 }
 

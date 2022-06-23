@@ -54,7 +54,7 @@ export interface PatchedEvent {
      * @type {number}
      * @memberof PatchedEvent
      */
-    ownerCluster?: number | null;
+    readonly ownerCluster?: number | null;
     /**
      * 
      * @type {number}
@@ -100,7 +100,6 @@ export function PatchedEventToJSON(value?: PatchedEvent | null): any {
     return {
         
         'title': value.title,
-        'owner_cluster': value.ownerCluster,
         'owner_user': value.ownerUser,
         'thread': value.thread,
     };

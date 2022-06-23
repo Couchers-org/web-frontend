@@ -42,7 +42,7 @@ export interface PatchedRegionLived {
      * @type {number}
      * @memberof PatchedRegionLived
      */
-    readonly region?: number;
+    region?: number;
 }
 
 export function PatchedRegionLivedFromJSON(json: any): PatchedRegionLived {
@@ -71,6 +71,7 @@ export function PatchedRegionLivedToJSON(value?: PatchedRegionLived | null): any
     }
     return {
         
+        'region': value.region,
     };
 }
 

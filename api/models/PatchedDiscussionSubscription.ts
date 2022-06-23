@@ -27,18 +27,6 @@ export interface PatchedDiscussionSubscription {
     readonly id?: number;
     /**
      * 
-     * @type {number}
-     * @memberof PatchedDiscussionSubscription
-     */
-    readonly user?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedDiscussionSubscription
-     */
-    readonly discussion?: number;
-    /**
-     * 
      * @type {Date}
      * @memberof PatchedDiscussionSubscription
      */
@@ -49,6 +37,18 @@ export interface PatchedDiscussionSubscription {
      * @memberof PatchedDiscussionSubscription
      */
     readonly deletedAt?: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedDiscussionSubscription
+     */
+    readonly user?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedDiscussionSubscription
+     */
+    readonly discussion?: number;
 }
 
 export function PatchedDiscussionSubscriptionFromJSON(json: any): PatchedDiscussionSubscription {
@@ -62,10 +62,10 @@ export function PatchedDiscussionSubscriptionFromJSONTyped(json: any, ignoreDisc
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'user': !exists(json, 'user') ? undefined : json['user'],
-        'discussion': !exists(json, 'discussion') ? undefined : json['discussion'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'deletedAt': !exists(json, 'deleted_at') ? undefined : (new Date(json['deleted_at'])),
+        'user': !exists(json, 'user') ? undefined : json['user'],
+        'discussion': !exists(json, 'discussion') ? undefined : json['discussion'],
     };
 }
 

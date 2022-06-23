@@ -18,12 +18,48 @@ import {
     Event,
     EventFromJSON,
     EventToJSON,
+    EventOccurrence,
+    EventOccurrenceFromJSON,
+    EventOccurrenceToJSON,
+    EventOccurrenceAttendee,
+    EventOccurrenceAttendeeFromJSON,
+    EventOccurrenceAttendeeToJSON,
+    EventOrganizer,
+    EventOrganizerFromJSON,
+    EventOrganizerToJSON,
+    EventSubscription,
+    EventSubscriptionFromJSON,
+    EventSubscriptionToJSON,
     PaginatedEventList,
     PaginatedEventListFromJSON,
     PaginatedEventListToJSON,
+    PaginatedEventOccurrenceAttendeeList,
+    PaginatedEventOccurrenceAttendeeListFromJSON,
+    PaginatedEventOccurrenceAttendeeListToJSON,
+    PaginatedEventOccurrenceList,
+    PaginatedEventOccurrenceListFromJSON,
+    PaginatedEventOccurrenceListToJSON,
+    PaginatedEventOrganizerList,
+    PaginatedEventOrganizerListFromJSON,
+    PaginatedEventOrganizerListToJSON,
+    PaginatedEventSubscriptionList,
+    PaginatedEventSubscriptionListFromJSON,
+    PaginatedEventSubscriptionListToJSON,
     PatchedEvent,
     PatchedEventFromJSON,
     PatchedEventToJSON,
+    PatchedEventOccurrence,
+    PatchedEventOccurrenceFromJSON,
+    PatchedEventOccurrenceToJSON,
+    PatchedEventOccurrenceAttendee,
+    PatchedEventOccurrenceAttendeeFromJSON,
+    PatchedEventOccurrenceAttendeeToJSON,
+    PatchedEventOrganizer,
+    PatchedEventOrganizerFromJSON,
+    PatchedEventOrganizerToJSON,
+    PatchedEventSubscription,
+    PatchedEventSubscriptionFromJSON,
+    PatchedEventSubscriptionToJSON,
 } from '../models';
 
 export interface EventsCreateRequest {
@@ -38,6 +74,102 @@ export interface EventsListRequest {
     page?: number;
 }
 
+export interface EventsOccurrenceAttendeesCreateRequest {
+    eventId: string;
+    eventOccurrenceAttendee: EventOccurrenceAttendee;
+}
+
+export interface EventsOccurrenceAttendeesDestroyRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsOccurrenceAttendeesListRequest {
+    eventId: string;
+    page?: number;
+}
+
+export interface EventsOccurrenceAttendeesPartialUpdateRequest {
+    eventId: string;
+    id: number;
+    patchedEventOccurrenceAttendee?: PatchedEventOccurrenceAttendee;
+}
+
+export interface EventsOccurrenceAttendeesRetrieveRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsOccurrenceAttendeesUpdateRequest {
+    eventId: string;
+    id: number;
+    eventOccurrenceAttendee: EventOccurrenceAttendee;
+}
+
+export interface EventsOccurrencesCreateRequest {
+    eventId: string;
+    eventOccurrence?: EventOccurrence;
+}
+
+export interface EventsOccurrencesDestroyRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsOccurrencesListRequest {
+    eventId: string;
+    page?: number;
+}
+
+export interface EventsOccurrencesPartialUpdateRequest {
+    eventId: string;
+    id: number;
+    patchedEventOccurrence?: PatchedEventOccurrence;
+}
+
+export interface EventsOccurrencesRetrieveRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsOccurrencesUpdateRequest {
+    eventId: string;
+    id: number;
+    eventOccurrence?: EventOccurrence;
+}
+
+export interface EventsOrganizersCreateRequest {
+    eventId: string;
+    eventOrganizer?: EventOrganizer;
+}
+
+export interface EventsOrganizersDestroyRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsOrganizersListRequest {
+    eventId: string;
+    page?: number;
+}
+
+export interface EventsOrganizersPartialUpdateRequest {
+    eventId: string;
+    id: number;
+    patchedEventOrganizer?: PatchedEventOrganizer;
+}
+
+export interface EventsOrganizersRetrieveRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsOrganizersUpdateRequest {
+    eventId: string;
+    id: number;
+    eventOrganizer?: EventOrganizer;
+}
+
 export interface EventsPartialUpdateRequest {
     id: number;
     patchedEvent?: PatchedEvent;
@@ -45,6 +177,38 @@ export interface EventsPartialUpdateRequest {
 
 export interface EventsRetrieveRequest {
     id: number;
+}
+
+export interface EventsSubscriptionsCreateRequest {
+    eventId: string;
+    eventSubscription?: EventSubscription;
+}
+
+export interface EventsSubscriptionsDestroyRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsSubscriptionsListRequest {
+    eventId: string;
+    page?: number;
+}
+
+export interface EventsSubscriptionsPartialUpdateRequest {
+    eventId: string;
+    id: number;
+    patchedEventSubscription?: PatchedEventSubscription;
+}
+
+export interface EventsSubscriptionsRetrieveRequest {
+    eventId: string;
+    id: number;
+}
+
+export interface EventsSubscriptionsUpdateRequest {
+    eventId: string;
+    id: number;
+    eventSubscription?: EventSubscription;
 }
 
 export interface EventsUpdateRequest {
@@ -157,6 +321,674 @@ export class EventsApi extends runtime.BaseAPI {
 
     /**
      */
+    async eventsOccurrenceAttendeesCreateRaw(requestParameters: EventsOccurrenceAttendeesCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrenceAttendee>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrenceAttendeesCreate.');
+        }
+
+        if (requestParameters.eventOccurrenceAttendee === null || requestParameters.eventOccurrenceAttendee === undefined) {
+            throw new runtime.RequiredError('eventOccurrenceAttendee','Required parameter requestParameters.eventOccurrenceAttendee was null or undefined when calling eventsOccurrenceAttendeesCreate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrence_attendees/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventOccurrenceAttendeeToJSON(requestParameters.eventOccurrenceAttendee),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceAttendeeFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesCreate(requestParameters: EventsOccurrenceAttendeesCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrenceAttendee> {
+        const response = await this.eventsOccurrenceAttendeesCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesDestroyRaw(requestParameters: EventsOccurrenceAttendeesDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrenceAttendeesDestroy.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrenceAttendeesDestroy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrence_attendees/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesDestroy(requestParameters: EventsOccurrenceAttendeesDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<void> {
+        await this.eventsOccurrenceAttendeesDestroyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesListRaw(requestParameters: EventsOccurrenceAttendeesListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<PaginatedEventOccurrenceAttendeeList>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrenceAttendeesList.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrence_attendees/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedEventOccurrenceAttendeeListFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesList(requestParameters: EventsOccurrenceAttendeesListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<PaginatedEventOccurrenceAttendeeList> {
+        const response = await this.eventsOccurrenceAttendeesListRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesPartialUpdateRaw(requestParameters: EventsOccurrenceAttendeesPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrenceAttendee>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrenceAttendeesPartialUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrenceAttendeesPartialUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrence_attendees/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchedEventOccurrenceAttendeeToJSON(requestParameters.patchedEventOccurrenceAttendee),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceAttendeeFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesPartialUpdate(requestParameters: EventsOccurrenceAttendeesPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrenceAttendee> {
+        const response = await this.eventsOccurrenceAttendeesPartialUpdateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesRetrieveRaw(requestParameters: EventsOccurrenceAttendeesRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrenceAttendee>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrenceAttendeesRetrieve.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrenceAttendeesRetrieve.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrence_attendees/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceAttendeeFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesRetrieve(requestParameters: EventsOccurrenceAttendeesRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrenceAttendee> {
+        const response = await this.eventsOccurrenceAttendeesRetrieveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesUpdateRaw(requestParameters: EventsOccurrenceAttendeesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrenceAttendee>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrenceAttendeesUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrenceAttendeesUpdate.');
+        }
+
+        if (requestParameters.eventOccurrenceAttendee === null || requestParameters.eventOccurrenceAttendee === undefined) {
+            throw new runtime.RequiredError('eventOccurrenceAttendee','Required parameter requestParameters.eventOccurrenceAttendee was null or undefined when calling eventsOccurrenceAttendeesUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrence_attendees/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventOccurrenceAttendeeToJSON(requestParameters.eventOccurrenceAttendee),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceAttendeeFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrenceAttendeesUpdate(requestParameters: EventsOccurrenceAttendeesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrenceAttendee> {
+        const response = await this.eventsOccurrenceAttendeesUpdateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrencesCreateRaw(requestParameters: EventsOccurrencesCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrence>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrencesCreate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrences/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventOccurrenceToJSON(requestParameters.eventOccurrence),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrencesCreate(requestParameters: EventsOccurrencesCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrence> {
+        const response = await this.eventsOccurrencesCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrencesDestroyRaw(requestParameters: EventsOccurrencesDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrencesDestroy.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrencesDestroy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrences/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async eventsOccurrencesDestroy(requestParameters: EventsOccurrencesDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<void> {
+        await this.eventsOccurrencesDestroyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async eventsOccurrencesListRaw(requestParameters: EventsOccurrencesListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<PaginatedEventOccurrenceList>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrencesList.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrences/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedEventOccurrenceListFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrencesList(requestParameters: EventsOccurrencesListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<PaginatedEventOccurrenceList> {
+        const response = await this.eventsOccurrencesListRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrencesPartialUpdateRaw(requestParameters: EventsOccurrencesPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrence>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrencesPartialUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrencesPartialUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrences/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchedEventOccurrenceToJSON(requestParameters.patchedEventOccurrence),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrencesPartialUpdate(requestParameters: EventsOccurrencesPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrence> {
+        const response = await this.eventsOccurrencesPartialUpdateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrencesRetrieveRaw(requestParameters: EventsOccurrencesRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrence>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrencesRetrieve.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrencesRetrieve.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrences/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrencesRetrieve(requestParameters: EventsOccurrencesRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrence> {
+        const response = await this.eventsOccurrencesRetrieveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOccurrencesUpdateRaw(requestParameters: EventsOccurrencesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOccurrence>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOccurrencesUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOccurrencesUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/occurrences/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventOccurrenceToJSON(requestParameters.eventOccurrence),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOccurrenceFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOccurrencesUpdate(requestParameters: EventsOccurrencesUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOccurrence> {
+        const response = await this.eventsOccurrencesUpdateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOrganizersCreateRaw(requestParameters: EventsOrganizersCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOrganizer>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOrganizersCreate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/organizers/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventOrganizerToJSON(requestParameters.eventOrganizer),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOrganizerFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOrganizersCreate(requestParameters: EventsOrganizersCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOrganizer> {
+        const response = await this.eventsOrganizersCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOrganizersDestroyRaw(requestParameters: EventsOrganizersDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOrganizersDestroy.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOrganizersDestroy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/organizers/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async eventsOrganizersDestroy(requestParameters: EventsOrganizersDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<void> {
+        await this.eventsOrganizersDestroyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async eventsOrganizersListRaw(requestParameters: EventsOrganizersListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<PaginatedEventOrganizerList>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOrganizersList.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/organizers/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedEventOrganizerListFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOrganizersList(requestParameters: EventsOrganizersListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<PaginatedEventOrganizerList> {
+        const response = await this.eventsOrganizersListRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOrganizersPartialUpdateRaw(requestParameters: EventsOrganizersPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOrganizer>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOrganizersPartialUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOrganizersPartialUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/organizers/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchedEventOrganizerToJSON(requestParameters.patchedEventOrganizer),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOrganizerFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOrganizersPartialUpdate(requestParameters: EventsOrganizersPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOrganizer> {
+        const response = await this.eventsOrganizersPartialUpdateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOrganizersRetrieveRaw(requestParameters: EventsOrganizersRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOrganizer>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOrganizersRetrieve.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOrganizersRetrieve.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/organizers/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOrganizerFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOrganizersRetrieve(requestParameters: EventsOrganizersRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOrganizer> {
+        const response = await this.eventsOrganizersRetrieveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsOrganizersUpdateRaw(requestParameters: EventsOrganizersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventOrganizer>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsOrganizersUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsOrganizersUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/organizers/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventOrganizerToJSON(requestParameters.eventOrganizer),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventOrganizerFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsOrganizersUpdate(requestParameters: EventsOrganizersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventOrganizer> {
+        const response = await this.eventsOrganizersUpdateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async eventsPartialUpdateRaw(requestParameters: EventsPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Event>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsPartialUpdate.');
@@ -219,6 +1051,226 @@ export class EventsApi extends runtime.BaseAPI {
      */
     async eventsRetrieve(requestParameters: EventsRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Event> {
         const response = await this.eventsRetrieveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsSubscriptionsCreateRaw(requestParameters: EventsSubscriptionsCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventSubscription>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsSubscriptionsCreate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/subscriptions/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventSubscriptionToJSON(requestParameters.eventSubscription),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventSubscriptionFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsSubscriptionsCreate(requestParameters: EventsSubscriptionsCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventSubscription> {
+        const response = await this.eventsSubscriptionsCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsSubscriptionsDestroyRaw(requestParameters: EventsSubscriptionsDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsSubscriptionsDestroy.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsSubscriptionsDestroy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/subscriptions/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async eventsSubscriptionsDestroy(requestParameters: EventsSubscriptionsDestroyRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<void> {
+        await this.eventsSubscriptionsDestroyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async eventsSubscriptionsListRaw(requestParameters: EventsSubscriptionsListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<PaginatedEventSubscriptionList>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsSubscriptionsList.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/subscriptions/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedEventSubscriptionListFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsSubscriptionsList(requestParameters: EventsSubscriptionsListRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<PaginatedEventSubscriptionList> {
+        const response = await this.eventsSubscriptionsListRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsSubscriptionsPartialUpdateRaw(requestParameters: EventsSubscriptionsPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventSubscription>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsSubscriptionsPartialUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsSubscriptionsPartialUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/subscriptions/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchedEventSubscriptionToJSON(requestParameters.patchedEventSubscription),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventSubscriptionFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsSubscriptionsPartialUpdate(requestParameters: EventsSubscriptionsPartialUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventSubscription> {
+        const response = await this.eventsSubscriptionsPartialUpdateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsSubscriptionsRetrieveRaw(requestParameters: EventsSubscriptionsRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventSubscription>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsSubscriptionsRetrieve.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsSubscriptionsRetrieve.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/subscriptions/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventSubscriptionFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsSubscriptionsRetrieve(requestParameters: EventsSubscriptionsRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventSubscription> {
+        const response = await this.eventsSubscriptionsRetrieveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async eventsSubscriptionsUpdateRaw(requestParameters: EventsSubscriptionsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<EventSubscription>> {
+        if (requestParameters.eventId === null || requestParameters.eventId === undefined) {
+            throw new runtime.RequiredError('eventId','Required parameter requestParameters.eventId was null or undefined when calling eventsSubscriptionsUpdate.');
+        }
+
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling eventsSubscriptionsUpdate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/events/{event_id}/subscriptions/{id}/`.replace(`{${"event_id"}}`, encodeURIComponent(String(requestParameters.eventId))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EventSubscriptionToJSON(requestParameters.eventSubscription),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventSubscriptionFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async eventsSubscriptionsUpdate(requestParameters: EventsSubscriptionsUpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<EventSubscription> {
+        const response = await this.eventsSubscriptionsUpdateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
