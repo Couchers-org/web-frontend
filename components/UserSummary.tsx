@@ -1,6 +1,6 @@
 import { ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { User } from "api";
+import { UserDetail } from "api";
 import classNames from "classnames";
 import Avatar from "components/Avatar";
 import { LinkIcon } from "components/Icons";
@@ -53,7 +53,7 @@ export interface UserSummaryProps {
   smallAvatar?: boolean;
   nameOnly?: boolean;
   headlineComponent?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  user?: User;
+  user?: UserDetail;
   titleIsLink?: boolean;
 }
 

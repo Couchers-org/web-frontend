@@ -1,12 +1,12 @@
-import { User } from "api";
+import { UserDetail } from "api";
 import * as React from "react";
 
-const ProfileUserContext = React.createContext<User>({} as User);
+const ProfileUserContext = React.createContext<UserDetail>({} as UserDetail);
 ProfileUserContext.displayName = "ProfileUserContext";
 
 interface ProfileUserProviderProps {
   children?: React.ReactNode;
-  user: User;
+  user: UserDetail;
 }
 
 export function ProfileUserProvider({

@@ -1,4 +1,4 @@
-import { User } from "api";
+import { UserDetail } from "api";
 import Button from "components/Button";
 import { MESSAGE } from "features/profile/constants";
 import { useRouter } from "next/router";
@@ -10,7 +10,7 @@ export default function MessageUserButton({
   user,
   setMutationError,
 }: {
-  user: User;
+  user: UserDetail;
   setMutationError: (value: string) => void;
 }) {
   const router = useRouter();

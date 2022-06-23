@@ -1,11 +1,11 @@
-import { User } from "api";
+import { UserDetail } from "api";
 import { SetMutationError } from "features/connections/friends";
 import AddFriendButton from "features/connections/friends/AddFriendButton";
 
 import PendingFriendReqButton from "./PendingFriendReqButton";
 
 interface FriendActionsProps {
-  user: User;
+  user: UserDetail;
   setMutationError: SetMutationError;
 }
 

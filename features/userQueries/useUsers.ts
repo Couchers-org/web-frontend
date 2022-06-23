@@ -1,4 +1,4 @@
-import { User } from "api";
+import { UserDetail } from "api";
 import { userKey } from "features/queryKeys";
 import { userStaleTime } from "features/userQueries/constants";
 import { useCallback, useEffect, useRef } from "react";
@@ -33,7 +33,7 @@ export default function useUsers(
     }
   });
 
-  const queries = useQueries<User, Error>(
+  const queries = useQueries<UserDetail, Error>(
     ids
       .filter((id): id is number => !!id)
       .map((id) => ({

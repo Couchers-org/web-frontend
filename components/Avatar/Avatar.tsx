@@ -1,7 +1,7 @@
 import { Avatar as MuiAvatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Skeleton } from "@material-ui/lab";
-import { User } from "api";
+import { UserDetail } from "api";
 import classNames from "classnames";
 import Link from "next/link";
 import React from "react";
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface AvatarProps {
   children?: React.ReactNode;
-  user?: User;
+  user?: UserDetail;
   grow?: boolean;
   className?: string;
   isProfileLink?: boolean;

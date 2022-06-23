@@ -1,4 +1,4 @@
-import { PatchedUser, User } from "api";
+import { PatchedUserDetail, UserDetail } from "api";
 import { useAuthContext } from "features/auth/AuthProvider";
 import { accountInfoQueryKey, userKey } from "features/queryKeys";
 import { useRouter } from "next/router";
@@ -8,7 +8,7 @@ import client from "service/rest/client";
 import { SetMutationError } from "utils/types";
 
 interface UpdateUserProfileVariables {
-  profileData: PatchedUser;
+  profileData: PatchedUserDetail;
   setMutationError: SetMutationError;
 }
 
@@ -22,9 +22,11 @@ export default function useUpdateUserProfile() {
     isLoading,
     isError,
     status,
-  } = useMutation<User, Error, UpdateUserProfileVariables>(
+  } = useMutation<UserDetail, Error, UpdateUserProfileVariables>(
     ({ profileData }) => {
-      return client.users.usersMePartialUpdate({ patchedUser: profileData });
+      return client.users.usersMePartialUpdate({
+        patchedUserDetail: profileData,
+      });
     },
     {
       onError: (error, { setMutationError }) => {

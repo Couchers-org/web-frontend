@@ -1,4 +1,4 @@
-import { User } from "api";
+import { UserDetail } from "api";
 import LabelAndText from "components/LabelAndText";
 import {
   AGE_GENDER,
@@ -24,7 +24,7 @@ import dayjs from "utils/dayjs";
 import { hourMillis, lessThanHour, timeAgo } from "utils/timeAgo";
 
 interface Props {
-  user: User;
+  user: UserDetail;
 }
 
 export const ReferencesLastActiveLabels = ({ user }: Props) => {

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { User } from "api";
+import { UserDetail } from "api";
 import { service } from "service";
 import wrapper from "test/hookWrapper";
 import { getLanguages, getRegions } from "test/serviceMockDefaults";
@@ -19,7 +19,7 @@ beforeEach(() => {
   getRegionsMock.mockImplementation(getRegions);
 });
 
-function renderAbout(user?: User) {
+function renderAbout(user?: UserDetail) {
   render(<About user={user || defaultUser} />, { wrapper });
 }
 describe("About (user)", () => {

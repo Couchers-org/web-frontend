@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import { User } from "api";
+import { UserDetail } from "api";
 import Divider from "components/Divider";
 import Markdown from "components/Markdown";
 import { useTranslation } from "i18n";
@@ -10,7 +10,7 @@ import { useRegions } from "../hooks/useRegions";
 import { AgeGenderLanguagesLabels, RemainingAboutLabels } from "./userLabels";
 
 interface AboutProps {
-  user: User;
+  user: UserDetail;
 }
 const useStyles = makeStyles((theme) => ({
   root: {

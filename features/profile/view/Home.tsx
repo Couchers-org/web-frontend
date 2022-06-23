@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import { User } from "api";
+import { UserDetail } from "api";
 import Divider from "components/Divider";
 import LabelAndText from "components/LabelAndText";
 import Markdown from "components/Markdown";
@@ -62,7 +62,7 @@ const getLabel = (
 };
 
 interface HomeProps {
-  user: User;
+  user: UserDetail;
 }
 
 export default function Home({ user }: HomeProps) {

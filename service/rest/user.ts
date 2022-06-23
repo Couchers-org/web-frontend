@@ -1,4 +1,4 @@
-import { User } from "api";
+import { UserDetail } from "api";
 import client from "service/rest/client";
 
 /**
@@ -22,7 +22,7 @@ export async function getCurrentUser() {
 /**
  * Returns User record by Username or id
  */
-export async function getUser(user: string): Promise<User> {
+export async function getUser(user: string): Promise<UserDetail> {
   const userId = parseInt(user, 10);
   // @todo: if we don't need to fetch by username ,remove this, otherwise ask team for supporting it
   if (Number.isNaN(userId)) {
