@@ -2,7 +2,9 @@ import {
   Grid,
   InputAdornment,
   makeStyles,
+  Theme,
   Typography,
+  useMediaQuery,
 } from "@material-ui/core";
 import Autocomplete from "components/Autocomplete";
 import Button from "components/Button";
@@ -15,26 +17,30 @@ import {
 import Divider from "components/Divider";
 import IconButton from "components/IconButton";
 import { CrossIcon } from "components/Icons";
+import LocationAutocomplete from "components/LocationAutocomplete";
 import TextField from "components/TextField";
 import { hostingStatusLabels } from "features/profile/constants";
 import { searchQueryKey } from "features/queryKeys";
 import LocationAutocomplete from "features/search/LocationAutocomplete";
-import useSearchFilters, {
+import {
   SearchFilters,
 } from "features/search/useSearchFilters";
 import { useTranslation } from "i18n";
 import { GLOBAL, SEARCH } from "i18n/namespaces";
+import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import { LngLat } from "maplibre-gl";
 import { HostingStatus } from "proto/api_pb";
 import { Controller, useForm } from "react-hook-form";
 import { useQueryClient } from "react-query";
 import { GeocodeResult } from "utils/hooks";
+import SearchFilters from "utils/searchFilters";
 
 import {
   ACCOMODATION_FILTERS,
   APPLY_FILTER,
   CLEAR_SEARCH,
-  FILTER_DIALOG_TITLE,
+  FILTER_DIALOG_TITLE_DESKTOP,
+  FILTER_DIALOG_TITLE_MOBILE,
   HOST_FILTERS,
   HOSTING_STATUS,
   LAST_ACTIVE,
@@ -72,7 +78,7 @@ export default function FilterDialog({
 }: {
   isOpen: boolean;
   onClose(): void;
-  searchFilters: ReturnType<typeof useSearchFilters>;
+  searchFilters: ReturnType<typeof useRouteWithSearchFilters>;
 }) {
   const { t } = useTranslation([GLOBAL, SEARCH]);
   const classes = useStyles();
@@ -137,13 +143,19 @@ export default function FilterDialog({
       : true;
   };
 
+  const isSmDown = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down("sm")
+  );
+
   return (
     <Dialog
       open={isOpen}
       onClose={onClose}
       aria-labelledby="filter-dialog-title"
     >
-      <DialogTitle id="filter-dialog-title">{FILTER_DIALOG_TITLE}</DialogTitle>
+      <DialogTitle id="filter-dialog-title">
+        {isSmDown ? FILTER_DIALOG_TITLE_MOBILE : FILTER_DIALOG_TITLE_DESKTOP}
+      </DialogTitle>
       <form onSubmit={onSubmit}>
         <DialogContent>
           <div className={classes.container}>

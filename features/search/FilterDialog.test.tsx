@@ -11,19 +11,18 @@ import {
   NUM_GUESTS,
   PROFILE_KEYWORDS,
 } from "features/search/constants";
-import useSearchFilters, {
-  parsedQueryToFilters,
-} from "features/search/useSearchFilters";
+import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import mockRouter from "next-router-mock";
 import { HostingStatus } from "proto/api_pb";
 import wrapper from "test/hookWrapper";
 import { server } from "test/restMock";
 import { t } from "test/utils";
+import { parsedQueryToSearchFilters } from "utils/searchFilters";
 
 import FilterDialog from "./FilterDialog";
 
 const Dialog = () => {
-  const searchFilters = useSearchFilters("");
+  const searchFilters = useRouteWithSearchFilters("");
   return (
     <>
       <FilterDialog
@@ -91,7 +90,7 @@ describe("FilterDialog", () => {
     userEvent.click(screen.getByRole("button", { name: APPLY_FILTER }));
 
     await waitFor(() => {
-      expect(parsedQueryToFilters(mockRouter.query)).toMatchObject(
+      expect(parsedQueryToSearchFilters(mockRouter.query)).toMatchObject(
         expectedFilters
       );
     });
@@ -157,7 +156,7 @@ describe("FilterDialog", () => {
       ).toBeNull();
       expect(numGuestsInput).toHaveValue(null);
 
-      expect(parsedQueryToFilters(mockRouter.query)).toMatchObject({});
+      expect(parsedQueryToSearchFilters(mockRouter.query)).toMatchObject({});
     });
   });
 
@@ -190,7 +189,7 @@ describe("FilterDialog", () => {
     await waitFor(() => {
       const errors = screen.getAllByText(MUST_HAVE_LOCATION);
       expect(errors).toHaveLength(3);
-      expect(parsedQueryToFilters(mockRouter.query)).toMatchObject({});
+      expect(parsedQueryToSearchFilters(mockRouter.query)).toMatchObject({});
     });
   });
 });

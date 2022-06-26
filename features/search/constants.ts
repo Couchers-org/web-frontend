@@ -15,7 +15,8 @@ export const aboutText = (user: User.AsObject) => {
 export const ACCOMODATION_FILTERS = "Accomodation filters";
 export const APPLY_FILTER = "Apply";
 export const CLEAR_SEARCH = "Clear search";
-export const FILTER_DIALOG_TITLE = "Filters";
+export const FILTER_DIALOG_TITLE_DESKTOP = "Filters";
+export const FILTER_DIALOG_TITLE_MOBILE = "Search";
 export const HOST_FILTERS = "Host filters";
 export const HOSTING_STATUS = "Hosting status";
 export const LAST_2_WEEKS = "Last 2 weeks";
@@ -26,7 +27,6 @@ export const LAST_MONTH = "Last month";
 export const LAST_WEEK = "Last week";
 export const LOCATION = "Near location";
 export const MAP_PAGE = "Map page";
-export const MUST_BE_MORE_SPECIFIC = "Please choose a more specific place";
 export const MUST_HAVE_LOCATION = "Specify a location to use this filter";
 export const NUM_GUESTS = "Number of guests";
 export const NO_USER_RESULTS = "No users found.";
@@ -34,11 +34,6 @@ export const PROFILE_KEYWORDS = "Profile keywords";
 export const SEARCH = "Search";
 export const SEARCH_BY_LOCATION = "By location";
 export const SEARCH_BY_KEYWORD = "By keyword";
-export const SEARCH_LOCATION_HINT =
-  "Press enter or click the icon to choose a location";
-export const SEARCH_LOCATION_BUTTON = "Search location";
-export const SELECT_LOCATION =
-  "Press enter or click the icon, then select a location from the list";
 export const SHOWING_ALL = "Showing all users";
 
 export const lastActiveOptions = [

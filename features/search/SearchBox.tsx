@@ -13,11 +13,11 @@ import {
 import classNames from "classnames";
 import Button from "components/Button";
 import { CrossIcon } from "components/Icons";
+import LocationAutocomplete from "components/LocationAutocomplete";
 import TextField from "components/TextField";
 import { searchQueryKey } from "features/queryKeys";
 import FilterDialog from "features/search/FilterDialog";
-import LocationAutocomplete from "features/search/LocationAutocomplete";
-import useSearchFilters from "features/search/useSearchFilters";
+import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import { LngLat } from "maplibre-gl";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -27,7 +27,8 @@ import makeStyles from "utils/makeStyles";
 
 import {
   CLEAR_SEARCH,
-  FILTER_DIALOG_TITLE,
+  FILTER_DIALOG_TITLE_DESKTOP,
+  FILTER_DIALOG_TITLE_MOBILE,
   LOCATION,
   PROFILE_KEYWORDS,
   SEARCH_BY_KEYWORD,
@@ -35,7 +36,7 @@ import {
 } from "./constants";
 
 const useStyles = makeStyles((theme) => ({
-  filterDialogButton: {
+  filterDialogButtonDesktop: {
     marginInlineStart: "auto",
   },
   mobileHide: {
@@ -54,7 +55,7 @@ export default function SearchBox({
   searchFilters,
 }: {
   className?: string;
-  searchFilters: ReturnType<typeof useSearchFilters>;
+  searchFilters: ReturnType<typeof useRouteWithSearchFilters>;
 }) {
   const classes = useStyles();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -118,25 +119,29 @@ export default function SearchBox({
     setValue("query", searchFilters.active.query ?? "");
   }, [setValue, searchFilters.active.location, searchFilters.active.query]);
 
-  const filterDialogButton = (
-    <>
-      <Button
-        onClick={() => setIsFiltersOpen(true)}
-        className={classNames(className, classes.filterDialogButton)}
-        variant={isSmDown ? "contained" : "outlined"}
-        size="small"
-      >
-        {FILTER_DIALOG_TITLE}
-      </Button>
-      <FilterDialog
-        isOpen={isFiltersOpen}
-        onClose={() => setIsFiltersOpen(false)}
-        searchFilters={searchFilters}
-      />
-    </>
+  const filterDialog = (
+    <FilterDialog
+      isOpen={isFiltersOpen}
+      onClose={() => setIsFiltersOpen(false)}
+      searchFilters={searchFilters}
+    />
   );
+
   if (isSmDown) {
-    return filterDialogButton;
+    return (
+      <>
+        <Button
+          onClick={() => setIsFiltersOpen(true)}
+          className={className}
+          variant="contained"
+          size="medium"
+        >
+          {FILTER_DIALOG_TITLE_MOBILE}
+        </Button>
+
+        {filterDialog}
+      </>
+    );
   }
 
   return (
@@ -224,7 +229,17 @@ export default function SearchBox({
             />
           </RadioGroup>
         </FormControl>
-        {filterDialogButton}
+
+        <Button
+          onClick={() => setIsFiltersOpen(true)}
+          className={classNames(className, classes.filterDialogButtonDesktop)}
+          variant="outlined"
+          size="small"
+        >
+          {FILTER_DIALOG_TITLE_DESKTOP}
+        </Button>
+
+        {filterDialog}
       </div>
     </>
   );

@@ -1,4 +1,5 @@
 import { Alert } from "@material-ui/lab";
+import Redirect from "components/Redirect";
 import Appropriate from "features/profile/view/leaveReference/formSteps/Appropriate";
 import Rating from "features/profile/view/leaveReference/formSteps/Rating";
 import SubmitReference from "features/profile/view/leaveReference/formSteps/submit/SubmitReference";
@@ -6,7 +7,7 @@ import Text from "features/profile/view/leaveReference/formSteps/Text";
 import { useTranslation } from "i18n";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
 import { useState } from "react";
-import { ReferenceStep } from "routes";
+import { leaveReferenceBaseRoute, ReferenceStep } from "routes";
 import makeStyles from "utils/makeStyles";
 
 export const useReferenceStyles = makeStyles((theme) => ({
@@ -88,7 +89,16 @@ export default function ReferenceForm({
     }));
   };
 
-  return step === "appropriate" ? (
+  const isSkippedStep =
+    referenceData.wasAppropriate === "" && step !== "appropriate";
+  const redirectTo =
+    referenceType === "friend"
+      ? `${leaveReferenceBaseRoute}/${referenceType}/${userId}`
+      : `${leaveReferenceBaseRoute}/${referenceType}/${userId}/${hostRequestId}`;
+
+  return isSkippedStep ? (
+    <Redirect to={redirectTo} />
+  ) : step === "appropriate" ? (
     <Appropriate
       referenceData={referenceData}
       setReferenceValues={setReferenceValues}

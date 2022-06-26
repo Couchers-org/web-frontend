@@ -3,19 +3,18 @@ import userEvent from "@testing-library/user-event";
 import {
   APPLY_FILTER,
   CLEAR_SEARCH,
-  FILTER_DIALOG_TITLE,
+  FILTER_DIALOG_TITLE_DESKTOP,
   LOCATION,
   PROFILE_KEYWORDS,
   SEARCH_BY_KEYWORD,
   SEARCH_BY_LOCATION,
 } from "features/search/constants";
-import useSearchFilters, {
-  SearchFilters,
-} from "features/search/useSearchFilters";
+import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import mockRouter from "next-router-mock";
 import { useEffect } from "react";
 import wrapper from "test/hookWrapper";
 import { server } from "test/restMock";
+import SearchFilters from "utils/searchFilters";
 
 import SearchBox from "./SearchBox";
 
@@ -24,7 +23,7 @@ const View = ({
 }: {
   setActive?: (value: SearchFilters) => void;
 }) => {
-  const filters = useSearchFilters("");
+  const filters = useRouteWithSearchFilters("");
   useEffect(() => {
     setActive?.(filters.active);
   }, [filters.active, setActive]);
@@ -133,9 +132,13 @@ describe("SearchBox", () => {
     await waitFor(() => {
       expect(setActive).toBeCalledWith({ query: "test search" });
     });
-    userEvent.click(screen.getByRole("button", { name: FILTER_DIALOG_TITLE }));
+    userEvent.click(
+      screen.getByRole("button", { name: FILTER_DIALOG_TITLE_DESKTOP })
+    );
 
-    const dialog = screen.getByRole("dialog", { name: FILTER_DIALOG_TITLE });
+    const dialog = screen.getByRole("dialog", {
+      name: FILTER_DIALOG_TITLE_DESKTOP,
+    });
     expect(dialog).toBeVisible();
     const dialogKeywordsField = within(dialog).getByLabelText(PROFILE_KEYWORDS);
     expect(dialogKeywordsField).toHaveValue("test search");

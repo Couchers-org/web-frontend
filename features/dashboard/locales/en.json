@@ -14,7 +14,7 @@
   "load_more": "Load more",
   "welcome": "Welcome to the Couchers.org Beta!",
   "new_pill": "New",
-  "landing_text": "We are building new <1>features</1> like events, local guides, moderation and hangouts. We appreciate your patience and support as we develop these.",
+  "landing_text": "We are building new <1>features</1> like events, local guides, moderation and hangouts. We appreciate your patience and <3>support</3> as we develop these.",
   "your_communities_helper_text": "You have been added to all communities based on your location. Feel free to <1>browse communities</1> in other locations as well.",
   "your_communities_helper_text2": "Don't see your community? <1>Get it started!</1>",
   "community_builder_form_text": "Start your own local community",
@@ -23,5 +23,13 @@
   "member_count_plural": "{{count}} members",
   "profile_summary_edit": "Edit",
   "profile_summary_view": "View my profile",
-  "profile_mobile_summary_view": "Go to profile"
+  "profile_mobile_summary_view": "Go to profile",
+  "find_a_host": "Find a host",
+  "become_a_host": "Become a host",
+  "browse_communities": "Browse communities",
+  "search_input_label": "Where are you going?",
+  "search_input_placeholder": "Search a location",
+  "show_map": "Show Map",
+  "hero_image_alt": "Hot-air balloons in Capadocia",
+  "hero_image_attribution": "Photo by <1>Mesut Kaya</1> on <3>Unsplash</3>"
 }

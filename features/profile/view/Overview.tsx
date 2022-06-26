@@ -41,12 +41,14 @@ function LoggedInUserActions({ tab }: { tab: UserTab }) {
   return (
     <>
       <Link href={routeToEditProfile(getEditTab(tab))} passHref>
-        <Button component="a" color="secondary">
+        <Button component="a" color="primary">
           {t("global:edit")}
         </Button>
       </Link>
       <Link href={connectionsRoute} passHref>
-        <Button component="a">{t("profile:my_connections")}</Button>
+        <Button component="a" variant="outlined">
+          {t("profile:my_connections")}
+        </Button>
       </Link>
     </>
   );
