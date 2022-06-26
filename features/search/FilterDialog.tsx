@@ -21,13 +21,9 @@ import LocationAutocomplete from "components/LocationAutocomplete";
 import TextField from "components/TextField";
 import { hostingStatusLabels } from "features/profile/constants";
 import { searchQueryKey } from "features/queryKeys";
-import LocationAutocomplete from "features/search/LocationAutocomplete";
-import {
-  SearchFilters,
-} from "features/search/useSearchFilters";
+import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import { useTranslation } from "i18n";
 import { GLOBAL, SEARCH } from "i18n/namespaces";
-import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import { LngLat } from "maplibre-gl";
 import { HostingStatus } from "proto/api_pb";
 import { Controller, useForm } from "react-hook-form";
