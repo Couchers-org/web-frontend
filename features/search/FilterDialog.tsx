@@ -22,6 +22,8 @@ import LocationAutocomplete from "features/search/LocationAutocomplete";
 import useSearchFilters, {
   SearchFilters,
 } from "features/search/useSearchFilters";
+import { useTranslation } from "i18n";
+import { GLOBAL, SEARCH } from "i18n/namespaces";
 import { LngLat } from "maplibre-gl";
 import { HostingStatus } from "proto/api_pb";
 import { Controller, useForm } from "react-hook-form";
@@ -72,6 +74,7 @@ export default function FilterDialog({
   onClose(): void;
   searchFilters: ReturnType<typeof useSearchFilters>;
 }) {
+  const { t } = useTranslation([GLOBAL, SEARCH]);
   const classes = useStyles();
   const { control, handleSubmit, register, setValue, getValues, errors } =
     useForm<FilterDialogFormData>({
@@ -230,7 +233,7 @@ export default function FilterDialog({
                       onChange(options);
                     }}
                     value={value}
-                    getOptionLabel={(option) => hostingStatusLabels[option]}
+                    getOptionLabel={(option) => hostingStatusLabels(t)[option]}
                     disableClearable={false}
                     freeSolo={false}
                     multiple={true}

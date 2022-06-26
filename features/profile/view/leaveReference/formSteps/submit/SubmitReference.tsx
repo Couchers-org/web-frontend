@@ -8,7 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "components/Dialog";
-import { HOST_REQUEST_REFERENCE_SUCCESS_DIALOG } from "features/profile/constants";
+import { hostRequestReferenceSuccessDialogId } from "features/profile/constants";
 import {
   useWriteFriendReference,
   useWriteHostReference,
@@ -175,11 +175,11 @@ export default function SubmitReference({
         </div>
       </form>
       <Dialog
-        aria-labelledby={HOST_REQUEST_REFERENCE_SUCCESS_DIALOG}
+        aria-labelledby={hostRequestReferenceSuccessDialogId}
         open={isOpen}
         onClose={redirectToHome}
       >
-        <DialogTitle id={HOST_REQUEST_REFERENCE_SUCCESS_DIALOG}>
+        <DialogTitle id={hostRequestReferenceSuccessDialogId}>
           {t("profile:leave_reference.reference_success")}
         </DialogTitle>
         <DialogContent>

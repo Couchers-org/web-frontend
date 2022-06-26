@@ -29,6 +29,7 @@
         "travel_section": "Travelled to",
         "lived_section": "Lived in"
     },
+    "section_tabs_a11y_label": "tabs for user's details",
     "home_info_headings": {
         "about_home": "About my home",
         "general": "General",
@@ -81,16 +82,6 @@
         "outside": "Outside",
         "window": "Window",
         "yes": "Yes"
-    },
-    "hosting_status": {
-        "can_host": "Can host",
-        "maybe": "May host",
-        "cant_host": "Can't host"
-    },
-    "meetup_status": {
-        "wants_to_meetup": "Wants to meet",
-        "open_to_meetup": "Open to meet",
-        "does_not_want_to_meetup": "Can't meet"
     },
     "sleeping_arrangement": {
         "private": "Private",
@@ -158,7 +149,18 @@
         "overnight_stay": "Overnight stay",
         "request": "Request",
         "request_description": "Share your plans for the visit and include why you're requesting to stay with this particular host",
-        "stay_type_a11y_text": "stay type"
+        "stay_type_a11y_text": "stay type",
+        "success": "Request sent!"
+    },
+    "reference_filter_label": {
+        "friend": "From friends",
+        "hosted": "From hosts",
+        "surfed": "From guests"
+    },
+    "reference_badge_label": {
+        "friend": "Friend",
+        "hosted": "Hosted",
+        "surfed": "Guest"
     },
     "accept_friend_label": "Accept friend request",
     "decline_friend_label": "Decline friend request",

@@ -226,17 +226,17 @@ export default function EditProfileForm() {
                     <FormControlLabel
                       value={HostingStatus.HOSTING_STATUS_CAN_HOST}
                       control={<Radio />}
-                      label={t("profile:hosting_status.can_host")}
+                      label={t("global:hosting_status.can_host")}
                     />
                     <FormControlLabel
                       value={HostingStatus.HOSTING_STATUS_MAYBE}
                       control={<Radio />}
-                      label={t("profile:hosting_status.maybe")}
+                      label={t("global:hosting_status.maybe")}
                     />
                     <FormControlLabel
                       value={HostingStatus.HOSTING_STATUS_CANT_HOST}
                       control={<Radio />}
-                      label={t("profile:hosting_status.cant_host")}
+                      label={t("global:hosting_status.cant_host")}
                     />
                   </RadioGroup>
                 </>
@@ -264,17 +264,17 @@ export default function EditProfileForm() {
                     <FormControlLabel
                       value={MeetupStatus.MEETUP_STATUS_WANTS_TO_MEETUP}
                       control={<Radio />}
-                      label={t("profile:meetup_status.wants_to_meetup")}
+                      label={t("global:meetup_status.wants_to_meetup")}
                     />
                     <FormControlLabel
                       value={MeetupStatus.MEETUP_STATUS_OPEN_TO_MEETUP}
                       control={<Radio />}
-                      label={t("profile:meetup_status.open_to_meetup")}
+                      label={t("global:meetup_status.open_to_meetup")}
                     />
                     <FormControlLabel
                       value={MeetupStatus.MEETUP_STATUS_DOES_NOT_WANT_TO_MEETUP}
                       control={<Radio />}
-                      label={t("profile:meetup_status.does_not_want_to_meetup")}
+                      label={t("global:meetup_status.does_not_want_to_meetup")}
                     />
                   </RadioGroup>
                 </>

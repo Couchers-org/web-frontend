@@ -69,7 +69,7 @@ function DefaultActions({
     <>
       <Button onClick={() => setIsRequesting(true)} disabled={disableHosting}>
         {disableHosting
-          ? t("profile:hosting_status.cant_host")
+          ? t("global:hosting_status.cant_host")
           : t("profile:actions.request")}
       </Button>
 

@@ -2,7 +2,7 @@ import { Card, CardContent, Hidden, Link, Typography } from "@material-ui/core";
 import SliderLabel from "components/RatingsSlider/SliderLabel";
 import TextBody from "components/TextBody";
 import UserSummary from "components/UserSummary";
-import { CONTACT_LINK } from "features/profile/constants";
+import { contactLink } from "features/profile/constants";
 import { useProfileUser } from "features/profile/hooks/useProfileUser";
 import {
   ReferenceContextFormData,
@@ -63,7 +63,7 @@ export default function ReferenceOverview({
         <Trans t={t} i18nKey="profile:leave_reference.contact_text">
           If you have any questions or wish to provide additional information,
           please don't hesitate to
-          <Link href={CONTACT_LINK} target="_blank">
+          <Link href={contactLink} target="_blank">
             contact us here.
           </Link>
         </Trans>

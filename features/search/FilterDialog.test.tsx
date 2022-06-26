@@ -18,6 +18,7 @@ import mockRouter from "next-router-mock";
 import { HostingStatus } from "proto/api_pb";
 import wrapper from "test/hookWrapper";
 import { server } from "test/restMock";
+import { t } from "test/utils";
 
 import FilterDialog from "./FilterDialog";
 
@@ -64,12 +65,14 @@ describe("FilterDialog", () => {
     userEvent.click(hostStatusInput);
     userEvent.click(
       screen.getByText(
-        hostingStatusLabels[HostingStatus.HOSTING_STATUS_CAN_HOST]
+        hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_CAN_HOST]
       )
     );
     userEvent.click(hostStatusInput);
     userEvent.click(
-      screen.getByText(hostingStatusLabels[HostingStatus.HOSTING_STATUS_MAYBE])
+      screen.getByText(
+        hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_MAYBE]
+      )
     );
 
     const numGuestsInput = screen.getByLabelText(NUM_GUESTS);
@@ -123,12 +126,12 @@ describe("FilterDialog", () => {
     expect(lastActiveInput).toHaveValue(LAST_WEEK);
     expect(
       screen.getByRole("button", {
-        name: hostingStatusLabels[HostingStatus.HOSTING_STATUS_CAN_HOST],
+        name: hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_CAN_HOST],
       })
     ).toBeVisible();
     expect(
       screen.getByRole("button", {
-        name: hostingStatusLabels[HostingStatus.HOSTING_STATUS_MAYBE],
+        name: hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_MAYBE],
       })
     ).toBeVisible();
     expect(numGuestsInput).toHaveValue(3);
@@ -144,12 +147,12 @@ describe("FilterDialog", () => {
       expect(lastActiveInput).toHaveValue("Any");
       expect(
         screen.queryByRole("button", {
-          name: hostingStatusLabels[HostingStatus.HOSTING_STATUS_CAN_HOST],
+          name: hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_CAN_HOST],
         })
       ).toBeNull();
       expect(
         screen.queryByRole("button", {
-          name: hostingStatusLabels[HostingStatus.HOSTING_STATUS_MAYBE],
+          name: hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_MAYBE],
         })
       ).toBeNull();
       expect(numGuestsInput).toHaveValue(null);
@@ -170,12 +173,14 @@ describe("FilterDialog", () => {
     userEvent.click(hostStatusInput);
     userEvent.click(
       screen.getByText(
-        hostingStatusLabels[HostingStatus.HOSTING_STATUS_CAN_HOST]
+        hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_CAN_HOST]
       )
     );
     userEvent.click(hostStatusInput);
     userEvent.click(
-      screen.getByText(hostingStatusLabels[HostingStatus.HOSTING_STATUS_MAYBE])
+      screen.getByText(
+        hostingStatusLabels(t)[HostingStatus.HOSTING_STATUS_MAYBE]
+      )
     );
 
     const numGuestsInput = screen.getByLabelText(NUM_GUESTS);
