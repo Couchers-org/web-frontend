@@ -1,24 +1,8 @@
 {
   "account_settings_page": {
     "gender_section": {
-      "title": "Alterar género",
-      "explanation": ""
-    },
-    "birth_date_section": {
-      "title": "",
-      "explanation": ""
-    },
-    "timezone_section": {
-      "title": "",
-      "description": "",
-      "explanation": ""
-    },
-    "username_section": {
-      "title": "",
-      "description": "",
-      "explanation": ""
-    },
-    "title": ""
+      "title": "Alterar género"
+    }
   },
   "sign_up_completed_prompt": "Enviámos um e-mail com um link de verificação para o teu endereço de e-mail. Clica no link para ativar a tua conta.",
   "feature_preview": {
@@ -26,20 +10,16 @@
       "explanation": "De momento não existem funcionalidades para pré-visualização ativas, volta a verificar mais tarde!",
       "title": "Sem funcionalidades para pré-visualização de momento"
     },
-    "disclaimer": "Lembra-te que estas funcionalidades são experimentais. Podem não funcionar como pretendido ou mudar rapidamente à medida que as desenvolvemos. Fica à vontade para dar feedback no nosso fórum e por favor reporta quaisquer problemas!",
-    "title": "",
-    "explanation": ""
+    "disclaimer": "Lembra-te que estas funcionalidades são experimentais. Podem não funcionar como pretendido ou mudar rapidamente à medida que as desenvolvemos. Fica à vontade para dar feedback no nosso fórum e por favor reporta quaisquer problemas!"
   },
   "unsubscribe": {
     "title": "Desinscrever-se",
     "error_message": "Erro ao desinscrever: {{message}}",
-    "button_text": "Confirmar a desinscrição",
-    "missing_payload_or_sig": ""
+    "button_text": "Confirmar a desinscrição"
   },
   "logged_out_message": "A tua sessão foi encerrada.",
   "feedback_form": {
-    "header": "Dá a tua opinião",
-    "skip_step_text": ""
+    "header": "Dá a tua opinião"
   },
   "sign_up_completed_title": "Obrigado por te registares!",
   "sign_up_confirmed_prompt": "Tudo pronto! Se não fores redirecionado, tenta fazer login.",
@@ -139,90 +119,22 @@
   },
   "delete_account": {
     "recover": {
-      "success": "A tua conta foi recuperada, podes voltar a entrar. Estamos felizes por ter-te de volta!",
-      "error_message": "",
-      "button_text": "",
-      "title": ""
-    },
-    "request": {
-      "reason_label": "",
-      "success_message": "",
-      "title": "",
-      "description": "",
-      "confirm_username_label": "",
-      "username_mismatch": "",
-      "reason_explanation": "",
-      "confirm_username_explanation": ""
-    },
-    "missing_token": "",
-    "confirm": {
-      "title": "",
-      "account_deleted": "",
-      "error_message": "",
-      "button_text": ""
+      "success": "A tua conta foi recuperada, podes voltar a entrar. Estamos felizes por ter-te de volta!"
     }
   },
   "community_guidelines_form": {
     "header": "Normas da comunidade",
     "guideline": {
-      "checkbox_label": "Entendi",
-      "required_error": ""
+      "checkbox_label": "Entendi"
     }
   },
   "location": {
     "field_label": "A tua localização",
     "validation_error": "Por favor seleciona uma localização válida."
   },
-  "reset_password_success": "",
-  "about_us": "",
-  "introduction_subtitle": "",
-  "change_phone": {
-    "phone_label": "",
-    "add_button_text": "",
-    "verify_button_text": "",
-    "verify_success": "",
-    "remove_success": "",
-    "change_to_different_description": "",
-    "change_button_text": "",
-    "title": "",
-    "no_phone_description": "",
-    "add_success": "",
-    "phone_not_verified_description": "",
-    "code_label": "",
-    "wrong_code": "",
-    "remove_phone_description": "",
-    "remove_button_text": ""
-  },
-  "jail": {
-    "title": "",
-    "description": "",
-    "terms_of_service_section": {
-      "description": ""
-    },
-    "location_section": {
-      "title": "",
-      "submit_button": {
-        "active_text": "",
-        "inactive_text": ""
-      },
-      "resubmit_button_text": ""
-    }
-  },
-  "unhandled_sign_up_state": "",
-  "login_prompt": "",
-  "introduction_title": "",
-  "reset_password": "",
-  "reset_password_error": "",
   "notification_settings": {
-    "title": "",
     "status": {
-      "disabled_message": "",
-      "enabled_message": ""
-    },
-    "action_button": {
-      "enable_text": "",
-      "disable_text": ""
+      "disabled_message": ""
     }
-  },
-  "vercel_logo_alt_text": ""
+  }
 }
