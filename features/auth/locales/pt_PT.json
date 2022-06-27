@@ -204,7 +204,8 @@
       "submit_button": {
         "active_text": "",
         "inactive_text": ""
-      }
+      },
+      "resubmit_button_text": ""
     }
   },
   "unhandled_sign_up_state": "",
@@ -222,5 +223,6 @@
       "enable_text": "",
       "disable_text": ""
     }
-  }
+  },
+  "vercel_logo_alt_text": ""
 }
