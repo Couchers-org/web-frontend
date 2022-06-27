@@ -27,12 +27,6 @@ export interface PatchedEventSubscription {
     readonly id?: number;
     /**
      * 
-     * @type {Date}
-     * @memberof PatchedEventSubscription
-     */
-    readonly createdAt?: Date;
-    /**
-     * 
      * @type {number}
      * @memberof PatchedEventSubscription
      */
@@ -43,6 +37,12 @@ export interface PatchedEventSubscription {
      * @memberof PatchedEventSubscription
      */
     readonly event?: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PatchedEventSubscription
+     */
+    readonly createdAt?: Date;
 }
 
 export function PatchedEventSubscriptionFromJSON(json: any): PatchedEventSubscription {
@@ -56,9 +56,9 @@ export function PatchedEventSubscriptionFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'user': !exists(json, 'user') ? undefined : json['user'],
         'event': !exists(json, 'event') ? undefined : json['event'],
+        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
     };
 }
 

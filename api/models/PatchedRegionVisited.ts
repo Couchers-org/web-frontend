@@ -36,7 +36,7 @@ export interface PatchedRegionVisited {
      * @type {number}
      * @memberof PatchedRegionVisited
      */
-    readonly user?: number;
+    user?: number;
     /**
      * 
      * @type {number}
@@ -71,6 +71,7 @@ export function PatchedRegionVisitedToJSON(value?: PatchedRegionVisited | null):
     }
     return {
         
+        'user': value.user,
         'region': value.region,
     };
 }

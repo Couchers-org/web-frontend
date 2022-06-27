@@ -36,7 +36,7 @@ export interface RegionVisited {
      * @type {number}
      * @memberof RegionVisited
      */
-    readonly user: number;
+    user: number;
     /**
      * 
      * @type {number}
@@ -71,6 +71,7 @@ export function RegionVisitedToJSON(value?: RegionVisited | null): any {
     }
     return {
         
+        'user': value.user,
         'region': value.region,
     };
 }

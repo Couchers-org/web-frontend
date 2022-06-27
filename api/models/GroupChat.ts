@@ -27,6 +27,12 @@ export interface GroupChat {
     readonly id: number;
     /**
      * 
+     * @type {number}
+     * @memberof GroupChat
+     */
+    readonly user: number;
+    /**
+     * 
      * @type {string}
      * @memberof GroupChat
      */
@@ -43,12 +49,6 @@ export interface GroupChat {
      * @memberof GroupChat
      */
     readonly isDm: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof GroupChat
-     */
-    readonly user: number;
 }
 
 export function GroupChatFromJSON(json: any): GroupChat {
@@ -62,10 +62,10 @@ export function GroupChatFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     return {
         
         'id': json['id'],
+        'user': json['user'],
         'title': !exists(json, 'title') ? undefined : json['title'],
         'onlyAdminsInvite': json['only_admins_invite'],
         'isDm': json['is_dm'],
-        'user': json['user'],
     };
 }
 

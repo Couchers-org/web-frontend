@@ -42,7 +42,7 @@ export interface RegionLived {
      * @type {number}
      * @memberof RegionLived
      */
-    region: number;
+    readonly region: number;
 }
 
 export function RegionLivedFromJSON(json: any): RegionLived {
@@ -71,7 +71,6 @@ export function RegionLivedToJSON(value?: RegionLived | null): any {
     }
     return {
         
-        'region': value.region,
     };
 }
 

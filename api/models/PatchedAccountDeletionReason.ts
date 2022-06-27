@@ -33,16 +33,16 @@ export interface PatchedAccountDeletionReason {
     readonly createdAt?: Date;
     /**
      * 
-     * @type {string}
-     * @memberof PatchedAccountDeletionReason
-     */
-    reason?: string | null;
-    /**
-     * 
      * @type {number}
      * @memberof PatchedAccountDeletionReason
      */
     readonly user?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedAccountDeletionReason
+     */
+    reason?: string | null;
 }
 
 export function PatchedAccountDeletionReasonFromJSON(json: any): PatchedAccountDeletionReason {
@@ -57,8 +57,8 @@ export function PatchedAccountDeletionReasonFromJSONTyped(json: any, ignoreDiscr
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'reason': !exists(json, 'reason') ? undefined : json['reason'],
         'user': !exists(json, 'user') ? undefined : json['user'],
+        'reason': !exists(json, 'reason') ? undefined : json['reason'],
     };
 }
 

@@ -34,6 +34,18 @@ export interface PatchedFriendRelationship {
     readonly id?: number;
     /**
      * 
+     * @type {number}
+     * @memberof PatchedFriendRelationship
+     */
+    readonly user?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedFriendRelationship
+     */
+    readonly toUser?: number;
+    /**
+     * 
      * @type {Date}
      * @memberof PatchedFriendRelationship
      */
@@ -50,18 +62,6 @@ export interface PatchedFriendRelationship {
      * @memberof PatchedFriendRelationship
      */
     status?: FriendRelationshipStatusEnum;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedFriendRelationship
-     */
-    readonly user?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedFriendRelationship
-     */
-    readonly toUser?: number;
 }
 
 export function PatchedFriendRelationshipFromJSON(json: any): PatchedFriendRelationship {
@@ -75,11 +75,11 @@ export function PatchedFriendRelationshipFromJSONTyped(json: any, ignoreDiscrimi
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
+        'toUser': !exists(json, 'to_user') ? undefined : json['to_user'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'updatedAt': !exists(json, 'updated_at') ? undefined : (json['updated_at'] === null ? null : new Date(json['updated_at'])),
         'status': !exists(json, 'status') ? undefined : FriendRelationshipStatusEnumFromJSON(json['status']),
-        'user': !exists(json, 'user') ? undefined : json['user'],
-        'toUser': !exists(json, 'to_user') ? undefined : json['to_user'],
     };
 }
 

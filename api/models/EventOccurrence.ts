@@ -27,6 +27,18 @@ export interface EventOccurrence {
     readonly id: number;
     /**
      * 
+     * @type {number}
+     * @memberof EventOccurrence
+     */
+    readonly event: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventOccurrence
+     */
+    readonly user: number;
+    /**
+     * 
      * @type {string}
      * @memberof EventOccurrence
      */
@@ -73,18 +85,6 @@ export interface EventOccurrence {
      * @memberof EventOccurrence
      */
     readonly updatedAt: Date;
-    /**
-     * 
-     * @type {number}
-     * @memberof EventOccurrence
-     */
-    readonly event: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof EventOccurrence
-     */
-    readonly user: number;
 }
 
 export function EventOccurrenceFromJSON(json: any): EventOccurrence {
@@ -98,6 +98,8 @@ export function EventOccurrenceFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': json['id'],
+        'event': json['event'],
+        'user': json['user'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'photoKey': !exists(json, 'photo_key') ? undefined : json['photo_key'],
         'geom': !exists(json, 'geom') ? undefined : json['geom'],
@@ -106,8 +108,6 @@ export function EventOccurrenceFromJSONTyped(json: any, ignoreDiscriminator: boo
         'during': !exists(json, 'during') ? undefined : json['during'],
         'createdAt': (new Date(json['created_at'])),
         'updatedAt': (new Date(json['updated_at'])),
-        'event': json['event'],
-        'user': json['user'],
     };
 }
 

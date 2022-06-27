@@ -34,6 +34,18 @@ export interface PatchedGroupChatSubscription {
     readonly id?: number;
     /**
      * 
+     * @type {number}
+     * @memberof PatchedGroupChatSubscription
+     */
+    readonly user?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedGroupChatSubscription
+     */
+    readonly groupChat?: number;
+    /**
+     * 
      * @type {Date}
      * @memberof PatchedGroupChatSubscription
      */
@@ -62,18 +74,6 @@ export interface PatchedGroupChatSubscription {
      * @memberof PatchedGroupChatSubscription
      */
     role?: RoleEnum;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedGroupChatSubscription
-     */
-    readonly user?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedGroupChatSubscription
-     */
-    readonly groupChat?: number;
 }
 
 export function PatchedGroupChatSubscriptionFromJSON(json: any): PatchedGroupChatSubscription {
@@ -87,13 +87,13 @@ export function PatchedGroupChatSubscriptionFromJSONTyped(json: any, ignoreDiscr
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
+        'groupChat': !exists(json, 'group_chat') ? undefined : json['group_chat'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'leftAt': !exists(json, 'left_at') ? undefined : (json['left_at'] === null ? null : new Date(json['left_at'])),
         'unmuteAt': !exists(json, 'unmute_at') ? undefined : (new Date(json['unmute_at'])),
         'lastSeenMessageId': !exists(json, 'last_seen_message_id') ? undefined : json['last_seen_message_id'],
         'role': !exists(json, 'role') ? undefined : RoleEnumFromJSON(json['role']),
-        'user': !exists(json, 'user') ? undefined : json['user'],
-        'groupChat': !exists(json, 'group_chat') ? undefined : json['group_chat'],
     };
 }
 

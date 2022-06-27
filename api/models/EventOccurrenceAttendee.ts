@@ -34,6 +34,18 @@ export interface EventOccurrenceAttendee {
     readonly id: number;
     /**
      * 
+     * @type {number}
+     * @memberof EventOccurrenceAttendee
+     */
+    readonly user: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventOccurrenceAttendee
+     */
+    readonly occurrence: number;
+    /**
+     * 
      * @type {Date}
      * @memberof EventOccurrenceAttendee
      */
@@ -44,18 +56,6 @@ export interface EventOccurrenceAttendee {
      * @memberof EventOccurrenceAttendee
      */
     status: EventOccurrenceAttendeeStatusEnum;
-    /**
-     * 
-     * @type {number}
-     * @memberof EventOccurrenceAttendee
-     */
-    readonly occurrence: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof EventOccurrenceAttendee
-     */
-    readonly user: number;
 }
 
 export function EventOccurrenceAttendeeFromJSON(json: any): EventOccurrenceAttendee {
@@ -69,10 +69,10 @@ export function EventOccurrenceAttendeeFromJSONTyped(json: any, ignoreDiscrimina
     return {
         
         'id': json['id'],
+        'user': json['user'],
+        'occurrence': json['occurrence'],
         'createdAt': (new Date(json['created_at'])),
         'status': EventOccurrenceAttendeeStatusEnumFromJSON(json['status']),
-        'occurrence': json['occurrence'],
-        'user': json['user'],
     };
 }
 

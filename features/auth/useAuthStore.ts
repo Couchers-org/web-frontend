@@ -6,6 +6,7 @@ import { AuthRes, SignupFlowRes } from "proto/auth_pb";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 import { service } from "service";
+import client from "service/rest/client";
 import isGrpcError from "utils/isGrpcError";
 
 type StorageType = "localStorage" | "sessionStorage";
@@ -98,10 +99,13 @@ export default function useAuthStore() {
         setError(null);
         setLoading(true);
         try {
-          const { userId } = await service.user.passwordLogin(
-            username,
-            password
-          );
+          // const { userId } = await service.user.passwordLogin(
+          //   username,
+          //   password
+          // );
+          const { userId } = await client.login({
+            tokenCreate: { username, password },
+          });
           setUserId(userId);
           Sentry.setUser({ id: userId.toString() });
 

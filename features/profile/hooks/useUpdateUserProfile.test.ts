@@ -1,4 +1,5 @@
 import { act, renderHook } from "@testing-library/react-hooks";
+import { PatchedUser } from "api";
 import useUpdateUserProfile from "features/profile/hooks/useUpdateUserProfile";
 import useCurrentUser from "features/userQueries/useCurrentUser";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
@@ -47,7 +48,7 @@ describe("updateUserProfile action", () => {
       thingsILike,
     } = defaultUser;
     /* eslint-disable sort-keys */
-    const newUserProfileData: UpdateUserProfileData = {
+    const newUserProfileData: PatchedUser = {
       // Unchanged data
       aboutMe,
       additionalInformation,
@@ -95,7 +96,7 @@ describe("updateUserProfile action", () => {
 
     act(() =>
       result.current.updateUserProfile({
-        profileData: newUserProfileData,
+        patchedUser: newUserProfileData,
         setMutationError: () => null,
       })
     );

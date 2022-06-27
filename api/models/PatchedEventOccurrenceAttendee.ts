@@ -34,6 +34,18 @@ export interface PatchedEventOccurrenceAttendee {
     readonly id?: number;
     /**
      * 
+     * @type {number}
+     * @memberof PatchedEventOccurrenceAttendee
+     */
+    readonly user?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedEventOccurrenceAttendee
+     */
+    readonly occurrence?: number;
+    /**
+     * 
      * @type {Date}
      * @memberof PatchedEventOccurrenceAttendee
      */
@@ -44,18 +56,6 @@ export interface PatchedEventOccurrenceAttendee {
      * @memberof PatchedEventOccurrenceAttendee
      */
     status?: EventOccurrenceAttendeeStatusEnum;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedEventOccurrenceAttendee
-     */
-    readonly occurrence?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedEventOccurrenceAttendee
-     */
-    readonly user?: number;
 }
 
 export function PatchedEventOccurrenceAttendeeFromJSON(json: any): PatchedEventOccurrenceAttendee {
@@ -69,10 +69,10 @@ export function PatchedEventOccurrenceAttendeeFromJSONTyped(json: any, ignoreDis
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
+        'occurrence': !exists(json, 'occurrence') ? undefined : json['occurrence'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'status': !exists(json, 'status') ? undefined : EventOccurrenceAttendeeStatusEnumFromJSON(json['status']),
-        'occurrence': !exists(json, 'occurrence') ? undefined : json['occurrence'],
-        'user': !exists(json, 'user') ? undefined : json['user'],
     };
 }
 

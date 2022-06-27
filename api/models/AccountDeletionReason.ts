@@ -33,16 +33,16 @@ export interface AccountDeletionReason {
     readonly createdAt: Date;
     /**
      * 
-     * @type {string}
-     * @memberof AccountDeletionReason
-     */
-    reason?: string | null;
-    /**
-     * 
      * @type {number}
      * @memberof AccountDeletionReason
      */
     readonly user: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountDeletionReason
+     */
+    reason?: string | null;
 }
 
 export function AccountDeletionReasonFromJSON(json: any): AccountDeletionReason {
@@ -57,8 +57,8 @@ export function AccountDeletionReasonFromJSONTyped(json: any, ignoreDiscriminato
         
         'id': json['id'],
         'createdAt': (new Date(json['created_at'])),
-        'reason': !exists(json, 'reason') ? undefined : json['reason'],
         'user': json['user'],
+        'reason': !exists(json, 'reason') ? undefined : json['reason'],
     };
 }
 

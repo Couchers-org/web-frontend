@@ -27,6 +27,18 @@ export interface PatchedComment {
     readonly id?: number;
     /**
      * 
+     * @type {number}
+     * @memberof PatchedComment
+     */
+    readonly thread?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedComment
+     */
+    readonly user?: number;
+    /**
+     * 
      * @type {string}
      * @memberof PatchedComment
      */
@@ -43,18 +55,6 @@ export interface PatchedComment {
      * @memberof PatchedComment
      */
     readonly deletedAt?: Date | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedComment
-     */
-    readonly user?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedComment
-     */
-    readonly thread?: number;
 }
 
 export function PatchedCommentFromJSON(json: any): PatchedComment {
@@ -68,11 +68,11 @@ export function PatchedCommentFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'thread': !exists(json, 'thread') ? undefined : json['thread'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'deletedAt': !exists(json, 'deleted_at') ? undefined : (json['deleted_at'] === null ? null : new Date(json['deleted_at'])),
-        'user': !exists(json, 'user') ? undefined : json['user'],
-        'thread': !exists(json, 'thread') ? undefined : json['thread'],
     };
 }
 

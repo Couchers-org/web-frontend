@@ -27,6 +27,12 @@ export interface PatchedGroupChat {
     readonly id?: number;
     /**
      * 
+     * @type {number}
+     * @memberof PatchedGroupChat
+     */
+    readonly user?: number;
+    /**
+     * 
      * @type {string}
      * @memberof PatchedGroupChat
      */
@@ -43,12 +49,6 @@ export interface PatchedGroupChat {
      * @memberof PatchedGroupChat
      */
     readonly isDm?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedGroupChat
-     */
-    readonly user?: number;
 }
 
 export function PatchedGroupChatFromJSON(json: any): PatchedGroupChat {
@@ -62,10 +62,10 @@ export function PatchedGroupChatFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
         'title': !exists(json, 'title') ? undefined : json['title'],
         'onlyAdminsInvite': !exists(json, 'only_admins_invite') ? undefined : json['only_admins_invite'],
         'isDm': !exists(json, 'is_dm') ? undefined : json['is_dm'],
-        'user': !exists(json, 'user') ? undefined : json['user'],
     };
 }
 

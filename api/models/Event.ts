@@ -54,7 +54,7 @@ export interface Event {
      * @type {number}
      * @memberof Event
      */
-    readonly ownerCluster: number | null;
+    ownerCluster?: number | null;
     /**
      * 
      * @type {number}
@@ -84,7 +84,7 @@ export function EventFromJSONTyped(json: any, ignoreDiscriminator: boolean): Eve
         'createdAt': (new Date(json['created_at'])),
         'user': json['user'],
         'parentNode': json['parent_node'],
-        'ownerCluster': json['owner_cluster'],
+        'ownerCluster': !exists(json, 'owner_cluster') ? undefined : json['owner_cluster'],
         'ownerUser': !exists(json, 'owner_user') ? undefined : json['owner_user'],
         'thread': json['thread'],
     };
@@ -100,6 +100,7 @@ export function EventToJSON(value?: Event | null): any {
     return {
         
         'title': value.title,
+        'owner_cluster': value.ownerCluster,
         'owner_user': value.ownerUser,
         'thread': value.thread,
     };

@@ -46,8 +46,11 @@ const client = {
   login: (parameters: LoginCreateRequest) => {
     const loginApi = new apis.LoginApi(configuration);
     return loginApi.loginCreate(parameters).then((response) => {
-      /* @ts-ignore */
-      setCookie(AUTH_COOKIE_NAME, response.auth_token || "");
+      const authToken = response.authToken;
+      if (!authToken) {
+        throw new Error("Login response did not include auth token");
+      }
+      setCookie(AUTH_COOKIE_NAME, authToken);
       return response;
     });
   },

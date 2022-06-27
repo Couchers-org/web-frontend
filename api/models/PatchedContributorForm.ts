@@ -34,10 +34,10 @@ export interface PatchedContributorForm {
     readonly id?: number;
     /**
      * 
-     * @type {Date}
+     * @type {number}
      * @memberof PatchedContributorForm
      */
-    readonly createdAt?: Date;
+    readonly user?: number;
     /**
      * 
      * @type {string}
@@ -76,10 +76,10 @@ export interface PatchedContributorForm {
     expertise?: string | null;
     /**
      * 
-     * @type {number}
+     * @type {Date}
      * @memberof PatchedContributorForm
      */
-    readonly user?: number;
+    readonly createdAt?: Date;
 }
 
 export function PatchedContributorFormFromJSON(json: any): PatchedContributorForm {
@@ -93,14 +93,14 @@ export function PatchedContributorFormFromJSONTyped(json: any, ignoreDiscriminat
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
+        'user': !exists(json, 'user') ? undefined : json['user'],
         'ideas': !exists(json, 'ideas') ? undefined : json['ideas'],
         'features': !exists(json, 'features') ? undefined : json['features'],
         'experience': !exists(json, 'experience') ? undefined : json['experience'],
         'contribute': !exists(json, 'contribute') ? undefined : ContributorFormContributeFromJSON(json['contribute']),
         'contributeWays': !exists(json, 'contribute_ways') ? undefined : json['contribute_ways'],
         'expertise': !exists(json, 'expertise') ? undefined : json['expertise'],
-        'user': !exists(json, 'user') ? undefined : json['user'],
+        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
     };
 }
 

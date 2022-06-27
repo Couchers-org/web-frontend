@@ -27,6 +27,12 @@ export interface PatchedCluster {
     readonly id?: number;
     /**
      * 
+     * @type {number}
+     * @memberof PatchedCluster
+     */
+    readonly parentNode?: number;
+    /**
+     * 
      * @type {string}
      * @memberof PatchedCluster
      */
@@ -49,12 +55,6 @@ export interface PatchedCluster {
      * @memberof PatchedCluster
      */
     officialCluster?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedCluster
-     */
-    readonly parentNode?: number;
 }
 
 export function PatchedClusterFromJSON(json: any): PatchedCluster {
@@ -68,11 +68,11 @@ export function PatchedClusterFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'parentNode': !exists(json, 'parent_node') ? undefined : json['parent_node'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'officialCluster': !exists(json, 'official_cluster') ? undefined : json['official_cluster'],
-        'parentNode': !exists(json, 'parent_node') ? undefined : json['parent_node'],
     };
 }
 

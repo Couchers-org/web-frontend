@@ -33,6 +33,18 @@ export interface ContentReport {
     readonly createdAt: Date;
     /**
      * 
+     * @type {number}
+     * @memberof ContentReport
+     */
+    readonly user: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContentReport
+     */
+    readonly filedByUser: number;
+    /**
+     * 
      * @type {string}
      * @memberof ContentReport
      */
@@ -61,18 +73,6 @@ export interface ContentReport {
      * @memberof ContentReport
      */
     readonly page: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ContentReport
-     */
-    readonly user: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ContentReport
-     */
-    readonly filedByUser: number;
 }
 
 export function ContentReportFromJSON(json: any): ContentReport {
@@ -87,13 +87,13 @@ export function ContentReportFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'id': json['id'],
         'createdAt': (new Date(json['created_at'])),
+        'user': json['user'],
+        'filedByUser': json['filed_by_user'],
         'reason': json['reason'],
         'description': json['description'],
         'contentRef': json['content_ref'],
         'userAgent': json['user_agent'],
         'page': json['page'],
-        'user': json['user'],
-        'filedByUser': json['filed_by_user'],
     };
 }
 

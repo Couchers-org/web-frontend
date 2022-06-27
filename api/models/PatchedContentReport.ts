@@ -33,6 +33,18 @@ export interface PatchedContentReport {
     readonly createdAt?: Date;
     /**
      * 
+     * @type {number}
+     * @memberof PatchedContentReport
+     */
+    readonly user?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedContentReport
+     */
+    readonly filedByUser?: number;
+    /**
+     * 
      * @type {string}
      * @memberof PatchedContentReport
      */
@@ -61,18 +73,6 @@ export interface PatchedContentReport {
      * @memberof PatchedContentReport
      */
     readonly page?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedContentReport
-     */
-    readonly user?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedContentReport
-     */
-    readonly filedByUser?: number;
 }
 
 export function PatchedContentReportFromJSON(json: any): PatchedContentReport {
@@ -87,13 +87,13 @@ export function PatchedContentReportFromJSONTyped(json: any, ignoreDiscriminator
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
+        'user': !exists(json, 'user') ? undefined : json['user'],
+        'filedByUser': !exists(json, 'filed_by_user') ? undefined : json['filed_by_user'],
         'reason': !exists(json, 'reason') ? undefined : json['reason'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'contentRef': !exists(json, 'content_ref') ? undefined : json['content_ref'],
         'userAgent': !exists(json, 'user_agent') ? undefined : json['user_agent'],
         'page': !exists(json, 'page') ? undefined : json['page'],
-        'user': !exists(json, 'user') ? undefined : json['user'],
-        'filedByUser': !exists(json, 'filed_by_user') ? undefined : json['filed_by_user'],
     };
 }
 

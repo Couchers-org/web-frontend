@@ -27,6 +27,18 @@ export interface Comment {
     readonly id: number;
     /**
      * 
+     * @type {number}
+     * @memberof Comment
+     */
+    readonly thread: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Comment
+     */
+    readonly user: number;
+    /**
+     * 
      * @type {string}
      * @memberof Comment
      */
@@ -43,18 +55,6 @@ export interface Comment {
      * @memberof Comment
      */
     readonly deletedAt: Date | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof Comment
-     */
-    readonly user: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Comment
-     */
-    readonly thread: number;
 }
 
 export function CommentFromJSON(json: any): Comment {
@@ -68,11 +68,11 @@ export function CommentFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     return {
         
         'id': json['id'],
+        'thread': json['thread'],
+        'user': json['user'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'createdAt': (new Date(json['created_at'])),
         'deletedAt': (json['deleted_at'] === null ? null : new Date(json['deleted_at'])),
-        'user': json['user'],
-        'thread': json['thread'],
     };
 }
 
