@@ -15,27 +15,6 @@
     "header": "Bonne conduite de la communauté"
   },
   "change_email_confirmation": {
-    "change_in_progress": "Changement d’adresse e-mail en cours…",
-    "success_message": "",
-    "error_message": ""
-  },
-  "change_password_form": {
-    "password_mismatch_error": "",
-    "title": "",
-    "confirm_password": "",
-    "old_password": "",
-    "new_password": ""
-  },
-  "basic_sign_up_form": {
-    "existing_user_prompt": "",
-    "header": ""
-  },
-  "login_page": {
-    "header": "",
-    "form": {
-      "password_field_label": "",
-      "forgot_password": ""
-    },
-    "title": ""
+    "change_in_progress": "Changement d’adresse e-mail en cours…"
   }
 }
