@@ -104,7 +104,7 @@ export default function useAuthStore() {
           //   password
           // );
           const { userId } = await client.login({
-            tokenCreate: { username, password },
+            tokenCreate: { email: username, password },
           });
           setUserId(userId);
           Sentry.setUser({ id: userId.toString() });

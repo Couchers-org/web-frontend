@@ -191,6 +191,14 @@ export interface UsersResendActivationCreateRequest {
     user?: User;
 }
 
+export interface UsersResetEmailConfirmCreateRequest {
+    user?: User;
+}
+
+export interface UsersResetEmailCreateRequest {
+    user?: User;
+}
+
 export interface UsersResetPasswordConfirmCreateRequest {
     user?: User;
 }
@@ -199,23 +207,15 @@ export interface UsersResetPasswordCreateRequest {
     user?: User;
 }
 
-export interface UsersResetUsernameConfirmCreateRequest {
-    user?: User;
-}
-
-export interface UsersResetUsernameCreateRequest {
-    user?: User;
-}
-
 export interface UsersRetrieveRequest {
     id: number;
 }
 
-export interface UsersSetPasswordCreateRequest {
+export interface UsersSetEmailCreateRequest {
     user?: User;
 }
 
-export interface UsersSetUsernameCreateRequest {
+export interface UsersSetPasswordCreateRequest {
     user?: User;
 }
 
@@ -1239,6 +1239,68 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
+    async usersResetEmailConfirmCreateRaw(requestParameters: UsersResetEmailConfirmCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/users/reset_email_confirm/`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserToJSON(requestParameters.user),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async usersResetEmailConfirmCreate(requestParameters: UsersResetEmailConfirmCreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<User> {
+        const response = await this.usersResetEmailConfirmCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async usersResetEmailCreateRaw(requestParameters: UsersResetEmailCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/users/reset_email/`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserToJSON(requestParameters.user),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async usersResetEmailCreate(requestParameters: UsersResetEmailCreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<User> {
+        const response = await this.usersResetEmailCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async usersResetPasswordConfirmCreateRaw(requestParameters: UsersResetPasswordConfirmCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
         const queryParameters: any = {};
 
@@ -1293,68 +1355,6 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
-    async usersResetUsernameConfirmCreateRaw(requestParameters: UsersResetUsernameConfirmCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/users/reset_username_confirm/`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: UserToJSON(requestParameters.user),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async usersResetUsernameConfirmCreate(requestParameters: UsersResetUsernameConfirmCreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<User> {
-        const response = await this.usersResetUsernameConfirmCreateRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async usersResetUsernameCreateRaw(requestParameters: UsersResetUsernameCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/users/reset_username/`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: UserToJSON(requestParameters.user),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async usersResetUsernameCreate(requestParameters: UsersResetUsernameCreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<User> {
-        const response = await this.usersResetUsernameCreateRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
     async usersRetrieveRaw(requestParameters: UsersRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling usersRetrieve.');
@@ -1387,6 +1387,37 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
+    async usersSetEmailCreateRaw(requestParameters: UsersSetEmailCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
+        }
+
+        const response = await this.request({
+            path: `/users/set_email/`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserToJSON(requestParameters.user),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async usersSetEmailCreate(requestParameters: UsersSetEmailCreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<User> {
+        const response = await this.usersSetEmailCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
     async usersSetPasswordCreateRaw(requestParameters: UsersSetPasswordCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
         const queryParameters: any = {};
 
@@ -1413,37 +1444,6 @@ export class UsersApi extends runtime.BaseAPI {
      */
     async usersSetPasswordCreate(requestParameters: UsersSetPasswordCreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<User> {
         const response = await this.usersSetPasswordCreateRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async usersSetUsernameCreateRaw(requestParameters: UsersSetUsernameCreateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<User>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // tokenAuth authentication
-        }
-
-        const response = await this.request({
-            path: `/users/set_username/`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: UserToJSON(requestParameters.user),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async usersSetUsernameCreate(requestParameters: UsersSetUsernameCreateRequest = {}, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<User> {
-        const response = await this.usersSetUsernameCreateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

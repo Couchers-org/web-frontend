@@ -30,7 +30,7 @@ export interface TokenCreate {
      * @type {string}
      * @memberof TokenCreate
      */
-    username?: string;
+    email?: string;
 }
 
 export function TokenCreateFromJSON(json: any): TokenCreate {
@@ -44,7 +44,7 @@ export function TokenCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'password': !exists(json, 'password') ? undefined : json['password'],
-        'username': !exists(json, 'username') ? undefined : json['username'],
+        'email': !exists(json, 'email') ? undefined : json['email'],
     };
 }
 
@@ -58,7 +58,7 @@ export function TokenCreateToJSON(value?: TokenCreate | null): any {
     return {
         
         'password': value.password,
-        'username': value.username,
+        'email': value.email,
     };
 }
 
