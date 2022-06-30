@@ -27,6 +27,12 @@ export interface PatchedEventOrganizer {
     readonly id?: number;
     /**
      * 
+     * @type {Date}
+     * @memberof PatchedEventOrganizer
+     */
+    readonly createdAt?: Date;
+    /**
+     * 
      * @type {number}
      * @memberof PatchedEventOrganizer
      */
@@ -37,12 +43,6 @@ export interface PatchedEventOrganizer {
      * @memberof PatchedEventOrganizer
      */
     readonly event?: number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof PatchedEventOrganizer
-     */
-    readonly createdAt?: Date;
 }
 
 export function PatchedEventOrganizerFromJSON(json: any): PatchedEventOrganizer {
@@ -56,9 +56,9 @@ export function PatchedEventOrganizerFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'user': !exists(json, 'user') ? undefined : json['user'],
         'event': !exists(json, 'event') ? undefined : json['event'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
     };
 }
 

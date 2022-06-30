@@ -30,7 +30,7 @@ export interface Language {
      * @type {string}
      * @memberof Language
      */
-    readonly code: string;
+    code: string;
     /**
      * 
      * @type {string}
@@ -64,6 +64,7 @@ export function LanguageToJSON(value?: Language | null): any {
     }
     return {
         
+        'code': value.code,
         'name': value.name,
     };
 }

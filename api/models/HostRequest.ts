@@ -34,24 +34,6 @@ export interface HostRequest {
     readonly id: number;
     /**
      * 
-     * @type {number}
-     * @memberof HostRequest
-     */
-    readonly conversation: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof HostRequest
-     */
-    readonly user: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof HostRequest
-     */
-    readonly hostUser: number;
-    /**
-     * 
      * @type {Date}
      * @memberof HostRequest
      */
@@ -92,6 +74,24 @@ export interface HostRequest {
      * @memberof HostRequest
      */
     hostSentReferenceReminders?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HostRequest
+     */
+    readonly conversation: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HostRequest
+     */
+    readonly user: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof HostRequest
+     */
+    readonly hostUser: number;
 }
 
 export function HostRequestFromJSON(json: any): HostRequest {
@@ -105,9 +105,6 @@ export function HostRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': json['id'],
-        'conversation': json['conversation'],
-        'user': json['user'],
-        'hostUser': json['host_user'],
         'startAt': (new Date(json['start_at'])),
         'endAt': (new Date(json['end_at'])),
         'status': !exists(json, 'status') ? undefined : Status34bEnumFromJSON(json['status']),
@@ -115,6 +112,9 @@ export function HostRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'hostLastSeenMessageId': !exists(json, 'host_last_seen_message_id') ? undefined : json['host_last_seen_message_id'],
         'userSentReferenceReminders': !exists(json, 'user_sent_reference_reminders') ? undefined : json['user_sent_reference_reminders'],
         'hostSentReferenceReminders': !exists(json, 'host_sent_reference_reminders') ? undefined : json['host_sent_reference_reminders'],
+        'conversation': json['conversation'],
+        'user': json['user'],
+        'hostUser': json['host_user'],
     };
 }
 

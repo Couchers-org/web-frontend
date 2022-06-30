@@ -434,6 +434,36 @@ export interface PatchedUserDetail {
      * @memberof PatchedUserDetail
      */
     readonly age?: number;
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof PatchedUserDetail
+     */
+    readonly languageAbilities?: { [key: string]: any; };
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof PatchedUserDetail
+     */
+    readonly regionsVisited?: Array<any>;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof PatchedUserDetail
+     */
+    readonly regionsLived?: Array<any>;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedUserDetail
+     */
+    readonly numberOfReferences?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedUserDetail
+     */
+    readonly numberOfFriends?: number;
 }
 
 export function PatchedUserDetailFromJSON(json: any): PatchedUserDetail {
@@ -510,6 +540,11 @@ export function PatchedUserDetailFromJSONTyped(json: any, ignoreDiscriminator: b
         'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
         'timezoneArea': !exists(json, 'timezone_area') ? undefined : json['timezone_area'],
         'age': !exists(json, 'age') ? undefined : json['age'],
+        'languageAbilities': !exists(json, 'language_abilities') ? undefined : json['language_abilities'],
+        'regionsVisited': !exists(json, 'regions_visited') ? undefined : json['regions_visited'],
+        'regionsLived': !exists(json, 'regions_lived') ? undefined : json['regions_lived'],
+        'numberOfReferences': !exists(json, 'number_of_references') ? undefined : json['number_of_references'],
+        'numberOfFriends': !exists(json, 'number_of_friends') ? undefined : json['number_of_friends'],
     };
 }
 

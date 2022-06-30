@@ -34,18 +34,6 @@ export interface FriendRelationship {
     readonly id: number;
     /**
      * 
-     * @type {number}
-     * @memberof FriendRelationship
-     */
-    readonly user: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof FriendRelationship
-     */
-    readonly toUser: number;
-    /**
-     * 
      * @type {Date}
      * @memberof FriendRelationship
      */
@@ -62,6 +50,18 @@ export interface FriendRelationship {
      * @memberof FriendRelationship
      */
     status: FriendRelationshipStatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof FriendRelationship
+     */
+    readonly user: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof FriendRelationship
+     */
+    readonly toUser: number;
 }
 
 export function FriendRelationshipFromJSON(json: any): FriendRelationship {
@@ -75,11 +75,11 @@ export function FriendRelationshipFromJSONTyped(json: any, ignoreDiscriminator: 
     return {
         
         'id': json['id'],
-        'user': json['user'],
-        'toUser': json['to_user'],
         'createdAt': (new Date(json['created_at'])),
         'updatedAt': !exists(json, 'updated_at') ? undefined : (json['updated_at'] === null ? null : new Date(json['updated_at'])),
         'status': FriendRelationshipStatusEnumFromJSON(json['status']),
+        'user': json['user'],
+        'toUser': json['to_user'],
     };
 }
 

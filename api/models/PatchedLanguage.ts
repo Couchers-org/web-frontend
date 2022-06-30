@@ -30,7 +30,7 @@ export interface PatchedLanguage {
      * @type {string}
      * @memberof PatchedLanguage
      */
-    readonly code?: string;
+    code?: string;
     /**
      * 
      * @type {string}
@@ -64,6 +64,7 @@ export function PatchedLanguageToJSON(value?: PatchedLanguage | null): any {
     }
     return {
         
+        'code': value.code,
         'name': value.name,
     };
 }

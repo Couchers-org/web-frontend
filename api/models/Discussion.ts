@@ -48,7 +48,7 @@ export interface Discussion {
      * @type {number}
      * @memberof Discussion
      */
-    thread: number;
+    readonly thread: number;
     /**
      * 
      * @type {number}
@@ -60,7 +60,7 @@ export interface Discussion {
      * @type {number}
      * @memberof Discussion
      */
-    ownerCluster: number;
+    readonly ownerCluster: number;
 }
 
 export function DiscussionFromJSON(json: any): Discussion {
@@ -94,8 +94,6 @@ export function DiscussionToJSON(value?: Discussion | null): any {
         
         'title': value.title,
         'content': value.content,
-        'thread': value.thread,
-        'owner_cluster': value.ownerCluster,
     };
 }
 

@@ -27,18 +27,6 @@ export interface PatchedEventOccurrence {
     readonly id?: number;
     /**
      * 
-     * @type {number}
-     * @memberof PatchedEventOccurrence
-     */
-    readonly event?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedEventOccurrence
-     */
-    readonly user?: number;
-    /**
-     * 
      * @type {string}
      * @memberof PatchedEventOccurrence
      */
@@ -85,6 +73,18 @@ export interface PatchedEventOccurrence {
      * @memberof PatchedEventOccurrence
      */
     readonly updatedAt?: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedEventOccurrence
+     */
+    readonly event?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedEventOccurrence
+     */
+    readonly user?: number;
 }
 
 export function PatchedEventOccurrenceFromJSON(json: any): PatchedEventOccurrence {
@@ -98,8 +98,6 @@ export function PatchedEventOccurrenceFromJSONTyped(json: any, ignoreDiscriminat
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'event': !exists(json, 'event') ? undefined : json['event'],
-        'user': !exists(json, 'user') ? undefined : json['user'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'photoKey': !exists(json, 'photo_key') ? undefined : json['photo_key'],
         'geom': !exists(json, 'geom') ? undefined : json['geom'],
@@ -108,6 +106,8 @@ export function PatchedEventOccurrenceFromJSONTyped(json: any, ignoreDiscriminat
         'during': !exists(json, 'during') ? undefined : json['during'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'updatedAt': !exists(json, 'updated_at') ? undefined : (new Date(json['updated_at'])),
+        'event': !exists(json, 'event') ? undefined : json['event'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
     };
 }
 

@@ -27,24 +27,6 @@ export interface Reply {
     readonly id: number;
     /**
      * 
-     * @type {number}
-     * @memberof Reply
-     */
-    readonly user: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Reply
-     */
-    readonly comment: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Reply
-     */
-    content?: string;
-    /**
-     * 
      * @type {Date}
      * @memberof Reply
      */
@@ -55,6 +37,24 @@ export interface Reply {
      * @memberof Reply
      */
     deletedAt?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Reply
+     */
+    content?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Reply
+     */
+    readonly user: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Reply
+     */
+    readonly comment: number;
 }
 
 export function ReplyFromJSON(json: any): Reply {
@@ -68,11 +68,11 @@ export function ReplyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Rep
     return {
         
         'id': json['id'],
-        'user': json['user'],
-        'comment': json['comment'],
-        'content': !exists(json, 'content') ? undefined : json['content'],
         'createdAt': (new Date(json['created_at'])),
         'deletedAt': !exists(json, 'deleted_at') ? undefined : (json['deleted_at'] === null ? null : new Date(json['deleted_at'])),
+        'content': !exists(json, 'content') ? undefined : json['content'],
+        'user': json['user'],
+        'comment': json['comment'],
     };
 }
 
@@ -85,8 +85,8 @@ export function ReplyToJSON(value?: Reply | null): any {
     }
     return {
         
-        'content': value.content,
         'deleted_at': value.deletedAt === undefined ? undefined : (value.deletedAt === null ? null : value.deletedAt.toISOString()),
+        'content': value.content,
     };
 }
 

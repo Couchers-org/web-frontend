@@ -39,16 +39,16 @@ export interface Upload {
     readonly createdAt: Date;
     /**
      * 
-     * @type {number}
-     * @memberof Upload
-     */
-    readonly user: number;
-    /**
-     * 
      * @type {string}
      * @memberof Upload
      */
     readonly credit: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Upload
+     */
+    readonly user: number;
 }
 
 export function UploadFromJSON(json: any): Upload {
@@ -64,8 +64,8 @@ export function UploadFromJSONTyped(json: any, ignoreDiscriminator: boolean): Up
         'key': json['key'],
         'filename': json['filename'],
         'createdAt': (new Date(json['created_at'])),
-        'user': json['user'],
         'credit': json['credit'],
+        'user': json['user'],
     };
 }
 

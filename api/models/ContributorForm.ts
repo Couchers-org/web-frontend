@@ -34,10 +34,10 @@ export interface ContributorForm {
     readonly id: number;
     /**
      * 
-     * @type {number}
+     * @type {Date}
      * @memberof ContributorForm
      */
-    readonly user: number;
+    readonly createdAt: Date;
     /**
      * 
      * @type {string}
@@ -76,10 +76,10 @@ export interface ContributorForm {
     expertise?: string | null;
     /**
      * 
-     * @type {Date}
+     * @type {number}
      * @memberof ContributorForm
      */
-    readonly createdAt: Date;
+    readonly user: number;
 }
 
 export function ContributorFormFromJSON(json: any): ContributorForm {
@@ -93,14 +93,14 @@ export function ContributorFormFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': json['id'],
-        'user': json['user'],
+        'createdAt': (new Date(json['created_at'])),
         'ideas': json['ideas'],
         'features': json['features'],
         'experience': json['experience'],
         'contribute': !exists(json, 'contribute') ? undefined : ContributorFormContributeFromJSON(json['contribute']),
         'contributeWays': !exists(json, 'contribute_ways') ? undefined : json['contribute_ways'],
         'expertise': !exists(json, 'expertise') ? undefined : json['expertise'],
-        'createdAt': (new Date(json['created_at'])),
+        'user': json['user'],
     };
 }
 

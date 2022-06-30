@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface PatchedAccountDeletionToken {
     /**
      * 
+     * @type {number}
+     * @memberof PatchedAccountDeletionToken
+     */
+    readonly id?: number;
+    /**
+     * 
      * @type {string}
      * @memberof PatchedAccountDeletionToken
      */
@@ -55,6 +61,7 @@ export function PatchedAccountDeletionTokenFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
+        'id': !exists(json, 'id') ? undefined : json['id'],
         'token': !exists(json, 'token') ? undefined : json['token'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'expiresAt': !exists(json, 'expires_at') ? undefined : (new Date(json['expires_at'])),

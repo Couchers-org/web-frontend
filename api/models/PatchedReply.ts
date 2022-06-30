@@ -27,24 +27,6 @@ export interface PatchedReply {
     readonly id?: number;
     /**
      * 
-     * @type {number}
-     * @memberof PatchedReply
-     */
-    readonly user?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedReply
-     */
-    readonly comment?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof PatchedReply
-     */
-    content?: string;
-    /**
-     * 
      * @type {Date}
      * @memberof PatchedReply
      */
@@ -55,6 +37,24 @@ export interface PatchedReply {
      * @memberof PatchedReply
      */
     deletedAt?: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedReply
+     */
+    content?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedReply
+     */
+    readonly user?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedReply
+     */
+    readonly comment?: number;
 }
 
 export function PatchedReplyFromJSON(json: any): PatchedReply {
@@ -68,11 +68,11 @@ export function PatchedReplyFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'user': !exists(json, 'user') ? undefined : json['user'],
-        'comment': !exists(json, 'comment') ? undefined : json['comment'],
-        'content': !exists(json, 'content') ? undefined : json['content'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'deletedAt': !exists(json, 'deleted_at') ? undefined : (json['deleted_at'] === null ? null : new Date(json['deleted_at'])),
+        'content': !exists(json, 'content') ? undefined : json['content'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
+        'comment': !exists(json, 'comment') ? undefined : json['comment'],
     };
 }
 
@@ -85,8 +85,8 @@ export function PatchedReplyToJSON(value?: PatchedReply | null): any {
     }
     return {
         
-        'content': value.content,
         'deleted_at': value.deletedAt === undefined ? undefined : (value.deletedAt === null ? null : value.deletedAt.toISOString()),
+        'content': value.content,
     };
 }
 

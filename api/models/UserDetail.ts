@@ -26,23 +26,23 @@ import {
     MeetupStatusEnumToJSON,
 } from './MeetupStatusEnum';
 import {
-    UserDetailParkingDetails,
-    UserDetailParkingDetailsFromJSON,
-    UserDetailParkingDetailsFromJSONTyped,
-    UserDetailParkingDetailsToJSON,
-} from './UserDetailParkingDetails';
+    PatchedUserDetailParkingDetails,
+    PatchedUserDetailParkingDetailsFromJSON,
+    PatchedUserDetailParkingDetailsFromJSONTyped,
+    PatchedUserDetailParkingDetailsToJSON,
+} from './PatchedUserDetailParkingDetails';
 import {
-    UserDetailSleepingArrangement,
-    UserDetailSleepingArrangementFromJSON,
-    UserDetailSleepingArrangementFromJSONTyped,
-    UserDetailSleepingArrangementToJSON,
-} from './UserDetailSleepingArrangement';
+    PatchedUserDetailSleepingArrangement,
+    PatchedUserDetailSleepingArrangementFromJSON,
+    PatchedUserDetailSleepingArrangementFromJSONTyped,
+    PatchedUserDetailSleepingArrangementToJSON,
+} from './PatchedUserDetailSleepingArrangement';
 import {
-    UserDetailSmokingAllowed,
-    UserDetailSmokingAllowedFromJSON,
-    UserDetailSmokingAllowedFromJSONTyped,
-    UserDetailSmokingAllowedToJSON,
-} from './UserDetailSmokingAllowed';
+    PatchedUserDetailSmokingAllowed,
+    PatchedUserDetailSmokingAllowedFromJSON,
+    PatchedUserDetailSmokingAllowedFromJSONTyped,
+    PatchedUserDetailSmokingAllowedToJSON,
+} from './PatchedUserDetailSmokingAllowed';
 
 /**
  * 
@@ -286,10 +286,10 @@ export interface UserDetail {
     wheelchairAccessible?: boolean | null;
     /**
      * 
-     * @type {UserDetailSmokingAllowed}
+     * @type {PatchedUserDetailSmokingAllowed}
      * @memberof UserDetail
      */
-    smokingAllowed?: UserDetailSmokingAllowed | null;
+    smokingAllowed?: PatchedUserDetailSmokingAllowed | null;
     /**
      * 
      * @type {boolean}
@@ -316,10 +316,10 @@ export interface UserDetail {
     otherHostInfo?: string | null;
     /**
      * 
-     * @type {UserDetailSleepingArrangement}
+     * @type {PatchedUserDetailSleepingArrangement}
      * @memberof UserDetail
      */
-    sleepingArrangement?: UserDetailSleepingArrangement | null;
+    sleepingArrangement?: PatchedUserDetailSleepingArrangement | null;
     /**
      * 
      * @type {string}
@@ -346,10 +346,10 @@ export interface UserDetail {
     parking?: boolean | null;
     /**
      * 
-     * @type {UserDetailParkingDetails}
+     * @type {PatchedUserDetailParkingDetails}
      * @memberof UserDetail
      */
-    parkingDetails?: UserDetailParkingDetails | null;
+    parkingDetails?: PatchedUserDetailParkingDetails | null;
     /**
      * 
      * @type {boolean}
@@ -430,10 +430,40 @@ export interface UserDetail {
     readonly timezoneArea: string;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof UserDetail
      */
-    readonly age: string;
+    readonly age: number;
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof UserDetail
+     */
+    readonly languageAbilities: { [key: string]: any; };
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof UserDetail
+     */
+    readonly regionsVisited: Array<any>;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof UserDetail
+     */
+    readonly regionsLived: Array<any>;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserDetail
+     */
+    readonly numberOfReferences: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserDetail
+     */
+    readonly numberOfFriends: number;
 }
 
 export function UserDetailFromJSON(json: any): UserDetail {
@@ -485,17 +515,17 @@ export function UserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'hasHousemates': !exists(json, 'has_housemates') ? undefined : json['has_housemates'],
         'housemateDetails': !exists(json, 'housemate_details') ? undefined : json['housemate_details'],
         'wheelchairAccessible': !exists(json, 'wheelchair_accessible') ? undefined : json['wheelchair_accessible'],
-        'smokingAllowed': !exists(json, 'smoking_allowed') ? undefined : UserDetailSmokingAllowedFromJSON(json['smoking_allowed']),
+        'smokingAllowed': !exists(json, 'smoking_allowed') ? undefined : PatchedUserDetailSmokingAllowedFromJSON(json['smoking_allowed']),
         'smokesAtHome': !exists(json, 'smokes_at_home') ? undefined : json['smokes_at_home'],
         'drinkingAllowed': !exists(json, 'drinking_allowed') ? undefined : json['drinking_allowed'],
         'drinksAtHome': !exists(json, 'drinks_at_home') ? undefined : json['drinks_at_home'],
         'otherHostInfo': !exists(json, 'other_host_info') ? undefined : json['other_host_info'],
-        'sleepingArrangement': !exists(json, 'sleeping_arrangement') ? undefined : UserDetailSleepingArrangementFromJSON(json['sleeping_arrangement']),
+        'sleepingArrangement': !exists(json, 'sleeping_arrangement') ? undefined : PatchedUserDetailSleepingArrangementFromJSON(json['sleeping_arrangement']),
         'sleepingDetails': !exists(json, 'sleeping_details') ? undefined : json['sleeping_details'],
         'area': !exists(json, 'area') ? undefined : json['area'],
         'houseRules': !exists(json, 'house_rules') ? undefined : json['house_rules'],
         'parking': !exists(json, 'parking') ? undefined : json['parking'],
-        'parkingDetails': !exists(json, 'parking_details') ? undefined : UserDetailParkingDetailsFromJSON(json['parking_details']),
+        'parkingDetails': !exists(json, 'parking_details') ? undefined : PatchedUserDetailParkingDetailsFromJSON(json['parking_details']),
         'campingOk': !exists(json, 'camping_ok') ? undefined : json['camping_ok'],
         'acceptedTos': !exists(json, 'accepted_tos') ? undefined : json['accepted_tos'],
         'acceptedCommunityGuidelines': !exists(json, 'accepted_community_guidelines') ? undefined : json['accepted_community_guidelines'],
@@ -510,6 +540,11 @@ export function UserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'avatarUrl': json['avatar_url'],
         'timezoneArea': json['timezone_area'],
         'age': json['age'],
+        'languageAbilities': json['language_abilities'],
+        'regionsVisited': json['regions_visited'],
+        'regionsLived': json['regions_lived'],
+        'numberOfReferences': json['number_of_references'],
+        'numberOfFriends': json['number_of_friends'],
     };
 }
 
@@ -558,17 +593,17 @@ export function UserDetailToJSON(value?: UserDetail | null): any {
         'has_housemates': value.hasHousemates,
         'housemate_details': value.housemateDetails,
         'wheelchair_accessible': value.wheelchairAccessible,
-        'smoking_allowed': UserDetailSmokingAllowedToJSON(value.smokingAllowed),
+        'smoking_allowed': PatchedUserDetailSmokingAllowedToJSON(value.smokingAllowed),
         'smokes_at_home': value.smokesAtHome,
         'drinking_allowed': value.drinkingAllowed,
         'drinks_at_home': value.drinksAtHome,
         'other_host_info': value.otherHostInfo,
-        'sleeping_arrangement': UserDetailSleepingArrangementToJSON(value.sleepingArrangement),
+        'sleeping_arrangement': PatchedUserDetailSleepingArrangementToJSON(value.sleepingArrangement),
         'sleeping_details': value.sleepingDetails,
         'area': value.area,
         'house_rules': value.houseRules,
         'parking': value.parking,
-        'parking_details': UserDetailParkingDetailsToJSON(value.parkingDetails),
+        'parking_details': PatchedUserDetailParkingDetailsToJSON(value.parkingDetails),
         'camping_ok': value.campingOk,
         'accepted_tos': value.acceptedTos,
         'accepted_community_guidelines': value.acceptedCommunityGuidelines,

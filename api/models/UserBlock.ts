@@ -27,6 +27,18 @@ export interface UserBlock {
     readonly id: number;
     /**
      * 
+     * @type {string}
+     * @memberof UserBlock
+     */
+    readonly blockedUserName: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UserBlock
+     */
+    readonly createdAt: Date;
+    /**
+     * 
      * @type {number}
      * @memberof UserBlock
      */
@@ -36,13 +48,7 @@ export interface UserBlock {
      * @type {number}
      * @memberof UserBlock
      */
-    blockedUser: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserBlock
-     */
-    readonly blockedUserName: string;
+    readonly blockedUser: number;
 }
 
 export function UserBlockFromJSON(json: any): UserBlock {
@@ -56,9 +62,10 @@ export function UserBlockFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     return {
         
         'id': json['id'],
+        'blockedUserName': json['blocked_user_name'],
+        'createdAt': (new Date(json['created_at'])),
         'user': json['user'],
         'blockedUser': json['blocked_user'],
-        'blockedUserName': json['blocked_user_name'],
     };
 }
 
@@ -71,7 +78,6 @@ export function UserBlockToJSON(value?: UserBlock | null): any {
     }
     return {
         
-        'blocked_user': value.blockedUser,
     };
 }
 

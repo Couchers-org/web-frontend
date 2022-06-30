@@ -39,16 +39,16 @@ export interface PatchedUpload {
     readonly createdAt?: Date;
     /**
      * 
-     * @type {number}
-     * @memberof PatchedUpload
-     */
-    readonly user?: number;
-    /**
-     * 
      * @type {string}
      * @memberof PatchedUpload
      */
     readonly credit?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedUpload
+     */
+    readonly user?: number;
 }
 
 export function PatchedUploadFromJSON(json: any): PatchedUpload {
@@ -64,8 +64,8 @@ export function PatchedUploadFromJSONTyped(json: any, ignoreDiscriminator: boole
         'key': !exists(json, 'key') ? undefined : json['key'],
         'filename': !exists(json, 'filename') ? undefined : json['filename'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'user': !exists(json, 'user') ? undefined : json['user'],
         'credit': !exists(json, 'credit') ? undefined : json['credit'],
+        'user': !exists(json, 'user') ? undefined : json['user'],
     };
 }
 

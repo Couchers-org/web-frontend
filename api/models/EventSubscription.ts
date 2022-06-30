@@ -27,6 +27,12 @@ export interface EventSubscription {
     readonly id: number;
     /**
      * 
+     * @type {Date}
+     * @memberof EventSubscription
+     */
+    readonly createdAt: Date;
+    /**
+     * 
      * @type {number}
      * @memberof EventSubscription
      */
@@ -37,12 +43,6 @@ export interface EventSubscription {
      * @memberof EventSubscription
      */
     readonly event: number;
-    /**
-     * 
-     * @type {Date}
-     * @memberof EventSubscription
-     */
-    readonly createdAt: Date;
 }
 
 export function EventSubscriptionFromJSON(json: any): EventSubscription {
@@ -56,9 +56,9 @@ export function EventSubscriptionFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'id': json['id'],
+        'createdAt': (new Date(json['created_at'])),
         'user': json['user'],
         'event': json['event'],
-        'createdAt': (new Date(json['created_at'])),
     };
 }
 

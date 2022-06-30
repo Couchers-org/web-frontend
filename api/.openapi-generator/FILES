@@ -151,7 +151,7 @@ models/PaginatedThreadList.ts
 models/PaginatedTimezoneAreaList.ts
 models/PaginatedUploadList.ts
 models/PaginatedUserBlockList.ts
-models/PaginatedUserList.ts
+models/PaginatedUserDetailList.ts
 models/ParkingDetailsEnum.ts
 models/PatchedAccountDeletionReason.ts
 models/PatchedAccountDeletionToken.ts
@@ -201,11 +201,11 @@ models/PatchedSignupFlow.ts
 models/PatchedThread.ts
 models/PatchedTimezoneArea.ts
 models/PatchedUpload.ts
-models/PatchedUser.ts
 models/PatchedUserBlock.ts
-models/PatchedUserParkingDetails.ts
-models/PatchedUserSleepingArrangement.ts
-models/PatchedUserSmokingAllowed.ts
+models/PatchedUserDetail.ts
+models/PatchedUserDetailParkingDetails.ts
+models/PatchedUserDetailSleepingArrangement.ts
+models/PatchedUserDetailSmokingAllowed.ts
 models/RecurringDonation.ts
 models/Reference.ts
 models/ReferenceTypeEnum.ts
@@ -226,11 +226,7 @@ models/Token.ts
 models/TokenCreate.ts
 models/TypeBd6Enum.ts
 models/Upload.ts
-models/User.ts
 models/UserBlock.ts
 models/UserDetail.ts
-models/UserDetailParkingDetails.ts
-models/UserDetailSleepingArrangement.ts
-models/UserDetailSmokingAllowed.ts
 models/index.ts
 runtime.ts

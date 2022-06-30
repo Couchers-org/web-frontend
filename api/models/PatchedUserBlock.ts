@@ -27,6 +27,18 @@ export interface PatchedUserBlock {
     readonly id?: number;
     /**
      * 
+     * @type {string}
+     * @memberof PatchedUserBlock
+     */
+    readonly blockedUserName?: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PatchedUserBlock
+     */
+    readonly createdAt?: Date;
+    /**
+     * 
      * @type {number}
      * @memberof PatchedUserBlock
      */
@@ -36,13 +48,7 @@ export interface PatchedUserBlock {
      * @type {number}
      * @memberof PatchedUserBlock
      */
-    blockedUser?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof PatchedUserBlock
-     */
-    readonly blockedUserName?: string;
+    readonly blockedUser?: number;
 }
 
 export function PatchedUserBlockFromJSON(json: any): PatchedUserBlock {
@@ -56,9 +62,10 @@ export function PatchedUserBlockFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'blockedUserName': !exists(json, 'blocked_user_name') ? undefined : json['blocked_user_name'],
+        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
         'user': !exists(json, 'user') ? undefined : json['user'],
         'blockedUser': !exists(json, 'blocked_user') ? undefined : json['blocked_user'],
-        'blockedUserName': !exists(json, 'blocked_user_name') ? undefined : json['blocked_user_name'],
     };
 }
 
@@ -71,7 +78,6 @@ export function PatchedUserBlockToJSON(value?: PatchedUserBlock | null): any {
     }
     return {
         
-        'blocked_user': value.blockedUser,
     };
 }
 

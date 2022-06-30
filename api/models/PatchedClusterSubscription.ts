@@ -34,6 +34,12 @@ export interface PatchedClusterSubscription {
     readonly id?: number;
     /**
      * 
+     * @type {RoleEnum}
+     * @memberof PatchedClusterSubscription
+     */
+    role?: RoleEnum;
+    /**
+     * 
      * @type {number}
      * @memberof PatchedClusterSubscription
      */
@@ -43,13 +49,7 @@ export interface PatchedClusterSubscription {
      * @type {number}
      * @memberof PatchedClusterSubscription
      */
-    readonly cluster?: number;
-    /**
-     * 
-     * @type {RoleEnum}
-     * @memberof PatchedClusterSubscription
-     */
-    role?: RoleEnum;
+    cluster?: number;
 }
 
 export function PatchedClusterSubscriptionFromJSON(json: any): PatchedClusterSubscription {
@@ -63,9 +63,9 @@ export function PatchedClusterSubscriptionFromJSONTyped(json: any, ignoreDiscrim
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'role': !exists(json, 'role') ? undefined : RoleEnumFromJSON(json['role']),
         'user': !exists(json, 'user') ? undefined : json['user'],
         'cluster': !exists(json, 'cluster') ? undefined : json['cluster'],
-        'role': !exists(json, 'role') ? undefined : RoleEnumFromJSON(json['role']),
     };
 }
 
@@ -79,6 +79,7 @@ export function PatchedClusterSubscriptionToJSON(value?: PatchedClusterSubscript
     return {
         
         'role': RoleEnumToJSON(value.role),
+        'cluster': value.cluster,
     };
 }
 
