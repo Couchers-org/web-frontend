@@ -37,8 +37,9 @@ export default function AttendanceMenu({
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (!isGoingAttendanceState) {
       onChangeAttendanceState(AttendanceState.ATTENDANCE_STATE_GOING);
+    } else {
+      setAnchorEl(event.currentTarget);
     }
-    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);

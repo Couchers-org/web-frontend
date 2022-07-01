@@ -12,10 +12,10 @@ Communication with the backend is via [protobuf messages](https://github.com/pro
   - If you don't want docker desktop, you can follow [these instructions](https://docs.docker.com/compose/install/) to install docker compose.
 - Install an editor of your choice. Good examples are [Atom](https://atom.io) or [Visual Studio Code](https://code.visualstudio.com/) which both have extensions for Typescript/Javascript etc.
 - Clone this repository with `git clone https://github.com/Couchers-org/web-frontend.git`
-- Make sure your docker resource and node has enough memory to run. 
+- Make sure your docker resource and node has enough memory to run the app. 
   - ex: set node limit to 8G: `export NODE_OPTIONS="--max-old-space-size=8192"`
   - open docker => resources => memory => set higher
-
+  
 ## Setting up the dev environment
 
 It is recommended that while running the frontend locally, you target the hosted dev API and backend - this is the default behaviour. If you'd like to run the backend locally too, see the note below.
