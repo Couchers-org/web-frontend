@@ -31,11 +31,11 @@ export default function AttendanceMenu({
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const isGoingAttendanceState =
+  const isAttending =
     attendanceState === AttendanceState.ATTENDANCE_STATE_GOING;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (!isGoingAttendanceState) {
+    if (!isAttending) {
       onChangeAttendanceState(AttendanceState.ATTENDANCE_STATE_GOING);
     } else {
       setAnchorEl(event.currentTarget);
@@ -62,13 +62,13 @@ export default function AttendanceMenu({
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         loading={loading}
-        variant={isGoingAttendanceState ? "outlined" : "contained"}
+        variant={isAttending ? "outlined" : "contained"}
       >
-        {isGoingAttendanceState
+        {isAttending
           ? t("communities:going_to_event")
           : t("communities:join_event")}
 
-        {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        {isAttending && (open ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
       </Button>
 
       <Menu
