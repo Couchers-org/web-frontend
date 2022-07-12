@@ -149,6 +149,7 @@ export default function UserOverview({
             label={VERIFICATION_SCORE}
             description={VERIFICATION_SCORE_DESCRIPTION}
           />
+          <Divider spacing={3} />
         </>
       )}
       <div className={classes.info}>
