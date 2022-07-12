@@ -1,6 +1,7 @@
 import Hidden from "@material-ui/core/Hidden";
 import Alert from "components/Alert";
 import CircularProgress from "components/CircularProgress";
+import UserOverview from "components/UserOverview/UserOverview";
 import {
   INVALID_REFERENCE_TYPE,
   REFERENCE_TYPE_NOT_AVAILABLE,
@@ -8,7 +9,6 @@ import {
 import { useListAvailableReferences } from "features/profile/hooks/referencesHooks";
 import { ProfileUserProvider } from "features/profile/hooks/useProfileUser";
 import ReferenceForm from "features/profile/view/leaveReference/ReferenceForm";
-import UserOverview from "features/profile/view/UserOverview";
 import { useUser } from "features/userQueries/useUsers";
 import { User } from "proto/api_pb";
 import { ReferenceType } from "proto/references_pb";

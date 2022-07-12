@@ -16,8 +16,11 @@ import { HostingStatus, MeetupStatus } from "proto/api_pb";
 import React from "react";
 import makeStyles from "utils/makeStyles";
 
-import { useProfileUser } from "../hooks/useProfileUser";
-import { ReferencesLastActiveLabels, ResponseRateLabel } from "./userLabels";
+import { useProfileUser } from "../../features/profile/hooks/useProfileUser";
+import {
+  ReferencesLastActiveLabels,
+  ResponseRateLabel,
+} from "../../features/profile/view/userLabels";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -74,8 +77,6 @@ type UserOverviewProps = {
   actions?: React.ReactNode;
 };
 
-// @todo: move this into /components and decouple it from features/profile because it's used
-//        from the dashboard as well
 export default function UserOverview({
   showHostAndMeetAvailability,
   actions,

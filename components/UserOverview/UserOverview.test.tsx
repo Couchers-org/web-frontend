@@ -8,8 +8,8 @@ import {
   hostingStatusLabels,
   meetupStatusLabels,
   VERIFICATION_SCORE,
-} from "../constants";
-import { ProfileUserProvider } from "../hooks/useProfileUser";
+} from "../../features/profile/constants";
+import { ProfileUserProvider } from "../../features/profile/hooks/useProfileUser";
 import UserOverview from "./UserOverview";
 
 describe("UserOverview", () => {
