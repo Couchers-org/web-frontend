@@ -1,4 +1,4 @@
-import { Card, CardActions, Typography } from "@material-ui/core";
+import { Box, Card, CardActions, Typography } from "@material-ui/core";
 import Avatar from "components/Avatar";
 import BarWithHelp from "components/Bar/BarWithHelp";
 import Divider from "components/Divider";
@@ -21,6 +21,7 @@ import {
   ReferencesLastActiveLabels,
   ResponseRateLabel,
 } from "../../features/profile/view/userLabels";
+import { HTML_SYMBOLS } from "../constants";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -38,17 +39,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   intro: {
-    display: "flex",
-    justifyContent: "center",
     wordBreak: "break-word",
     overflowWrap: "break-word",
-    textAlign: "center",
   },
 
   wrapper: {
     marginTop: theme.spacing(2),
     "& h1": {
-      textAlign: "center",
       marginBottom: theme.spacing(0.5),
     },
   },
@@ -83,6 +80,7 @@ export default function UserOverview({
 }: UserOverviewProps) {
   const classes = useStyles();
   const user = useProfileUser();
+  const { username, name, city } = user;
 
   return (
     <Card className={classes.card}>
@@ -90,20 +88,22 @@ export default function UserOverview({
         <Avatar user={user} grow />
       </div>
 
-      <div className={classes.wrapper}>
-        <Typography variant="h1" className={classes.intro}>
-          {user.name}
+      <Box className={classes.wrapper}>
+        <Typography variant="h1" className={classes.intro} align={"left"}>
+          {name}
         </Typography>
-        <Typography variant="body1" className={classes.intro}>
-          {user.city}
-        </Typography>
-      </div>
+        <Typography
+          color={"textSecondary"}
+        >{`${HTML_SYMBOLS["@"]}${username}`}</Typography>
+      </Box>
 
       <Divider />
 
-      {actions && (
-        <CardActions className={classes.cardActions}>{actions}</CardActions>
-      )}
+      <Typography variant="body1" className={classes.intro}>
+        {city}
+      </Typography>
+
+      <Divider />
 
       {showHostAndMeetAvailability && (
         <>
@@ -128,6 +128,13 @@ export default function UserOverview({
 
       {Boolean(showHostAndMeetAvailability || actions) && (
         <Divider spacing={3} />
+      )}
+
+      {actions && (
+        <>
+          <CardActions className={classes.cardActions}>{actions}</CardActions>
+          <Divider spacing={3} />
+        </>
       )}
 
       {process.env.NEXT_PUBLIC_IS_VERIFICATION_ENABLED && (
