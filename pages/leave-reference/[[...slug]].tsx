@@ -2,10 +2,9 @@ import { appGetLayout } from "components/AppRoute";
 import NotFoundPage from "features/NotFoundPage";
 import LeaveReferencePageComponent from "features/profile/view/leaveReference/LeaveReferencePage";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
+import { translationStaticProps } from "i18n/server-side-translations";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import nextI18nextConfig from "next-i18next.config";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { referenceStepStrings, referenceTypeRouteStrings } from "routes";
 
 export const getStaticPaths: GetStaticPaths = () => ({
@@ -13,15 +12,10 @@ export const getStaticPaths: GetStaticPaths = () => ({
   fallback: "blocking",
 });
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(
-      locale ?? "en",
-      [GLOBAL, PROFILE],
-      nextI18nextConfig
-    )),
-  },
-});
+export const getStaticProps: GetStaticProps = translationStaticProps([
+  GLOBAL,
+  PROFILE,
+]);
 export default function LeaveReferencePage() {
   const router = useRouter();
 

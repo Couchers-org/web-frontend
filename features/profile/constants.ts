@@ -1,3 +1,4 @@
+import { TFunction } from "i18n";
 import {
   HostingStatus,
   MeetupStatus,
@@ -6,20 +7,19 @@ import {
   SmokingLocation,
 } from "proto/api_pb";
 import { ReferenceType } from "proto/references_pb";
-import { t as tFunction } from "test/utils";
 
 export const referencesQueryStaleTime = 10 * 60 * 1000;
 export const contactLink = "mailto:support@couchers.org";
 export const hostRequestReferenceSuccessDialogId =
   "hostRequestReferneceSuccessDialog";
 
-export const sectionLabels = (t: typeof tFunction) => ({
+export const sectionLabels = (t: TFunction) => ({
   about: t("profile:heading.about_me"),
   home: t("profile:heading.home"),
   references: t("profile:heading.references"),
 });
 
-export const referencesFilterLabels = (t: typeof tFunction) => ({
+export const referencesFilterLabels = (t: TFunction) => ({
   [ReferenceType.REFERENCE_TYPE_FRIEND]: t(
     "profile:reference_filter_label.friend"
   ),
@@ -32,7 +32,7 @@ export const referencesFilterLabels = (t: typeof tFunction) => ({
   all: "All references",
   given: "Given to others",
 });
-export const referenceBadgeLabel = (t: typeof tFunction) => ({
+export const referenceBadgeLabel = (t: TFunction) => ({
   [ReferenceType.REFERENCE_TYPE_FRIEND]: t(
     "profile:reference_badge_label.surfed"
   ),
@@ -44,7 +44,7 @@ export const referenceBadgeLabel = (t: typeof tFunction) => ({
   ),
 });
 
-export const smokingLocationLabels = (t: typeof tFunction) => ({
+export const smokingLocationLabels = (t: TFunction) => ({
   [SmokingLocation.SMOKING_LOCATION_NO]: t("profile:smoking_location.no"),
   [SmokingLocation.SMOKING_LOCATION_OUTSIDE]: t(
     "profile:smoking_location.outside"
@@ -57,7 +57,7 @@ export const smokingLocationLabels = (t: typeof tFunction) => ({
   [SmokingLocation.SMOKING_LOCATION_UNSPECIFIED]: t("profile:unspecified_info"),
 });
 
-export const hostingStatusLabels = (t: typeof tFunction) => ({
+export const hostingStatusLabels = (t: TFunction) => ({
   [HostingStatus.HOSTING_STATUS_CAN_HOST]: t("global:hosting_status.can_host"),
   [HostingStatus.HOSTING_STATUS_MAYBE]: t("global:hosting_status.maybe"),
   [HostingStatus.HOSTING_STATUS_CANT_HOST]: t(
@@ -71,7 +71,7 @@ export const hostingStatusLabels = (t: typeof tFunction) => ({
   ),
 });
 
-export const meetupStatusLabels = (t: typeof tFunction) => ({
+export const meetupStatusLabels = (t: TFunction) => ({
   [MeetupStatus.MEETUP_STATUS_WANTS_TO_MEETUP]: t(
     "global:meetup_status.wants_to_meetup"
   ),
@@ -89,7 +89,7 @@ export const meetupStatusLabels = (t: typeof tFunction) => ({
   ),
 });
 
-export const sleepingArrangementLabels = (t: typeof tFunction) => ({
+export const sleepingArrangementLabels = (t: TFunction) => ({
   [SleepingArrangement.SLEEPING_ARRANGEMENT_PRIVATE]: t(
     "profile:sleeping_arrangement.private"
   ),
@@ -110,7 +110,7 @@ export const sleepingArrangementLabels = (t: typeof tFunction) => ({
   ),
 });
 
-export const parkingDetailsLabels = (t: typeof tFunction) => ({
+export const parkingDetailsLabels = (t: TFunction) => ({
   [ParkingDetails.PARKING_DETAILS_FREE_ONSITE]: t(
     "profile:parking_details.free_onsite"
   ),
@@ -127,10 +127,7 @@ export const parkingDetailsLabels = (t: typeof tFunction) => ({
   [ParkingDetails.PARKING_DETAILS_UNKNOWN]: t("profile:unspecified_info"),
 });
 
-export function booleanConversion(
-  t: typeof tFunction,
-  value: boolean | undefined
-) {
+export function booleanConversion(t: TFunction, value: boolean | undefined) {
   return value === undefined
     ? t("profile:info_unanswered")
     : value
