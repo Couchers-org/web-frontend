@@ -1,4 +1,4 @@
-import { Box, Card, CardActions, Typography } from "@material-ui/core";
+import { Card, CardActions, Typography } from "@material-ui/core";
 import Avatar from "components/Avatar";
 import BarWithHelp from "components/Bar/BarWithHelp";
 import Divider from "components/Divider";
@@ -52,12 +52,17 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "stretch",
-    padding: theme.spacing(0.5),
+    padding: "0px",
     "& > *": {
       margin: theme.spacing(0.5),
     },
     "& > :not(:first-child)": {
       marginLeft: theme.spacing(0.5),
+      marginTop: theme.spacing(1.5),
+    },
+    "& > button": {
+      fontWeight: "bold",
+      padding: theme.spacing(1.6),
     },
   },
 
@@ -87,18 +92,18 @@ export default function UserOverview({
         <Avatar user={user} grow />
       </div>
 
-      <Box className={classes.wrapper}>
+      <div className={classes.wrapper}>
         <Typography variant="h1" className={classes.intro} align={"left"}>
           {name}
         </Typography>
         <Typography
           color={"textSecondary"}
         >{`${HTML_SYMBOLS["@"]}${username}`}</Typography>
-      </Box>
+      </div>
 
       <Divider />
 
-      <Typography variant="body1" className={classes.intro}>
+      <Typography color={"primary"} variant="body1" className={classes.intro}>
         {city}
       </Typography>
 
@@ -126,13 +131,13 @@ export default function UserOverview({
       )}
 
       {Boolean(showHostAndMeetAvailability || actions) && (
-        <Divider spacing={3} />
+        <Divider spacing={2} />
       )}
 
       {actions && (
         <>
           <CardActions className={classes.cardActions}>{actions}</CardActions>
-          <Divider spacing={3} />
+          <Divider spacing={2} />
         </>
       )}
 
@@ -148,7 +153,7 @@ export default function UserOverview({
             label={t("global:verification_score")}
             description={t("global:verification_score_description")}
           />
-          <Divider spacing={3} />
+          <Divider spacing={2} />
         </>
       )}
       <div className={classes.info}>
