@@ -2,7 +2,7 @@ import { Meta, Story } from "@storybook/react";
 import { User } from "proto/api_pb";
 import users from "test/fixtures/users.json";
 
-import { ProfileUserProvider } from "../hooks/useProfileUser";
+import { ProfileUserProvider } from "../../features/profile/hooks/useProfileUser";
 import UserOverview from "./UserOverview";
 
 export default {

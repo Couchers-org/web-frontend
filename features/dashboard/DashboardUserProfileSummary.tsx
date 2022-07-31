@@ -1,8 +1,8 @@
 import { CircularProgress, Theme, useMediaQuery } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Button from "components/Button";
+import UserOverview from "components/UserOverview/UserOverview";
 import { ProfileUserProvider } from "features/profile/hooks/useProfileUser";
-import UserOverview from "features/profile/view/UserOverview";
 import useCurrentUser from "features/userQueries/useCurrentUser";
 import { DASHBOARD } from "i18n/namespaces";
 import Link from "next/link";

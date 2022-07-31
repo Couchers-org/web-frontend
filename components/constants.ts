@@ -239,3 +239,7 @@ export const dateFormats = {
   "zh-TW": "YYYY/MM/DD",
   "zu-ZA": "YYYY/MM/DD",
 };
+
+export const HTML_SYMBOLS = {
+  "@": "\u0040",
+};
