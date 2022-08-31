@@ -6,7 +6,13 @@ title: Blog
 
 If you'd like to contribute to the blog, please [sign up](/volunteer) and let us know!
 
-## [Hosting refugees and finding shelter with Couchers.org](/blog/2022/03/13/hosting-refugees-and-finding-shelter-with-couchers-org-en)
+## [Couch Surfing 101: Setting up your profile](/blog/2022/08/30/setting-up-your-profile)
+
+2022/08/30.
+
+A guide for new couch surfers on how to set up your profile so you can host people or get hosted!
+
+## [Hosting refugees and finding shelter with Couchers.org](/blog/2022/08/30/setting-up-your-profile)
 
 2022/03/13.
 
