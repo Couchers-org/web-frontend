@@ -12,7 +12,9 @@ If you'd like to contribute to the blog, please [sign up](/volunteer) and let us
 
 A guide for new couch surfers on how to set up your profile so you can host people or get hosted!
 
-## [Hosting refugees and finding shelter with Couchers.org](/blog/2022/08/30/setting-up-your-profile)
+[Read more.](/blog/2022/08/30/setting-up-your-profile)
+
+## [Hosting refugees and finding shelter with Couchers.org](/blog/2022/03/13/hosting-refugees-and-finding-shelter-with-couchers-org-en)
 
 2022/03/13.
 
