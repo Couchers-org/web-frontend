@@ -1,4 +1,4 @@
-import { Tooltip } from "@material-ui/core";
+import { Tooltip, Button } from "@material-ui/core";
 import IconButton from "components/IconButton";
 import { DoneAllIcon } from "components/Icons";
 import Snackbar from "components/Snackbar";
@@ -73,15 +73,20 @@ export default function MarkAllReadButton({
       {markAll.error && (
         <Snackbar severity="error">{markAll.error.message}</Snackbar>
       )}
-      <Tooltip title={t("mark_all_read_button_text")}>
+
+      <Button
+        variant="text"
+        onClick={() => markAll.mutate()}
+      >
         <IconButton
           aria-label={t("mark_all_read_button_text")}
           loading={markAll.isLoading}
-          onClick={() => markAll.mutate()}
+          disabled={true}
         >
-          <DoneAllIcon />
-        </IconButton>
-      </Tooltip>
+            <DoneAllIcon />
+          </IconButton>
+        {t("mark_all_read_button_text")}
+      </Button>
     </>
   );
 }
