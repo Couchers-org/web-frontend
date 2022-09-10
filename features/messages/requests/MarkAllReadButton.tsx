@@ -83,8 +83,8 @@ export default function MarkAllReadButton({
           loading={markAll.isLoading}
           disabled={true}
         >
-            <DoneAllIcon />
-          </IconButton>
+          <DoneAllIcon />
+        </IconButton>
         {t("mark_all_read_button_text")}
       </Button>
     </>
