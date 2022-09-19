@@ -1,4 +1,4 @@
-import Button from "components/Button/Button";
+import Button from "components/Button";
 import { DoneAllIcon } from "components/Icons";
 import Snackbar from "components/Snackbar";
 import { groupChatsListKey, hostRequestsListKey } from "features/queryKeys";
