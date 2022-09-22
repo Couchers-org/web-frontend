@@ -8,12 +8,25 @@ import { MESSAGES } from "i18n/namespaces";
 import { useMutation, useQueryClient } from "react-query";
 import { service } from "service";
 import getAllPages from "utils/getAllPages";
+import { Typography, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  markAsReadButton: {
+    border: `1px solid ${theme.palette.grey[800]}`,
+    borderRadius: "4px"
+  },
+  markAsReadIcon: {
+    marginRight: "6px",
+    fontSize: "1.1rem"
+  }
+}));
 
 export default function MarkAllReadButton({
   type,
 }: {
   type: "chats" | "hosting" | "surfing";
 }) {
+  const classes = useStyles();
   const { t } = useTranslation(MESSAGES);
   const queryClient = useQueryClient();
   const markAll = useMutation<void, RpcError>(
@@ -73,8 +86,11 @@ export default function MarkAllReadButton({
         <Snackbar severity="error">{markAll.error.message}</Snackbar>
       )}
 
-      <Button loading={markAll.isLoading} variant="text" onClick={() => markAll.mutate()}>
-        <DoneAllIcon /> {t("mark_all_read_button_text")}
+      <Button className={classes.markAsReadButton} loading={markAll.isLoading} variant="text" onClick={() => markAll.mutate()}>
+        <DoneAllIcon className={classes.markAsReadIcon} />
+        <Typography>
+          {t("mark_all_read_button_text")}
+        </Typography>
       </Button>
     </>
   );
