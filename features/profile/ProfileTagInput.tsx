@@ -204,11 +204,12 @@ export default function ProfileTagInput({
       >
         <div className={classes.header}>
           <Typography>
-            <Trans i18nKey="profile:profile_tag_input.header_text">
-              Press 'Enter' to add
-              <Link href="mailto:support@couchers.org">Email us</Link> to add a
-              language
-            </Trans>
+            <Trans
+              components={{
+                support_link: <Link href="mailto:support@couchers.org" />,
+              }}
+              i18nKey="profile:profile_tag_input.header_text"
+            />
           </Typography>
         </div>
         <Autocomplete
