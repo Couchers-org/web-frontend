@@ -24,6 +24,19 @@ import { ImageInputValues } from "service/api";
 
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from "./constants";
 
+/*
+  .eventConverPhoto {
+    width: 100%;
+  }
+
+  @media (min-width: 960px) {
+    .eventCoverPhoto {
+      height: 200px;
+    }
+  }
+
+*/
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -32,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     display: "flex",
+    width: "100%"
   },
   avatar: {
     "& img": { objectFit: "cover" },
@@ -62,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     display: "flex",
     justifyContent: "center",
-    width: "fit-content",
+    width: "100%",
   },
   loading: {
     position: "absolute",
@@ -91,6 +105,7 @@ interface RectImgInputProps extends ImageInputProps {
   width?: number;
 }
 
+//TODO: Here sends the cropped image to the server??
 export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
   const { className, control, id, initialPreviewSrc, name } = props;
   const classes = useStyles();
@@ -199,8 +214,8 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
               src={imageUrl ?? "/img/imagePlaceholder.svg"}
               style={{ objectFit: !imageUrl ? "contain" : undefined }}
               alt={props.alt}
-              width={props.width ?? DEFAULT_WIDTH}
-              height={props.height ?? DEFAULT_HEIGHT}
+              width={"100%"}
+              height={"200px"}
             />
           )}
           {mutation.isLoading && (
