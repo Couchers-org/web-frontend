@@ -3,35 +3,14 @@ import { UserDetail } from "api";
 import Divider from "components/Divider";
 import LabelAndText from "components/LabelAndText";
 import Markdown from "components/Markdown";
-import booleanConversion, {
-  ABOUT_HOME,
-  ACCEPT_CAMPING,
-  ACCEPT_DRINKING,
-  ACCEPT_KIDS,
-  ACCEPT_PETS,
-  ACCEPT_SMOKING,
-  ADDITIONAL,
-  HAS_HOUSEMATES,
-  HOST_DRINKING,
-  HOST_KIDS,
-  HOST_PETS,
-  HOST_SMOKING,
-  HOSTING_PREFERENCES,
-  HOUSE_RULES,
-  LAST_MINUTE,
-  LOCAL_AREA,
-  MAX_GUESTS,
-  MY_HOME,
-  PARKING,
-  PARKING_DETAILS,
+import {
+  booleanConversion,
   parkingDetailsLabels,
-  SLEEPING_ARRANGEMENT,
   sleepingArrangementLabels,
   smokingLocationLabels,
-  SPACE,
-  UNSURE,
-  WHEELCHAIR,
 } from "features/profile/constants";
+import { useTranslation } from "i18n";
+import { GLOBAL, PROFILE } from "i18n/namespaces";
 import makeStyles from "utils/makeStyles";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,135 +30,152 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getLabel = (
-  labelsByKey: { [key: string]: string },
-  key: string | null
-): string => {
-  if (key == null) {
-    return UNSURE;
-  }
-  return labelsByKey[key];
-};
-
 interface HomeProps {
   user: UserDetail;
 }
 
 export default function Home({ user }: HomeProps) {
+  const { t } = useTranslation([GLOBAL, PROFILE]);
   const classes = useStyles();
+
+  const getLabel = (
+    labelsByKey: { [key: string]: string },
+    key: string | null | undefined
+  ): string => {
+    if (key == null || key === undefined) {
+      return t("profile:unspecified_info");
+    }
+    return labelsByKey[key];
+  };
 
   return (
     <>
       <div className={classes.root}>
         <div className={classes.info}>
-          <Typography variant="h1">{HOSTING_PREFERENCES}</Typography>
+          <Typography variant="h1">
+            {t("profile:home_info_headings.hosting_preferences")}
+          </Typography>
           <LabelAndText
-            label={LAST_MINUTE}
-            text={booleanConversion(user.lastMinute)}
+            label={t("profile:home_info_headings.last_minute")}
+            text={booleanConversion(t, user.lastMinute)}
           />
           <LabelAndText
-            label={WHEELCHAIR}
-            text={booleanConversion(user.wheelchairAccessible)}
+            label={t("profile:home_info_headings.wheelchair")}
+            text={booleanConversion(t, user.wheelchairAccessible)}
           />
           <LabelAndText
-            label={ACCEPT_CAMPING}
-            text={booleanConversion(user.campingOk)}
+            label={t("profile:edit_home_questions.accept_camping")}
+            text={booleanConversion(t, user.campingOk)}
           />
           <LabelAndText
-            label={MAX_GUESTS}
-            text={`${user.maxGuests || UNSURE}`}
+            label={t("profile:home_info_headings.max_guests")}
+            text={`${user.maxGuests || t("profile:unspecified_info")}`}
           />
           <LabelAndText
-            label={ACCEPT_KIDS}
-            text={booleanConversion(user.acceptsKids)}
+            label={t("profile:edit_home_questions.accept_kids")}
+            text={booleanConversion(t, user.acceptsKids)}
           />
           <LabelAndText
-            label={ACCEPT_PETS}
-            text={booleanConversion(user.acceptsPets)}
+            label={t("profile:edit_home_questions.accept_pets")}
+            text={booleanConversion(t, user.acceptsPets)}
           />
           <LabelAndText
-            label={ACCEPT_DRINKING}
-            text={booleanConversion(user.drinkingAllowed)}
+            label={t("profile:edit_home_questions.accept_drinking")}
+            text={booleanConversion(t, user.drinkingAllowed)}
           />
           <LabelAndText
-            label={ACCEPT_SMOKING}
-            text={getLabel(smokingLocationLabels, user.smokingAllowed)}
+            label={t("profile:edit_home_questions.accept_smoking")}
+            text={`${getLabel(smokingLocationLabels(t), user.smokingAllowed)}`}
           />
         </div>
         <div className={classes.info}>
-          <Typography variant="h1">{MY_HOME}</Typography>
+          <Typography variant="h1">
+            {t("profile:home_info_headings.my_home")}
+          </Typography>
           <LabelAndText
-            label={SPACE}
-            text={getLabel(sleepingArrangementLabels, user.sleepingArrangement)}
+            label={t("profile:home_info_headings.space")}
+            text={`${getLabel(sleepingArrangementLabels(t), user.sleepingArrangement)}`}
           />
           <LabelAndText
-            label={PARKING}
-            text={booleanConversion(user.parking)}
+            label={t("profile:home_info_headings.parking")}
+            text={booleanConversion(t, user.parking)}
           />
           <LabelAndText
-            label={PARKING_DETAILS}
-            text={getLabel(parkingDetailsLabels, user.parkingDetails)}
+            label={t("profile:home_info_headings.parking_details")}
+            text={getLabel(parkingDetailsLabels(t), user.parkingDetails)}
           />
           <LabelAndText
-            label={HAS_HOUSEMATES}
-            text={`${booleanConversion(user.hasHousemates)}${
-              user.housemateDetails ? `, ${user.housemateDetails}` : ""
+            label={t("profile:home_info_headings.has_housemates")}
+            text={`${booleanConversion(t, user.hasHousemates)}${
+              user.housemateDetails
+                ? `, ${user.housemateDetails}`
+                : ""
             }`}
           />
           <LabelAndText
-            label={HOST_KIDS}
-            text={`${booleanConversion(user.hasKids)}${
+            label={t("profile:home_info_headings.host_kids")}
+            text={`${booleanConversion(t, user.hasKids)}${
               user.kidDetails ? `, ${user.kidDetails}` : ""
             }`}
           />
           <LabelAndText
-            label={HOST_PETS}
-            text={`${booleanConversion(user.hasPets)}${
+            label={t("profile:home_info_headings.host_pets")}
+            text={`${booleanConversion(t, user.hasPets)}${
               user.petDetails ? `, ${user.petDetails}` : ""
             }`}
           />
           <LabelAndText
-            label={HOST_DRINKING}
-            text={booleanConversion(user.drinksAtHome)}
+            label={t("profile:home_info_headings.host_drinking")}
+            text={booleanConversion(t, user.drinksAtHome)}
           />
           <LabelAndText
-            label={HOST_SMOKING}
-            text={booleanConversion(user.smokesAtHome)}
+            label={t("profile:home_info_headings.host_smoking")}
+            text={booleanConversion(t, user.smokesAtHome)}
           />
         </div>
       </div>
       <Divider className={classes.marginTop3} />
       {user.aboutPlace && (
         <>
-          <Typography variant="h1">{ABOUT_HOME}</Typography>
+          <Typography variant="h1">
+            {t("profile:home_info_headings.about_home")}
+          </Typography>
           <Markdown source={user.aboutPlace} />
           <Divider className={classes.marginTop3} />
         </>
       )}
       {user.area && (
         <>
-          <Typography variant="h1">{LOCAL_AREA}</Typography>
+          <Typography variant="h1">
+            {t("profile:home_info_headings.local_area")}
+          </Typography>
           <Markdown source={user.area} />
           <Divider className={classes.marginTop3} />
         </>
       )}
       {user.sleepingDetails && (
         <>
-          <Typography variant="h1">{SLEEPING_ARRANGEMENT}</Typography>
+          <Typography variant="h1">
+            {t("profile:home_info_headings.sleeping_arrangement")}
+          </Typography>
           <Markdown source={user.sleepingDetails} />
           <Divider className={classes.marginTop3} />
         </>
       )}
       {user.houseRules && (
         <>
-          <Typography variant="h1">{HOUSE_RULES}</Typography>
+          <Typography variant="h1">
+            {t("profile:home_info_headings.house_rules")}
+          </Typography>
           <Markdown source={user.houseRules} />
           <Divider className={classes.marginTop3} />
         </>
       )}
       {user.otherHostInfo && (
         <>
-          <Typography variant="h1">{ADDITIONAL}</Typography>
+          <Typography variant="h1">
+            {t("profile:heading.additional_information_section")}
+          </Typography>
           <Markdown source={user.otherHostInfo} />
         </>
       )}

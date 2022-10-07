@@ -5,36 +5,12 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { HostingStatusEnum, MeetupStatusEnum, PatchedUser } from "api";
+import { HostingStatusEnum, MeetupStatusEnum, PatchedUserDetail } from "api";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import CircularProgress from "components/CircularProgress";
 import EditLocationMap from "components/EditLocationMap";
 import ImageInput from "components/ImageInput";
-import {
-  ACCEPTING,
-  ADDITIONAL,
-  EDUCATION,
-  HOBBIES,
-  HOMETOWN,
-  HOSTING_STATUS,
-  LANGUAGES_SPOKEN,
-  MAN_PRONOUNS,
-  MAYBE_ACCEPTING,
-  MAYBE_MEETUP,
-  MEETUP,
-  MEETUP_STATUS,
-  NAME,
-  NO_MEETUP,
-  NOT_ACCEPTING,
-  OCCUPATION,
-  PRONOUNS,
-  REGIONS_LIVED,
-  REGIONS_VISITED,
-  SAVE,
-  WHO,
-  WOMAN_PRONOUNS,
-} from "features/profile/constants";
 import { useLanguages } from "features/profile/hooks/useLanguages";
 import { useRegions } from "features/profile/hooks/useRegions";
 import useUpdateUserProfile from "features/profile/hooks/useUpdateUserProfile";
@@ -60,7 +36,7 @@ import {
 } from "./constants";
 import useStyles from "./styles";
 
-type FormValues = Omit<PatchedUser, "languageAbilities"> & {
+type FormValues = Omit<PatchedUserDetail, "languageAbilities"> & {
   fluentLanguages: string[];
 };
 
@@ -84,9 +60,9 @@ export default function EditProfileForm() {
     useForm<FormValues>({
       defaultValues: {
         city: user?.city ?? undefined,
-        lat: user?.lat,
-        lng: user?.lng,
-        radius: user?.radius,
+        // lat: user?.lat,
+        // lng: user?.lng,
+        // radius: user?.radius,
       },
       shouldFocusError: true,
     });
@@ -105,9 +81,9 @@ export default function EditProfileForm() {
   useEffect(() => {
     if (!userIsLoading && user) {
       setValue("city", user.city);
-      setValue("lat", user.lat);
-      setValue("lng", user.lng);
-      setValue("radius", user.radius);
+      // setValue("lat", user.lat);
+      // setValue("lng", user.lng);
+      // setValue("radius", user.radius);
     }
   }, [userIsLoading, setValue, user]);
 
@@ -171,10 +147,14 @@ export default function EditProfileForm() {
   return (
     <>
       {updateError && (
-        <Alert severity="error">{errorMessage || "Unknown error"}</Alert>
+        <Alert severity="error">
+          {errorMessage || t("global:error.unknown")}
+        </Alert>
       )}
       {errors.avatarUrl && (
-        <Alert severity="error">{errors.avatarUrl?.message || ""}</Alert>
+        <Alert severity="error">
+          {errors.avatarUrl?.message || t("global:error.unknown")}
+        </Alert>
       )}
       {user ? (
         <>
@@ -187,14 +167,14 @@ export default function EditProfileForm() {
               initialPreviewSrc={user.avatarUrl}
               userName={user?.name || ""}
               type="avatar"
-              onSuccess={async (data) => {
-                await service.user.updateAvatar(data.key);
-                if (user) queryClient.invalidateQueries(userKey(user.id));
-              }}
+              // onSuccess={async (data) => {
+              //   await service.user.updateAvatar(data.key);
+              //   if (user) queryClient.invalidateQueries(userKey(user.id));
+              // }}
             />
             <ProfileTextInput
               id="name"
-              label={NAME}
+              label={t("profile:edit_profile_headings.name")}
               name="name"
               defaultValue={user.name}
               error={!!errors.name}
@@ -202,7 +182,7 @@ export default function EditProfileForm() {
               className={classes.field}
             />
           </form>
-          <Controller
+          {/* <Controller
             defaultValue=""
             name="location"
             control={control}
@@ -229,7 +209,7 @@ export default function EditProfileForm() {
                 }}
               />
             )}
-          />
+          /> */}
           <form onSubmit={onSubmit} className={classes.bottomFormContainer}>
             <Controller
               control={control}
@@ -237,10 +217,14 @@ export default function EditProfileForm() {
               name="hostingStatus"
               render={({ onChange, value }) => (
                 <>
-                  <Typography variant="h2">{HOSTING_STATUS}</Typography>
+                  <Typography variant="h2">
+                    {t("profile:edit_profile_headings.hosting_status")}
+                  </Typography>
                   <RadioGroup
                     row
-                    aria-label={HOSTING_STATUS}
+                    aria-label={t(
+                      "profile:edit_profile_headings.hosting_status"
+                    )}
                     name="hostingStatus"
                     value={value}
                     onChange={(event) => onChange(event.target.value)}
@@ -249,17 +233,17 @@ export default function EditProfileForm() {
                     <FormControlLabel
                       value={HostingStatusEnum.CanHost}
                       control={<Radio />}
-                      label={ACCEPTING}
+                      label={t("global:hosting_status.can_host")}
                     />
                     <FormControlLabel
                       value={HostingStatusEnum.Maybe}
                       control={<Radio />}
-                      label={MAYBE_ACCEPTING}
+                      label={t("global:hosting_status.maybe")}
                     />
                     <FormControlLabel
                       value={HostingStatusEnum.CantHost}
                       control={<Radio />}
-                      label={NOT_ACCEPTING}
+                      label={t("global:hosting_status.cant_host")}
                     />
                   </RadioGroup>
                 </>
@@ -271,10 +255,14 @@ export default function EditProfileForm() {
               name="meetupStatus"
               render={({ onChange, value }) => (
                 <>
-                  <Typography variant="h2">{MEETUP_STATUS}</Typography>
+                  <Typography variant="h2">
+                    {t("profile:edit_profile_headings.meetup_status")}
+                  </Typography>
                   <RadioGroup
                     row
-                    aria-label={MEETUP_STATUS}
+                    aria-label={t(
+                      "profile:edit_profile_headings.meetup_status"
+                    )}
                     name="meetupStatus"
                     value={value}
                     onChange={(event) => onChange(event.target.value)}
@@ -283,17 +271,17 @@ export default function EditProfileForm() {
                     <FormControlLabel
                       value={MeetupStatusEnum.WantsToMeetup}
                       control={<Radio />}
-                      label={MEETUP}
+                      label={t("global:meetup_status.wants_to_meetup")}
                     />
                     <FormControlLabel
                       value={MeetupStatusEnum.OpenToMeetup}
                       control={<Radio />}
-                      label={MAYBE_MEETUP}
+                      label={t("global:meetup_status.open_to_meetup")}
                     />
                     <FormControlLabel
                       value={MeetupStatusEnum.DoesNotWantToMeetup}
                       control={<Radio />}
-                      label={NO_MEETUP}
+                      label={t("global:meetup_status.does_not_want_to_meetup")}
                     />
                   </RadioGroup>
                 </>
@@ -305,29 +293,32 @@ export default function EditProfileForm() {
               name="pronouns"
               render={({ onChange, value }) => {
                 const other =
-                  value === WOMAN_PRONOUNS || value === MAN_PRONOUNS
+                  value === t("profile:pronouns.woman") ||
+                  value === t("profile:pronouns.man")
                     ? ""
                     : value;
                 return (
                   <>
-                    <Typography variant="h2">{PRONOUNS}</Typography>
+                    <Typography variant="h2">
+                      {t("profile:edit_profile_headings.pronouns")}
+                    </Typography>
                     <RadioGroup
                       row
-                      aria-label={PRONOUNS}
+                      aria-label={t("profile:edit_profile_headings.pronouns")}
                       name="pronouns"
                       value={value}
                       onChange={(_, value) => onChange(value)}
                       className={classes.radioButtons}
                     >
                       <FormControlLabel
-                        value={WOMAN_PRONOUNS}
+                        value={t("profile:pronouns.woman")}
                         control={<Radio />}
-                        label={WOMAN_PRONOUNS}
+                        label={t("profile:pronouns.woman")}
                       />
                       <FormControlLabel
-                        value={MAN_PRONOUNS}
+                        value={t("profile:pronouns.man")}
                         control={<Radio />}
-                        label={MAN_PRONOUNS}
+                        label={t("profile:pronouns.man")}
                       />
                       <FormControlLabel
                         value={other}
@@ -360,7 +351,7 @@ export default function EditProfileForm() {
                     onChange={(_, value) => onChange(value)}
                     value={value}
                     options={Object.values(languages)}
-                    label={LANGUAGES_SPOKEN}
+                    label={t("profile:edit_profile_headings.languages_spoken")}
                     id="fluentLanguages"
                   />
                 )}
@@ -368,7 +359,7 @@ export default function EditProfileForm() {
             )}
             <ProfileTextInput
               id="hometown"
-              label={HOMETOWN}
+              label={t("profile:edit_profile_headings.hometown")}
               name="hometown"
               defaultValue={user.hometown}
               inputRef={register}
@@ -376,7 +367,7 @@ export default function EditProfileForm() {
             />
             <ProfileTextInput
               id="occupation"
-              label={OCCUPATION}
+              label={t("profile:edit_profile_headings.occupation")}
               name="occupation"
               defaultValue={user.occupation}
               inputRef={register}
@@ -384,7 +375,7 @@ export default function EditProfileForm() {
             />
             <ProfileTextInput
               id="education"
-              label={EDUCATION}
+              label={t("profile:edit_profile_headings.education")}
               name="education"
               defaultValue={user.education}
               inputRef={register}
@@ -392,7 +383,7 @@ export default function EditProfileForm() {
             />
             <ProfileMarkdownInput
               id="aboutMe"
-              label={WHO}
+              label={t("profile:heading.who_section")}
               name="aboutMe"
               defaultValue={user.aboutMe || DEFAULT_ABOUT_ME_HEADINGS}
               control={control}
@@ -400,7 +391,7 @@ export default function EditProfileForm() {
             />
             <ProfileMarkdownInput
               id="thingsILike"
-              label={HOBBIES}
+              label={t("profile:heading.hobbies_section")}
               name="thingsILike"
               defaultValue={user.thingsILike || DEFAULT_HOBBIES_HEADINGS}
               control={control}
@@ -408,7 +399,7 @@ export default function EditProfileForm() {
             />
             <ProfileMarkdownInput
               id="additionalInformation"
-              label={ADDITIONAL}
+              label={t("profile:heading.additional_information_section")}
               name="additionalInformation"
               defaultValue={user.additionalInformation || ""}
               control={control}
@@ -428,7 +419,7 @@ export default function EditProfileForm() {
                       onChange={(_, values) => onChange(values)}
                       value={value}
                       options={Object.values(regions)}
-                      label={REGIONS_VISITED}
+                      label={t("profile:edit_profile_headings.regions_visited")}
                       id="regions-visited"
                     />
                   )}
@@ -444,7 +435,7 @@ export default function EditProfileForm() {
                       onChange={(_, values) => onChange(values)}
                       value={value}
                       options={Object.values(regions)}
-                      label={REGIONS_LIVED}
+                      label={t("profile:edit_profile_headings.regions_lived")}
                       id="regions-lived"
                     />
                   )}
@@ -460,7 +451,7 @@ export default function EditProfileForm() {
                 loading={updateIsLoading}
                 onClick={onSubmit}
               >
-                {SAVE}
+                {t("global:save")}
               </Button>
             </div>
           </form>

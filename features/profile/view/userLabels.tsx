@@ -1,49 +1,43 @@
 import { UserDetail } from "api";
 import LabelAndText from "components/LabelAndText";
-import {
-  AGE_GENDER,
-  EDUCATION,
-  HOMETOWN,
-  JOINED,
-  LANGUAGES_FLUENT,
-  LANGUAGES_FLUENT_FALSE,
-  LAST_ACTIVE,
-  LAST_ACTIVE_FALSE,
-  LOCAL_TIME,
-  OCCUPATION,
-  REFERENCES,
-} from "features/profile/constants";
 import { useLanguages } from "features/profile/hooks/useLanguages";
 import { responseRateKey } from "features/queryKeys";
 import { useTranslation } from "i18n";
-import { COMMUNITIES, GLOBAL } from "i18n/namespaces";
+import { COMMUNITIES, GLOBAL, PROFILE } from "i18n/namespaces";
 import { useQuery } from "react-query";
 import { service } from "service";
-import { dateTimeFormatter } from "utils/date";
+import { dateTimeFormatter, timestamp2Date } from "utils/date";
 import dayjs from "utils/dayjs";
-import { hourMillis, lessThanHour, timeAgo } from "utils/timeAgo";
+import { timeAgoI18n } from "utils/timeAgo";
 
 interface Props {
   user: UserDetail;
 }
 
 export const ReferencesLastActiveLabels = ({ user }: Props) => {
-  /* @todo: fetch the num references using endpoint or whenever it's added to `user` */
-  const numReferences = 0;
-  /* @todo: read lastActive from user when it's made available */
-  const lastActive = new Date();
+    const { t } = useTranslation(PROFILE);
+    //workaround for not being able to type timeAgoI18n properly
+    const { t: tGlobal } = useTranslation(GLOBAL);
+    /* @todo: fetch the num references using endpoint or whenever it's added to `user` */
+    const numReferences = 0;
+    /* @todo: read lastActive from user when it's made available */
+    const lastActive = new Date();
+
   return (
     <>
-      <LabelAndText label={REFERENCES} text={`${numReferences || 0}`} />
       <LabelAndText
-        label={LAST_ACTIVE}
+        label={t("heading.references")}
+        text={`${numReferences || 0}`}
+      />
+      <LabelAndText
+        label={t("heading.last_active")}
         text={
           lastActive
-            ? timeAgo(lastActive, {
-                millis: hourMillis,
-                text: lessThanHour,
+            ? timeAgoI18n({
+                input: lastActive,
+                t: tGlobal,
               })
-            : LAST_ACTIVE_FALSE
+            : t("last_active_false")
         }
       />
     </>
@@ -103,24 +97,28 @@ export const ResponseRateLabel = ({ user }: Props) => {
 };
 
 export const AgeGenderLanguagesLabels = ({ user }: Props) => {
+  const { t } = useTranslation("profile");
   const { languages } = useLanguages();
+  // TODO implement calculateAge
+  // const age = user.birthdate ? calculateAge(user.birthdate) : undefined;
+  const age = "UNIMPLEMENTED"
 
   return (
     <>
       <LabelAndText
-        label={AGE_GENDER}
-        text={`${user.age || "-"} / ${user.gender} ${
+        label={t("heading.age_gender")}
+        text={`${age || "-"} / ${user.gender} ${
           user.pronouns ? `(${user.pronouns})` : ""
         }`}
       />
       {/* @todo: uncomment once we have user.languageAbilitiesList available */}
       {/* {languages && (
         <LabelAndText
-          label={LANGUAGES_FLUENT}
+          label={t("heading.languages_fluent")}
           text={
             user.languageAbilitiesList
               .map((ability) => languages[ability.code])
-              .join(", ") || LANGUAGES_FLUENT_FALSE
+              .join(", ") || t("languages_fluent_false")
           }
         />
       )} */}
@@ -130,34 +128,26 @@ export const AgeGenderLanguagesLabels = ({ user }: Props) => {
 
 export const RemainingAboutLabels = ({ user }: Props) => {
   const {
+    t,
     i18n: { language: locale },
-  } = useTranslation([GLOBAL, COMMUNITIES]);
-
+  } = useTranslation([GLOBAL, COMMUNITIES, PROFILE]);
   return (
     <>
-      {user.hometown && <LabelAndText label={HOMETOWN} text={user.hometown} />}
-      {user.occupation && (
-        <LabelAndText label={OCCUPATION} text={user.occupation} />
-      )}
-      {user.education && (
-        <LabelAndText label={EDUCATION} text={user.education} />
-      )}
-      {user.createdAt && (
-        <LabelAndText
-          label={JOINED}
-          text={
-            user.createdAt
-              ? dateTimeFormatter(locale).format(new Date(user.createdAt))
-              : ""
-          }
+      {user.hometown && <LabelAndText label={t("profile:heading.hometown")} text={user.hometown} />}
+      {user.occupation && <LabelAndText label={t("profile:heading.occupation")} text={user.occupation} />}
+      {user.education && <LabelAndText label={t("profile:heading.education")} text={user.education} />}
+      <LabelAndText
+        label={t("profile:heading.joined")}
+        text={
+          user.createdAt
+            ? dateTimeFormatter(locale).format(new Date(user.createdAt))
+            : ""
+        }
+      />
+      <LabelAndText
+        label={t("profile:heading.local_time")}
+        text={dayjs().tz(user.timezoneArea).format("LT")}
         />
-      )}
-      {user.timezoneArea && (
-        <LabelAndText
-          label={LOCAL_TIME}
-          text={dayjs().tz(user.timezoneArea).format("LT")}
-        />
-      )}
     </>
   );
 };

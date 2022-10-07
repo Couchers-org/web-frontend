@@ -51,16 +51,20 @@ Want to help but don't see anything listed for you? [Fill out this form](/volunt
 
 #### Operations
 
+- [Compliance Specialist](/volunteer/compliance-specialist)
 - [Volunteer Coordinator](/volunteer/volunteer-coordinator)
 
 #### Marketing
 
+- [Head of Marketing](/volunteer/head-of-marketing)
 - [PR Manager](/volunteer/pr-manager)
 - [Social Media Community Manager](/volunteer/social-media-community-manager)
+- [Blog Writer](/volunteer/blog-writer)
 
 #### Support
 
 - [Handbook Project Manager](/volunteer/handbook-project-manager)
+- [Technical Support Analyst](/volunteer/technical-support-analyst)
 
 ### Community Building
 

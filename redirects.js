@@ -9,7 +9,7 @@ module.exports = {
     {
       source: "/translation-form",
       destination:
-        "https://docs.google.com/forms/d/11OymP2TZsyjOfcNYbUV3XHsNAEsRMUlAiZz5ozeIQgg/viewform",
+        "https://docs.google.com/forms/d/e/1FAIpQLSe3hl2BXAKyxHolrTJqp3MEbxlmvQh1SvSQIR9H2Y93ooMakw/viewform",
       permanent: false,
     },
     {
@@ -85,7 +85,7 @@ module.exports = {
     },
     {
       source: "/backend-developer-chat",
-      destination: "https://calendly.com/couchers/backend-developer-chat",
+      destination: "https://calendly.com/farley_neonsurge/couchers",
       permanent: false,
     },
     {
@@ -100,7 +100,7 @@ module.exports = {
     },
     {
       source: "/frontend-developer-chat",
-      destination: "https://calendly.com/couchers/frontend-developer-chat",
+      destination: "https://calendly.com/farley_neonsurge/couchers",
       permanent: false,
     },
     {

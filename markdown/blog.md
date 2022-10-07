@@ -6,6 +6,22 @@ title: Blog
 
 If you'd like to contribute to the blog, please [sign up](/volunteer) and let us know!
 
+## [Couch Surfing 101: 5 steps to creating a good host request](/blog/2022/09/20/creating-a-good-request)
+
+2022/08/30.
+
+A guide for new couch surfers on how to send the best request to get hosted!
+
+[Read more.](/blog/2022/09/20/creating-a-good-request)
+
+## [Couch Surfing 101: Setting up your profile](/blog/2022/08/30/setting-up-your-profile)
+
+2022/08/30.
+
+A guide for new couch surfers on how to set up your profile so you can host people or get hosted!
+
+[Read more.](/blog/2022/08/30/setting-up-your-profile)
+
 ## [Hosting refugees and finding shelter with Couchers.org](/blog/2022/03/13/hosting-refugees-and-finding-shelter-with-couchers-org-en)
 
 2022/03/13.

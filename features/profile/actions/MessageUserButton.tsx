@@ -1,6 +1,7 @@
 import { UserDetail } from "api";
 import Button from "components/Button";
-import { MESSAGE } from "features/profile/constants";
+import { useTranslation } from "i18n";
+import { PROFILE } from "i18n/namespaces";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 import { routeToCreateMessage, routeToGroupChat } from "routes";
@@ -13,6 +14,7 @@ export default function MessageUserButton({
   user: UserDetail;
   setMutationError: (value: string) => void;
 }) {
+  const { t } = useTranslation(PROFILE);
   const router = useRouter();
   const { mutate, isLoading } = useMutation<number | false, Error>(
     () => service.conversations.getDirectMessage(user.id),
@@ -39,7 +41,7 @@ export default function MessageUserButton({
 
   return (
     <Button loading={isLoading} onClick={() => mutate()}>
-      {MESSAGE}
+      {t("actions.message_label")}
     </Button>
   );
 }
