@@ -93,14 +93,18 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * @param {string} user
  * @returns {Promise<User.AsObject>}
  */
-export async function getUser(user: string): Promise<User.AsObject> {
-  const userReq = new GetUserReq();
-  userReq.setUser(user || "");
-
-  const response = await client.api.getUser(userReq);
-
-  return response.toObject();
+export async function getUser(user: string): Promise<User.AsObject>{
+  console.log("getUser", user)
+  return new Promise((res, rej) => rej())
 }
+// export async function getUser(user: string): Promise<User.AsObject> {
+//   const userReq = new GetUserReq();
+//   userReq.setUser(user || "");
+
+//   const response = await client.api.getUser(userReq);
+
+//   return response.toObject();
+// }
 
 /**
  * Updates user profile

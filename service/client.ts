@@ -1,5 +1,6 @@
 import { grpcTimeout } from "appConstants";
-import { Request, RpcError, StatusCode } from "grpc-web";
+import { Request as RpcRequest, RpcError, StatusCode } from "grpc-web";
+import path from "path"
 import { AccountPromiseClient } from "proto/account_grpc_web_pb";
 import { APIPromiseClient } from "proto/api_grpc_web_pb";
 import { AuthPromiseClient } from "proto/auth_grpc_web_pb";
@@ -22,6 +23,42 @@ import { ThreadsPromiseClient } from "proto/threads_grpc_web_pb";
 import isGrpcError from "utils/isGrpcError";
 
 const URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+async function http<T>(endpoint: string, configOverride: RequestInit): Promise<T> {
+  const url = path.join(URL, endpoint)
+  const config = {
+    headers: {
+      "content-type": "application/json"
+    },
+    ...configOverride
+  }
+  const request = new Request(url, config)
+  const response = await fetch(request)
+
+  // if(!response.ok) {
+  //   throw new Error(response.statusText)
+  // }
+
+  // may error if there is no body, return empty array
+  return response.json().catch(() => ({}))
+}
+
+export async function get<T>(path: string, config?: RequestInit): Promise<T> {
+  const init = {method: 'get', ...config}
+  return await http<T>(path, init)
+}
+
+export async function post<T, U>(path: string, body: T, config?: RequestInit): Promise<U> {
+  const init = {method: 'post', body: JSON.stringify(body), ...config}
+  return await http<U>(path, init)
+}
+
+export async function put<T, U>(path: string, body: T, config?: RequestInit): Promise<U> {
+  const init = {method: 'put', body: JSON.stringify(body), ...config}
+  return await http<U>(path, init)
+}
+
+// TODO - deprecate below vvv
 
 let _unauthenticatedErrorHandler: (
   e: RpcError
@@ -50,7 +87,7 @@ export class AuthInterceptor {
 
 class TimeoutInterceptor {
   async intercept(
-    request: Request<unknown, unknown>,
+    request: RpcRequest<unknown, unknown>,
     invoker: (request: unknown) => unknown
   ) {
     const deadline = Date.now() + grpcTimeout;
@@ -72,6 +109,11 @@ const opts = {
 };
 
 const client = {
+  // new http client
+  get,
+  post,
+  put,
+  // TODO - depreacte rest of object
   account: new AccountPromiseClient(URL, null, opts),
   api: new APIPromiseClient(URL, null, opts),
   auth: new AuthPromiseClient(URL, null, opts),

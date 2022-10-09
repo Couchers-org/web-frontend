@@ -4,22 +4,21 @@ import Button from "components/Button";
 import TextField from "components/TextField";
 import { useAuthContext } from "features/auth/AuthProvider";
 import useAuthStyles from "features/auth/useAuthStyles";
-import { RpcError } from "grpc-web";
 import { useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
-import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
+import { HttpError } from "service/auth"
 import {
   emailValidationPattern,
   lowercaseAndTrimField,
-  nameValidationPattern,
+  passwordValidationPatern
 } from "utils/validation";
 
 type SignupBasicInputs = {
-  name: string;
   email: string;
+  password: string;
 };
 
 interface BasicFormProps {
@@ -40,15 +39,21 @@ export default function BasicForm({
     shouldUnregister: false,
   });
 
-  const mutation = useMutation<void, RpcError, SignupBasicInputs>(
+  const mutation = useMutation<void, HttpError, SignupBasicInputs>(
     async (data) => {
       const sanitizedEmail = lowercaseAndTrimField(data.email);
-      const sanitizedName = data.name.trim();
-      const state = await service.auth.startSignup(
-        sanitizedName,
-        sanitizedEmail
-      );
-      return authActions.updateSignupState(state);
+      const { password } = data
+      // TODO - persist the user id returned from in the createUser response
+      await service.auth.createUser(sanitizedEmail, sanitizedEmail, password)
+      const authState = {
+        flowToken: "",
+        needBasic: false,
+        needAccount: true,
+        needFeedback: true,
+        needVerifyEmail: true,
+        needAcceptCommunityGuidelines: true, 
+      }
+      return authActions.updateSignupState(authState);
     },
     {
       onSettled() {
@@ -66,37 +71,14 @@ export default function BasicForm({
     mutation.mutate(data);
   });
 
-  const nameInputRef = useRef<HTMLInputElement>();
+  const formSubmitErrors = Object.entries(mutation.error?.error_messages || {}).map(([field, message]) => (
+    <Alert severity="error" key={field}>{message}</Alert>
+  ))
 
   return (
     <>
-      {mutation.error && (
-        <Alert severity="error">{mutation.error.message || ""}</Alert>
-      )}
+      {mutation.error && formSubmitErrors}
       <form className={authClasses.form} onSubmit={onSubmit}>
-        <InputLabel className={authClasses.formLabel} htmlFor="name">
-          {t("auth:basic_form.name.field_label")}
-        </InputLabel>
-        <TextField
-          id="name"
-          fullWidth
-          className={authClasses.formField}
-          name="name"
-          variant="standard"
-          inputRef={(el: HTMLInputElement | null) => {
-            if (!nameInputRef.current) el?.focus();
-            if (el) nameInputRef.current = el;
-            register(el, {
-              pattern: {
-                message: t("auth:basic_form.name.empty_error"),
-                value: nameValidationPattern,
-              },
-              required: t("auth:basic_form.name.required_error"),
-            });
-          }}
-          helperText={errors?.name?.message ?? " "}
-          error={!!errors?.name?.message}
-        />
         <InputLabel className={authClasses.formLabel} htmlFor="email">
           {t("auth:basic_form.email.field_label")}
         </InputLabel>
@@ -115,6 +97,26 @@ export default function BasicForm({
           })}
           helperText={errors?.email?.message ?? " "}
           error={!!errors?.email?.message}
+        />
+        <InputLabel className={authClasses.formLabel} htmlFor="password">
+          Password
+        </InputLabel>
+        <TextField
+          id="password"
+          fullWidth
+          className={authClasses.formField}
+          name="password"
+          type="password"
+          variant="standard"
+          inputRef={register({
+            pattern: {
+              message: "Please enter a password",
+              value: passwordValidationPatern,
+            },
+            required: "Password can't be empty.",
+          })}
+          helperText={errors?.password?.message ?? " "}
+          error={!!errors?.password?.message}
         />
         <Button
           classes={{
