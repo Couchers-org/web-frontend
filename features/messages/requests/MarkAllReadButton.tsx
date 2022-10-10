@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius
   },
   markAsReadIcon: {
-    marginRight: "6px",
-    fontSize: "1.1rem"
+    marginInlineEnd: theme.spacing(1),
+    fontSize: theme.typography.body1.fontSize
   }
 }));
 
