@@ -13,7 +13,7 @@ import { Typography, makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   markAsReadButton: {
     border: `1px solid ${theme.palette.grey[800]}`,
-    borderRadius: "4px"
+    borderRadius: theme.shape.borderRadius
   },
   markAsReadIcon: {
     marginRight: "6px",
