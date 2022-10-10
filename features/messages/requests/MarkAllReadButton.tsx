@@ -88,7 +88,7 @@ export default function MarkAllReadButton({
 
       <Button className={classes.markAsReadButton} loading={markAll.isLoading} variant="text" onClick={() => markAll.mutate()}>
         <DoneAllIcon className={classes.markAsReadIcon} />
-        <Typography>
+        <Typography component="span">
           {t("mark_all_read_button_text")}
         </Typography>
       </Button>
