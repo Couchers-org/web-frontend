@@ -26,7 +26,8 @@
     "new_password": "Nouveau mot de passe"
   },
   "basic_sign_up_form": {
-    "existing_user_prompt": "Déjà inscrit·e ? <2>Se connecter</2>"
+    "existing_user_prompt": "Déjà inscrit·e ? <2>Se connecter</2>",
+    "header": "Lancer l'inscription !"
   },
   "login_page": {
     "title": "Se connecter",
