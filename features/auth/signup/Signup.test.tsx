@@ -26,7 +26,7 @@ const startSignupMock = service.auth.startSignup as MockedService<
 >;
 const createUserMock = service.auth.createUser as MockedService<
   typeof service.auth.createUser
->
+>;
 const signupFlowAccountMock = service.auth.signupFlowAccount as MockedService<
   typeof service.auth.signupFlowAccount
 >;
@@ -113,10 +113,7 @@ describe("Signup", () => {
         screen.getByLabelText(t("auth:basic_form.email.field_label")),
         "test@example.com"
       );
-      userEvent.type(
-        screen.getByLabelText("Password"),
-        "Password123{enter}"
-      );
+      userEvent.type(screen.getByLabelText("Password"), "Password123{enter}");
       expect(
         await screen.findByLabelText(
           t("auth:account_form.username.field_label")

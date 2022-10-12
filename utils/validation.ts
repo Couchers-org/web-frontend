@@ -1,7 +1,7 @@
 // taken from backend
 export const nameValidationPattern = /\S+/;
 export const usernameValidationPattern = /^[a-z][0-9a-z_]*[a-z0-9]$/i;
-export const passwordValidationPattern = /.{8,255}/
+export const passwordValidationPattern = /.{8,255}/;
 export const validatePassword = (password: string) => {
   return password.length >= 8 && password.length < 256;
 };

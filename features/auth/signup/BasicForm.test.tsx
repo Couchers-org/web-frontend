@@ -16,17 +16,7 @@ import BasicForm from "./BasicForm";
 
 const createUserMock = service.auth.createUser as MockedService<
   typeof service.auth.createUser
->
-
-const stateAfterStart = {
-  flowToken: "dummy-token",
-  success: false,
-  needBasic: false,
-  needAccount: false,
-  needAcceptCommunityGuidelines: true,
-  needFeedback: true,
-  needVerifyEmail: true,
-};
+>;
 
 describe("basic signup form", () => {
   it("cannot be submitted empty", async () => {
@@ -53,10 +43,7 @@ describe("basic signup form", () => {
     expect(result.current.authState.flowState).toBe(null);
 
     render(<BasicForm />, { wrapper });
-    userEvent.type(
-      await screen.findByLabelText("Password"),
-      "P@ssword123 "
-    );
+    userEvent.type(await screen.findByLabelText("Password"), "P@ssword123");
     userEvent.click(
       await screen.findByRole("button", { name: t("global:continue") })
     );
@@ -95,7 +82,7 @@ describe("basic signup form", () => {
     createUserMock.mockResolvedValue({
       email: "frodo@couchers.org.invalid",
       username: "frodo@couchers.org.invalid",
-      id :1
+      id: 1,
     });
     const { result } = renderHook(() => useAuthContext(), { wrapper });
     expect(result.current.authState.authenticated).toBe(false);
@@ -106,10 +93,7 @@ describe("basic signup form", () => {
       await screen.findByLabelText(t("auth:basic_form.email.field_label")),
       "frodo@couchers.org.invalid"
     );
-    userEvent.type(
-      await screen.findByLabelText("Password"),
-      "P@ssword123"
-    );
+    userEvent.type(await screen.findByLabelText("Password"), "P@ssword123");
 
     userEvent.click(
       await screen.findByRole("button", { name: t("global:continue") })
@@ -127,10 +111,10 @@ describe("basic signup form", () => {
   it("displays an error when present", async () => {
     createUserMock.mockRejectedValueOnce({
       error_messages: {
-        email: ["A user with that email address already exists."]
+        email: ["A user with that email address already exists."],
       },
       errors: ["The data submitted was invalid"],
-      status_code: 400
+      status_code: 400,
     });
     render(<BasicForm />, {
       wrapper,
@@ -140,10 +124,7 @@ describe("basic signup form", () => {
       screen.getByLabelText(t("auth:basic_form.email.field_label")),
       "test@example.com{enter}"
     );
-    userEvent.type(
-      screen.getByLabelText("Password"),
-      "P@ssword123"
-    );
+    userEvent.type(screen.getByLabelText("Password"), "P@ssword123");
     mockConsoleError();
     await assertErrorAlert("A user with that email address already exists.");
   });

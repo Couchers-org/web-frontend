@@ -14,27 +14,35 @@ import {
 import client from "service/client";
 
 interface CreateUserReq {
-  email: string,
-  username: string,
-  password: string
+  email: string;
+  username: string;
+  password: string;
 }
 
 interface CreateUserRes {
-  email: string,
-  username: string,
-  id: number
+  email: string;
+  username: string;
+  id: number;
 }
 
 export interface HttpError {
-  status_code: number,
-  errors: string[],
+  status_code: number;
+  errors: string[];
   error_messages: {
-    [key: string]: string
-  }
+    [key: string]: string;
+  };
 }
 
-export async function createUser(username: string, email: string, password: string){
-  return client.post<CreateUserReq, CreateUserRes>("users/", { username, email, password })
+export async function createUser(
+  username: string,
+  email: string,
+  password: string
+) {
+  return client.post<CreateUserReq, CreateUserRes>("users/", {
+    username,
+    email,
+    password,
+  });
 }
 
 export async function checkUsername(username: string) {

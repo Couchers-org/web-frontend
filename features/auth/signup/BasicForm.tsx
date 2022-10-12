@@ -9,11 +9,11 @@ import { AUTH, GLOBAL } from "i18n/namespaces";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
-import { HttpError } from "service/auth"
+import { HttpError } from "service/auth";
 import {
   emailValidationPattern,
   lowercaseAndTrimField,
-  passwordValidationPattern
+  passwordValidationPattern,
 } from "utils/validation";
 
 type SignupBasicInputs = {
@@ -42,17 +42,17 @@ export default function BasicForm({
   const mutation = useMutation<void, HttpError, SignupBasicInputs>(
     async (data) => {
       const sanitizedEmail = lowercaseAndTrimField(data.email);
-      const { password } = data
+      const { password } = data;
       // TODO - persist the user id returned from in the createUser response
-      await service.auth.createUser(sanitizedEmail, sanitizedEmail, password)
+      await service.auth.createUser(sanitizedEmail, sanitizedEmail, password);
       const authState = {
         flowToken: "",
         needBasic: false,
         needAccount: true,
         needFeedback: true,
         needVerifyEmail: true,
-        needAcceptCommunityGuidelines: true, 
-      }
+        needAcceptCommunityGuidelines: true,
+      };
       return authActions.updateSignupState(authState);
     },
     {
@@ -71,9 +71,13 @@ export default function BasicForm({
     mutation.mutate(data);
   });
 
-  const formSubmitErrors = Object.entries(mutation.error?.error_messages || {}).map(([field, message]) => (
-    <Alert severity="error" key={field}>{message}</Alert>
-  ))
+  const formSubmitErrors = Object.entries(
+    mutation.error?.error_messages || {}
+  ).map(([field, message]) => (
+    <Alert severity="error" key={field}>
+      {message}
+    </Alert>
+  ));
 
   return (
     <>
