@@ -13,21 +13,21 @@ import {
 } from "proto/auth_pb";
 import client from "service/client";
 
-type CreateUserReq = {
+interface CreateUserReq {
   email: string,
   username: string,
   password: string
 }
 
-type CreateUserRes = {
+interface CreateUserRes {
   email: string,
   username: string,
   id: number
 }
 
-export type HttpError = {
+export interface HttpError {
   status_code: number,
-  errors: [string],
+  errors: string[],
   error_messages: {
     [key: string]: string
   }

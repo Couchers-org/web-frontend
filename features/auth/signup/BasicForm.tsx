@@ -13,7 +13,7 @@ import { HttpError } from "service/auth"
 import {
   emailValidationPattern,
   lowercaseAndTrimField,
-  passwordValidationPatern
+  passwordValidationPattern
 } from "utils/validation";
 
 type SignupBasicInputs = {
@@ -110,10 +110,10 @@ export default function BasicForm({
           variant="standard"
           inputRef={register({
             pattern: {
-              message: "Please enter a password",
-              value: passwordValidationPatern,
+              message: t("auth:basic_form.password.empty_error"),
+              value: passwordValidationPattern,
             },
-            required: "Password can't be empty.",
+            required: t("auth:basic_form.email.required_error"),
           })}
           helperText={errors?.password?.message ?? " "}
           error={!!errors?.password?.message}
