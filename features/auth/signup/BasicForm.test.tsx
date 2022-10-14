@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
-import { StatusCode } from "grpc-web";
 import { service } from "service";
 import wrapper from "test/hookWrapper";
 import {

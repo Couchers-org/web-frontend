@@ -21,9 +21,6 @@ import {
 
 import Signup from "./Signup";
 
-const startSignupMock = service.auth.startSignup as MockedService<
-  typeof service.auth.startSignup
->;
 const createUserMock = service.auth.createUser as MockedService<
   typeof service.auth.createUser
 >;
