@@ -71,10 +71,11 @@ export default function BasicForm({
     mutation.mutate(data);
   });
 
-  const formSubmitErrors = Object.entries(
-    mutation.error?.error_messages || {}
-  ).map(([field, message]) => (
-    <Alert severity="error" key={field}>
+  const formSubmitErrors = Object.values(
+    mutation.error?.errors || {}
+  ).flat()
+  .map(message => (
+    <Alert severity="error" key={message}>
       {message}
     </Alert>
   ));

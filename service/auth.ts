@@ -27,9 +27,9 @@ interface CreateUserRes {
 
 export interface HttpError {
   status_code: number;
-  errors: string[];
-  error_messages: {
-    [key: string]: string;
+  error_messages: string[];
+  errors?: {
+    [key: string]: string[];
   };
 }
 

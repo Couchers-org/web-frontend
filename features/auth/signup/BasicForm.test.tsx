@@ -109,10 +109,10 @@ describe("basic signup form", () => {
 
   it("displays an error when present", async () => {
     createUserMock.mockRejectedValueOnce({
-      error_messages: {
+      errors: {
         email: ["A user with that email address already exists."],
       },
-      errors: ["The data submitted was invalid"],
+      error_messages: ["The data submitted was invalid"],
       status_code: 400,
     });
     render(<BasicForm />, {
