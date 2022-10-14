@@ -117,7 +117,7 @@ export default function BasicForm({
               message: t("auth:basic_form.password.empty_error"),
               value: passwordValidationPattern,
             },
-            required: t("auth:basic_form.email.required_error"),
+            required: t("auth:basic_form.password.required_error"),
           })}
           helperText={errors?.password?.message ?? " "}
           error={!!errors?.password?.message}

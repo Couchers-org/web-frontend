@@ -89,7 +89,7 @@
     },
     "password": {
       "field_label": "Password",
-      "empty_error": "Please enter a password",
+      "empty_error": "Please enter a valid password",
       "required_error": "Password can't be empty."
     }
   },
