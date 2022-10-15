@@ -22,15 +22,13 @@ async function http<T>(
   const request = new Request(url, config);
   const response = await fetch(request);
 
-  const responseBody = await response
-    .json()
-    .catch(() => ({}))
+  const responseBody = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw responseBody as HttpError
+    throw responseBody as HttpError;
   }
 
-  return responseBody
+  return responseBody;
 }
 
 export async function get<T>(path: string, config?: RequestInit): Promise<T> {

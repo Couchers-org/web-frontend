@@ -42,14 +42,20 @@ describe("basic signup form", () => {
     expect(result.current.authState.flowState).toBe(null);
 
     render(<BasicForm />, { wrapper });
-    userEvent.type(await screen.findByLabelText(t("auth:basic_form.email.field_label")), "frodo@couchers.org.invalid");
-    userEvent.type(await screen.findByLabelText(t("auth:basic_form.password.field_label")), "P@ssword123");
+    userEvent.type(
+      await screen.findByLabelText(t("auth:basic_form.email.field_label")),
+      "frodo@couchers.org.invalid"
+    );
+    userEvent.type(
+      await screen.findByLabelText(t("auth:basic_form.password.field_label")),
+      "P@ssword123"
+    );
     userEvent.click(
       await screen.findByRole("button", { name: t("global:continue") })
     );
 
     await waitFor(() => {
-      expect(createUserMock).not.toBeCalled()
+      expect(createUserMock).not.toBeCalled();
     });
 
     expect(result.current.authState.authenticated).toBe(false);
@@ -69,7 +75,7 @@ describe("basic signup form", () => {
     );
 
     await waitFor(() => {
-      expect(createUserMock).toBeCalledTimes(0)
+      expect(createUserMock).toBeCalledTimes(0);
     });
 
     expect(result.current.authState.authenticated).toBe(false);
@@ -82,10 +88,7 @@ describe("basic signup form", () => {
     expect(result.current.authState.flowState).toBe(null);
 
     render(<BasicForm />, { wrapper });
-    userEvent.type(
-      await screen.findByLabelText("Username"),
-      "testuser"
-    );
+    userEvent.type(await screen.findByLabelText("Username"), "testuser");
     userEvent.type(
       await screen.findByLabelText(t("auth:basic_form.email.field_label")),
       "frodo@couchers.org.invalid"
@@ -113,10 +116,7 @@ describe("basic signup form", () => {
     expect(result.current.authState.flowState).toBe(null);
 
     render(<BasicForm />, { wrapper });
-    userEvent.type(
-      await screen.findByLabelText("Username"),
-      "testuser"
-    );
+    userEvent.type(await screen.findByLabelText("Username"), "testuser");
     userEvent.type(
       await screen.findByLabelText(t("auth:basic_form.email.field_label")),
       "frodo@couchers.org.invalid"
