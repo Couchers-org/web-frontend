@@ -133,7 +133,7 @@ export default function BasicForm({
         error={!!errors?.email?.message}
       />
         <InputLabel className={authClasses.formLabel} htmlFor="password">
-          Password
+          {t("auth:basic_form.password.field_label")}
         </InputLabel>
         <TextField
           id="password"
