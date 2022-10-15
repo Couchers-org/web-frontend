@@ -6,6 +6,7 @@ import { useAuthContext } from "features/auth/AuthProvider";
 import useAuthStyles from "features/auth/useAuthStyles";
 import { useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
+import { useRef } from 'react';
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
@@ -14,9 +15,11 @@ import {
   emailValidationPattern,
   lowercaseAndTrimField,
   passwordValidationPattern,
+  usernameValidationPattern,
 } from "utils/validation";
 
 type SignupBasicInputs = {
+  username: string,
   email: string;
   password: string;
 };
@@ -41,10 +44,11 @@ export default function BasicForm({
 
   const mutation = useMutation<void, HttpError, SignupBasicInputs>(
     async (data) => {
+      const sanitizedUsername = lowercaseAndTrimField(data.username);
       const sanitizedEmail = lowercaseAndTrimField(data.email);
       const { password } = data;
       // TODO - persist the user id returned from in the createUser response
-      await service.auth.createUser(sanitizedEmail, sanitizedEmail, password);
+      await service.auth.createUser(sanitizedUsername, sanitizedEmail, password);
       const authState = {
         flowToken: "",
         needBasic: false,
@@ -71,6 +75,8 @@ export default function BasicForm({
     mutation.mutate(data);
   });
 
+  const usernameInputRef = useRef<HTMLInputElement>();
+
   const formSubmitErrors = Object.values(
     mutation.error?.errors || {}
   ).flat()
@@ -84,25 +90,48 @@ export default function BasicForm({
     <>
       {mutation.error && formSubmitErrors}
       <form className={authClasses.form} onSubmit={onSubmit}>
-        <InputLabel className={authClasses.formLabel} htmlFor="email">
-          {t("auth:basic_form.email.field_label")}
+        <InputLabel className={authClasses.formLabel} htmlFor="username">
+          {t("auth:basic_form.username.field_label")}
         </InputLabel>
         <TextField
-          id="email"
+          id="username"
           fullWidth
           className={authClasses.formField}
-          name="email"
+          name="username"
           variant="standard"
-          inputRef={register({
-            pattern: {
-              message: t("auth:basic_form.email.empty_error"),
-              value: emailValidationPattern,
-            },
-            required: t("auth:basic_form.email.required_error"),
-          })}
-          helperText={errors?.email?.message ?? " "}
-          error={!!errors?.email?.message}
+          inputRef={(el: HTMLInputElement | null) => {
+            if (!usernameInputRef.current) el?.focus();
+            if (el) usernameInputRef.current = el;
+            register(el, {
+              pattern: {
+                message: t("auth:basic_form.username.empty_error"),
+                value: usernameValidationPattern,
+              },
+              required: t("auth:basic_form.username.required_error"),
+            });
+          }}
+          helperText={errors?.username?.message ?? " "}
+          error={!!errors?.username?.message}
         />
+      <InputLabel className={authClasses.formLabel} htmlFor="email">
+        {t("auth:basic_form.email.field_label")}
+      </InputLabel>
+      <TextField
+        id="email"
+        fullWidth
+        className={authClasses.formField}
+        name="email"
+        variant="standard"
+        inputRef={register({
+          pattern: {
+            message: t("auth:basic_form.email.empty_error"),
+            value: emailValidationPattern,
+          },
+          required: t("auth:basic_form.email.required_error"),
+        })}
+        helperText={errors?.email?.message ?? " "}
+        error={!!errors?.email?.message}
+      />
         <InputLabel className={authClasses.formLabel} htmlFor="password">
           Password
         </InputLabel>

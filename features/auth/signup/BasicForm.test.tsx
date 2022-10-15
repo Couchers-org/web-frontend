@@ -36,19 +36,40 @@ describe("basic signup form", () => {
     expect(result.current.authState.flowState).toBe(null);
   });
 
+  it("cannot be submitted without username", async () => {
+    const { result } = renderHook(() => useAuthContext(), { wrapper });
+    expect(result.current.authState.authenticated).toBe(false);
+    expect(result.current.authState.flowState).toBe(null);
+
+    render(<BasicForm />, { wrapper });
+    userEvent.type(await screen.findByLabelText(t("auth:basic_form.email.field_label")), "frodo@couchers.org.invalid");
+    userEvent.type(await screen.findByLabelText(t("auth:basic_form.password.field_label")), "P@ssword123");
+    userEvent.click(
+      await screen.findByRole("button", { name: t("global:continue") })
+    );
+
+    await waitFor(() => {
+      expect(createUserMock).not.toBeCalled()
+    });
+
+    expect(result.current.authState.authenticated).toBe(false);
+    expect(result.current.authState.flowState).toBe(null);
+  });
+
   it("cannot be submitted without email", async () => {
     const { result } = renderHook(() => useAuthContext(), { wrapper });
     expect(result.current.authState.authenticated).toBe(false);
     expect(result.current.authState.flowState).toBe(null);
 
     render(<BasicForm />, { wrapper });
+    userEvent.type(await screen.findByLabelText("Username"), "testuser");
     userEvent.type(await screen.findByLabelText("Password"), "P@ssword123");
     userEvent.click(
       await screen.findByRole("button", { name: t("global:continue") })
     );
 
     await waitFor(() => {
-      expect(createUserMock).not.toBeCalled();
+      expect(createUserMock).toBeCalledTimes(0)
     });
 
     expect(result.current.authState.authenticated).toBe(false);
@@ -61,6 +82,10 @@ describe("basic signup form", () => {
     expect(result.current.authState.flowState).toBe(null);
 
     render(<BasicForm />, { wrapper });
+    userEvent.type(
+      await screen.findByLabelText("Username"),
+      "testuser"
+    );
     userEvent.type(
       await screen.findByLabelText(t("auth:basic_form.email.field_label")),
       "frodo@couchers.org.invalid"
@@ -89,6 +114,10 @@ describe("basic signup form", () => {
 
     render(<BasicForm />, { wrapper });
     userEvent.type(
+      await screen.findByLabelText("Username"),
+      "testuser"
+    );
+    userEvent.type(
       await screen.findByLabelText(t("auth:basic_form.email.field_label")),
       "frodo@couchers.org.invalid"
     );
@@ -100,7 +129,7 @@ describe("basic signup form", () => {
 
     await waitFor(() => {
       expect(createUserMock).toBeCalledWith(
-        "frodo@couchers.org.invalid",
+        "testuser",
         "frodo@couchers.org.invalid",
         "P@ssword123"
       );
@@ -120,10 +149,14 @@ describe("basic signup form", () => {
     });
 
     userEvent.type(
-      screen.getByLabelText(t("auth:basic_form.email.field_label")),
-      "test@example.com{enter}"
+      screen.getByLabelText(t("auth:basic_form.username.field_label")),
+      "testuser"
     );
-    userEvent.type(screen.getByLabelText("Password"), "P@ssword123");
+    userEvent.type(
+      screen.getByLabelText(t("auth:basic_form.email.field_label")),
+      "test@example.com"
+    );
+    userEvent.type(screen.getByLabelText("Password"), "P@ssword123{enter}");
     mockConsoleError();
     await assertErrorAlert("A user with that email address already exists.");
   });

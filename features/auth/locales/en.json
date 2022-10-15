@@ -82,6 +82,11 @@
     "tos_accept_label": "I Accept the Terms of Service."
   },
   "basic_form": {
+    "username": {
+      "field_label": "Username",
+      "empty_error": "Please enter a valid username",
+      "required_error": "Username can't be empty."
+    },
     "email": {
       "field_label": "Email",
       "empty_error": "Please enter a valid email address",
