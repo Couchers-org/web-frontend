@@ -10,7 +10,7 @@ import { useRef } from 'react';
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
-import { HttpError } from "service/auth";
+import { HttpError } from "service/http";
 import {
   emailValidationPattern,
   lowercaseAndTrimField,

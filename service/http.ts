@@ -1,5 +1,13 @@
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+export interface HttpError {
+  status_code: number;
+  error_messages: string[];
+  errors: {
+    [key: string]: string[];
+  };
+}
+
 async function http<T>(
   endpoint: string,
   configOverride: RequestInit
@@ -14,7 +22,15 @@ async function http<T>(
   const request = new Request(url, config);
   const response = await fetch(request);
 
-  return response.json().catch(() => ({}));
+  const responseBody = await response
+    .json()
+    .catch(() => ({}))
+
+  if (!response.ok) {
+    throw responseBody as HttpError
+  }
+
+  return responseBody
 }
 
 export async function get<T>(path: string, config?: RequestInit): Promise<T> {

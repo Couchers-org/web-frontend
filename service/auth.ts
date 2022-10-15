@@ -25,14 +25,6 @@ interface CreateUserRes {
   id: number;
 }
 
-export interface HttpError {
-  status_code: number;
-  error_messages: string[];
-  errors?: {
-    [key: string]: string[];
-  };
-}
-
 export async function createUser(
   username: string,
   email: string,
