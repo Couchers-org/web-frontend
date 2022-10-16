@@ -13,6 +13,30 @@ import {
 } from "proto/auth_pb";
 import client from "service/client";
 
+interface CreateUserReq {
+  email: string;
+  username: string;
+  password: string;
+}
+
+interface CreateUserRes {
+  email: string;
+  username: string;
+  id: number;
+}
+
+export async function createUser(
+  username: string,
+  email: string,
+  password: string
+) {
+  return client.post<CreateUserReq, CreateUserRes>("users/", {
+    username,
+    email,
+    password,
+  });
+}
+
 export async function checkUsername(username: string) {
   const req = new LoginReq();
   req.setUser(username);

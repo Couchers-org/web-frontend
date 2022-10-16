@@ -1,5 +1,5 @@
 import { grpcTimeout } from "appConstants";
-import { Request, RpcError, StatusCode } from "grpc-web";
+import { Request as RpcRequest, RpcError, StatusCode } from "grpc-web";
 import { AccountPromiseClient } from "proto/account_grpc_web_pb";
 import { APIPromiseClient } from "proto/api_grpc_web_pb";
 import { AuthPromiseClient } from "proto/auth_grpc_web_pb";
@@ -20,6 +20,8 @@ import { ResourcesPromiseClient } from "proto/resources_grpc_web_pb";
 import { SearchPromiseClient } from "proto/search_grpc_web_pb";
 import { ThreadsPromiseClient } from "proto/threads_grpc_web_pb";
 import isGrpcError from "utils/isGrpcError";
+
+import { get, post, put } from "./http";
 
 const URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -50,7 +52,7 @@ export class AuthInterceptor {
 
 class TimeoutInterceptor {
   async intercept(
-    request: Request<unknown, unknown>,
+    request: RpcRequest<unknown, unknown>,
     invoker: (request: unknown) => unknown
   ) {
     const deadline = Date.now() + grpcTimeout;
@@ -91,6 +93,9 @@ const client = {
   resources: new ResourcesPromiseClient(URL, null, opts),
   search: new SearchPromiseClient(URL, null, opts),
   threads: new ThreadsPromiseClient(URL, null, opts),
+  get,
+  post,
+  put,
 };
 
 if (

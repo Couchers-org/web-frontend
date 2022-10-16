@@ -21,8 +21,8 @@ import {
 
 import Signup from "./Signup";
 
-const startSignupMock = service.auth.startSignup as MockedService<
-  typeof service.auth.startSignup
+const createUserMock = service.auth.createUser as MockedService<
+  typeof service.auth.createUser
 >;
 const signupFlowAccountMock = service.auth.signupFlowAccount as MockedService<
   typeof service.auth.signupFlowAccount
@@ -98,25 +98,19 @@ describe("Signup", () => {
           needVerifyEmail: false,
         })
       );
-      startSignupMock.mockResolvedValue({
-        flowToken: "token",
-        needBasic: false,
-        needAccount: true,
-        needAcceptCommunityGuidelines: true,
-        needFeedback: true,
-        needVerifyEmail: false,
+      createUserMock.mockResolvedValue({
+        email: "test@example.com",
+        username: "Test user",
+        id: 1,
       });
 
       render(<View />, { wrapper });
 
       userEvent.type(
-        await screen.findByLabelText(t("auth:basic_form.name.field_label")),
-        "Test user"
-      );
-      userEvent.type(
         screen.getByLabelText(t("auth:basic_form.email.field_label")),
-        "test@example.com{enter}"
+        "test@example.com"
       );
+      userEvent.type(screen.getByLabelText("Password"), "Password123{enter}");
       expect(
         await screen.findByLabelText(
           t("auth:account_form.username.field_label")

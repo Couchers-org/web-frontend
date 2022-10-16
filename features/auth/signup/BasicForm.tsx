@@ -4,22 +4,24 @@ import Button from "components/Button";
 import TextField from "components/TextField";
 import { useAuthContext } from "features/auth/AuthProvider";
 import useAuthStyles from "features/auth/useAuthStyles";
-import { RpcError } from "grpc-web";
 import { useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
+import { HttpError } from "service/http";
 import {
   emailValidationPattern,
   lowercaseAndTrimField,
-  nameValidationPattern,
+  passwordValidationPattern,
+  usernameValidationPattern,
 } from "utils/validation";
 
 type SignupBasicInputs = {
-  name: string;
+  username: string;
   email: string;
+  password: string;
 };
 
 interface BasicFormProps {
@@ -40,15 +42,26 @@ export default function BasicForm({
     shouldUnregister: false,
   });
 
-  const mutation = useMutation<void, RpcError, SignupBasicInputs>(
+  const mutation = useMutation<void, HttpError, SignupBasicInputs>(
     async (data) => {
+      const sanitizedUsername = lowercaseAndTrimField(data.username);
       const sanitizedEmail = lowercaseAndTrimField(data.email);
-      const sanitizedName = data.name.trim();
-      const state = await service.auth.startSignup(
-        sanitizedName,
-        sanitizedEmail
+      const { password } = data;
+      // TODO - persist the user id returned from in the createUser response
+      await service.auth.createUser(
+        sanitizedUsername,
+        sanitizedEmail,
+        password
       );
-      return authActions.updateSignupState(state);
+      const authState = {
+        flowToken: "",
+        needBasic: false,
+        needAccount: true,
+        needFeedback: true,
+        needVerifyEmail: true,
+        needAcceptCommunityGuidelines: true,
+      };
+      return authActions.updateSignupState(authState);
     },
     {
       onSettled() {
@@ -66,36 +79,42 @@ export default function BasicForm({
     mutation.mutate(data);
   });
 
-  const nameInputRef = useRef<HTMLInputElement>();
+  const usernameInputRef = useRef<HTMLInputElement>();
+
+  const formSubmitErrors = Object.values(mutation.error?.errors || {})
+    .flat()
+    .map((message) => (
+      <Alert severity="error" key={message}>
+        {message}
+      </Alert>
+    ));
 
   return (
     <>
-      {mutation.error && (
-        <Alert severity="error">{mutation.error.message || ""}</Alert>
-      )}
+      {mutation.error && formSubmitErrors}
       <form className={authClasses.form} onSubmit={onSubmit}>
-        <InputLabel className={authClasses.formLabel} htmlFor="name">
-          {t("auth:basic_form.name.field_label")}
+        <InputLabel className={authClasses.formLabel} htmlFor="username">
+          {t("auth:basic_form.username.field_label")}
         </InputLabel>
         <TextField
-          id="name"
+          id="username"
           fullWidth
           className={authClasses.formField}
-          name="name"
+          name="username"
           variant="standard"
           inputRef={(el: HTMLInputElement | null) => {
-            if (!nameInputRef.current) el?.focus();
-            if (el) nameInputRef.current = el;
+            if (!usernameInputRef.current) el?.focus();
+            if (el) usernameInputRef.current = el;
             register(el, {
               pattern: {
-                message: t("auth:basic_form.name.empty_error"),
-                value: nameValidationPattern,
+                message: t("auth:basic_form.username.empty_error"),
+                value: usernameValidationPattern,
               },
-              required: t("auth:basic_form.name.required_error"),
+              required: t("auth:basic_form.username.required_error"),
             });
           }}
-          helperText={errors?.name?.message ?? " "}
-          error={!!errors?.name?.message}
+          helperText={errors?.username?.message ?? " "}
+          error={!!errors?.username?.message}
         />
         <InputLabel className={authClasses.formLabel} htmlFor="email">
           {t("auth:basic_form.email.field_label")}
@@ -115,6 +134,26 @@ export default function BasicForm({
           })}
           helperText={errors?.email?.message ?? " "}
           error={!!errors?.email?.message}
+        />
+        <InputLabel className={authClasses.formLabel} htmlFor="password">
+          {t("auth:basic_form.password.field_label")}
+        </InputLabel>
+        <TextField
+          id="password"
+          fullWidth
+          className={authClasses.formField}
+          name="password"
+          type="password"
+          variant="standard"
+          inputRef={register({
+            pattern: {
+              message: t("auth:basic_form.password.empty_error"),
+              value: passwordValidationPattern,
+            },
+            required: t("auth:basic_form.password.required_error"),
+          })}
+          helperText={errors?.password?.message ?? " "}
+          error={!!errors?.password?.message}
         />
         <Button
           classes={{
