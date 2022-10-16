@@ -39,9 +39,8 @@ const signupFlowCommunityGuidelinesMock = service.auth
 const signupFlowFeedbackMock = service.auth.signupFlowFeedback as MockedService<
   typeof service.auth.signupFlowFeedback
 >;
-const signupFlowEmailTokenMock = service.auth
-  .signupFlowEmailToken as MockedService<
-  typeof service.auth.signupFlowEmailToken
+const activateUserMock = service.auth.activateUser as MockedService<
+  typeof service.auth.activateUser
 >;
 const validateUsernameMock = service.auth.validateUsername as MockedService<
   typeof service.auth.validateUsername
@@ -457,14 +456,10 @@ describe("Signup", () => {
     await assertErrorAlert("Permission denied");
   });
 
-  it("sets the email flow state correctly when given a url token", async () => {
-    signupFlowEmailTokenMock.mockResolvedValue({
-      needBasic: false,
-      needAccount: true,
-      needAcceptCommunityGuidelines: true,
-      needFeedback: true,
-      needVerifyEmail: false,
-      flowToken: "token",
+  it("sets the email flow state correctly when given an activation token", async () => {
+    activateUserMock.mockResolvedValue({
+      uid: "fakeUID",
+      token: "fakeToken",
     });
     const state: SignupFlowRes.AsObject = {
       needBasic: false,
@@ -476,22 +471,25 @@ describe("Signup", () => {
     };
     window.localStorage.setItem("auth.flowState", JSON.stringify(state));
 
-    mockRouter.setCurrentUrl(`${signupRoute}?token=fakeEmailToken`);
+    mockRouter.setCurrentUrl(`${signupRoute}?uid=fakeUID&token=fakeToken`);
     render(<View />, {
       wrapper,
     });
     expect(
       await screen.findByLabelText(t("auth:account_form.username.field_label"))
     ).toBeVisible();
-    expect(signupFlowEmailTokenMock).toBeCalledWith("fakeEmailToken");
+    expect(activateUserMock).toBeCalledWith("fakeUID", "fakeToken");
     const { result } = renderHook(() => useAuthStore(), { wrapper });
     expect(result.current.authState.flowState?.needVerifyEmail).toBe(false);
   });
 
-  it("displays an error when email token api errors", async () => {
-    signupFlowEmailTokenMock.mockRejectedValue({
-      code: StatusCode.NOT_FOUND,
-      message: "Invalid token",
+  it("displays an error when user activation fails", async () => {
+    activateUserMock.mockRejectedValue({
+      errors: {
+        token: ["Invalid token for given user."],
+      },
+      error_messages: ["The data submitted was invalid"],
+      status_code: 400,
     });
     const state: SignupFlowRes.AsObject = {
       needBasic: false,
@@ -502,10 +500,10 @@ describe("Signup", () => {
       flowToken: "token",
     };
     window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    mockRouter.setCurrentUrl(`${signupRoute}?token=fakeEmailToken`);
+    mockRouter.setCurrentUrl(`${signupRoute}?uid=fakeUID&token=fakeEmailToken`);
     render(<View />, {
       wrapper,
     });
-    await assertErrorAlert("Invalid token");
+    await assertErrorAlert("Invalid token for given user.");
   });
 });

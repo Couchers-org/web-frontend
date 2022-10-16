@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import vercelLogo from "resources/vercel.svg";
 import { dashboardRoute, loginRoute, signupRoute, tosRoute } from "routes";
 import { service } from "service";
-import isGrpcError from "utils/isGrpcError";
+import isHttpError from "utils/isHttpError";
 import makeStyles from "utils/makeStyles";
 import stringOrFirstString from "utils/stringOrFirstString";
 
@@ -166,7 +166,8 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const urlToken = stringOrFirstString(router.query.token);
+  const activationUID = stringOrFirstString(router.query.uid);
+  const activationToken = stringOrFirstString(router.query.token);
 
   useEffect(() => {
     authActions.clearError();
@@ -178,21 +179,32 @@ export default function Signup() {
 
   useEffect(() => {
     (async () => {
-      if (urlToken) {
+      if (activationUID && activationToken) {
         setLoading(true);
         try {
-          authActions.updateSignupState(
-            await service.auth.signupFlowEmailToken(urlToken)
-          );
+          await service.auth.activateUser(activationUID, activationToken);
+          authActions.updateSignupState({
+            needBasic: false,
+            needAccount: true,
+            needAcceptCommunityGuidelines: true,
+            needFeedback: true,
+            needVerifyEmail: false,
+            flowToken: "token",
+          });
         } catch (err) {
           Sentry.captureException(err, {
             tags: {
               component: "auth/signup/Signup",
             },
           });
-          authActions.authError(
-            isGrpcError(err) ? err.message : t("global:error.fatal_message")
-          );
+          const errorMessages = isHttpError(err)
+            ? [
+                ...Object.values(err.errors || {}).flat(),
+                ...(err.error_messages || []),
+                t("global:error.fatal_message"),
+              ]
+            : [t("global:error.fatal_message")];
+          authActions.authError(errorMessages[0]);
           router.push(signupRoute);
           return;
         }
@@ -201,7 +213,7 @@ export default function Signup() {
     })();
     // next-router-mock router isn't memoized, so putting router in the dependencies
     // causes infinite looping in tests
-  }, [urlToken, authActions, t]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activationUID, activationToken, authActions, t]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
