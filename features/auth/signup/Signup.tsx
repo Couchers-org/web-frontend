@@ -200,7 +200,6 @@ export default function Signup() {
           const errorMessages = isHttpError(err)
             ? [
                 ...Object.values(err.errors || {}).flat(),
-                ...(err.error_messages || []),
                 t("global:error.fatal_message"),
               ]
             : [t("global:error.fatal_message")];
