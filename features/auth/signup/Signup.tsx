@@ -197,13 +197,10 @@ export default function Signup() {
               component: "auth/signup/Signup",
             },
           });
-          const errorMessages = isHttpError(err)
-            ? [
-                ...Object.values(err.errors || {}).flat(),
-                t("global:error.fatal_message"),
-              ]
-            : [t("global:error.fatal_message")];
-          authActions.authError(errorMessages[0]);
+          const errorMessage = isHttpError(err)
+            ? Object.values(err.errors || {})[0][0] || err.error_messages[0]
+            : t("global:error.fatal_message");
+          authActions.authError(errorMessage);
           router.push(signupRoute);
           return;
         }
