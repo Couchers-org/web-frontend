@@ -36,6 +36,7 @@ export const featurePreviewRoute = "/preview";
 export const confirmChangeEmailRoute = "/confirm-email";
 
 export const signupRoute = "/signup";
+export const userActivationRoute = "/activation";
 
 // profile
 export const userTabs = [

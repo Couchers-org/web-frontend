@@ -140,6 +140,8 @@
   "introduction_title": "Join and help grow the new alternative to Couchsurfing™",
   "reset_password": "Reset password",
   "reset_password_error": "Error resetting password: {{message}}",
+  "user_activation": "Email Verification",
+  "user_activation_success": "Your email has been verified.",
   "account_settings_page": {
     "title": "Account settings",
     "gender_section": {

@@ -25,12 +25,12 @@ interface CreateUserRes {
   id: number;
 }
 
-interface ActivateUserReq {
+export interface ActivateUserReq {
   uid: string;
   token: string;
 }
 
-interface ActivateUserRes {
+export interface ActivateUserRes {
   uid: string;
   token: string;
 }

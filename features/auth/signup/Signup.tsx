@@ -1,8 +1,6 @@
 import { Divider, Typography } from "@material-ui/core";
-import * as Sentry from "@sentry/react";
 import classNames from "classnames";
 import Alert from "components/Alert";
-import CircularProgress from "components/CircularProgress";
 import HtmlMeta from "components/HtmlMeta";
 import Redirect from "components/Redirect";
 import StyledLink from "components/StyledLink";
@@ -10,14 +8,10 @@ import MobileAuthBg from "features/auth/resources/mobile-auth-bg.jpg";
 import CommunityGuidelinesForm from "features/auth/signup/CommunityGuidelinesForm";
 import { Trans, useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import vercelLogo from "resources/vercel.svg";
-import { dashboardRoute, loginRoute, signupRoute, tosRoute } from "routes";
-import { service } from "service";
-import isHttpError from "utils/isHttpError";
+import { dashboardRoute, loginRoute, tosRoute } from "routes";
 import makeStyles from "utils/makeStyles";
-import stringOrFirstString from "utils/stringOrFirstString";
 
 import { useAuthContext } from "../AuthProvider";
 import useAuthStyles from "../useAuthStyles";
@@ -163,11 +157,6 @@ export default function Signup() {
   const error = authState.error;
   const authClasses = useAuthStyles();
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
-
-  const router = useRouter();
-  const activationUID = stringOrFirstString(router.query.uid);
-  const activationToken = stringOrFirstString(router.query.token);
 
   useEffect(() => {
     authActions.clearError();
@@ -176,40 +165,6 @@ export default function Signup() {
   useEffect(() => {
     if (authState.error) window.scroll({ top: 0, behavior: "smooth" });
   }, [authState.error]);
-
-  useEffect(() => {
-    (async () => {
-      if (activationUID && activationToken) {
-        setLoading(true);
-        try {
-          await service.auth.activateUser(activationUID, activationToken);
-          authActions.updateSignupState({
-            needBasic: false,
-            needAccount: true,
-            needAcceptCommunityGuidelines: true,
-            needFeedback: true,
-            needVerifyEmail: false,
-            flowToken: "token",
-          });
-        } catch (err) {
-          Sentry.captureException(err, {
-            tags: {
-              component: "auth/signup/Signup",
-            },
-          });
-          const errorMessage = isHttpError(err)
-            ? Object.values(err.errors || {})[0][0] || err.error_messages[0]
-            : t("global:error.fatal_message");
-          authActions.authError(errorMessage);
-          router.push(signupRoute);
-          return;
-        }
-        setLoading(false);
-      }
-    })();
-    // next-router-mock router isn't memoized, so putting router in the dependencies
-    // causes infinite looping in tests
-  }, [activationUID, activationToken, authActions, t]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -257,7 +212,7 @@ export default function Signup() {
               {error}
             </Alert>
           )}
-          {loading ? <CircularProgress /> : <CurrentForm />}
+          <CurrentForm />
         </div>
         {process.env.NEXT_PUBLIC_COUCHERS_ENV !== "prod" && (
           <a
