@@ -1,5 +1,6 @@
 import { grpcTimeout } from "appConstants";
-import { Request as RpcRequest, RpcError, StatusCode } from "grpc-web";
+import { Request as RpcRequest } from "grpc-web";
+import { constants as httpConstants } from "http2"
 import { AccountPromiseClient } from "proto/account_grpc_web_pb";
 import { APIPromiseClient } from "proto/api_grpc_web_pb";
 import { AuthPromiseClient } from "proto/auth_grpc_web_pb";
@@ -19,17 +20,19 @@ import { RequestsPromiseClient } from "proto/requests_grpc_web_pb";
 import { ResourcesPromiseClient } from "proto/resources_grpc_web_pb";
 import { SearchPromiseClient } from "proto/search_grpc_web_pb";
 import { ThreadsPromiseClient } from "proto/threads_grpc_web_pb";
-import isGrpcError from "utils/isGrpcError";
+import isHttpError from "utils/isHttpError";
 
-import { get, patch, post, put } from "./http";
+import { get, HttpError, patch, post, put } from "./http";
 
 const URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+const { HTTP_STATUS_UNAUTHORIZED } = httpConstants
+
 let _unauthenticatedErrorHandler: (
-  e: RpcError
+  e: HttpError
 ) => Promise<void> = async () => {};
 export const setUnauthenticatedErrorHandler = (
-  f: (e: RpcError) => Promise<void>
+  f: (e: HttpError) => Promise<void>
 ) => {
   _unauthenticatedErrorHandler = f;
 };
@@ -40,7 +43,7 @@ export class AuthInterceptor {
     try {
       response = await invoker(request);
     } catch (e) {
-      if (isGrpcError(e) && e.code === StatusCode.UNAUTHENTICATED) {
+      if (isHttpError(e) && e.status_code === HTTP_STATUS_UNAUTHORIZED) {
         _unauthenticatedErrorHandler(e);
       } else {
         throw e;

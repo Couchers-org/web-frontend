@@ -12,9 +12,19 @@ import {
   UpdateProfileReq,
   User,
 } from "proto/api_pb";
-import { AuthReq, CompleteTokenLoginReq } from "proto/auth_pb";
+import { CompleteTokenLoginReq } from "proto/auth_pb";
 import client from "service/client";
 import { ProtoToJsTypes } from "utils/types";
+
+export interface LoginReq {
+  username: string;
+  password: string;
+}
+
+export interface LoginRes {
+  auth_token: string;
+  user_id: number;
+}
 
 type RequiredUpdateProfileReq = Required<UpdateProfileReq.AsObject>;
 type ProfileFormData = {
@@ -55,12 +65,7 @@ export type HostingPreferenceData = Omit<
  * Login user using password
  */
 export async function passwordLogin(username: string, password: string) {
-  const req = new AuthReq();
-  req.setUser(username);
-  req.setPassword(password);
-
-  const res = await client.auth.authenticate(req);
-  return res.toObject();
+  return client.post<LoginReq, LoginRes>("login/", {username, password})
 }
 
 /**
@@ -272,5 +277,5 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  * Logout user
  */
 export function logout() {
-  return client.auth.deauthenticate(new Empty());
+  return client.post("logout/")
 }

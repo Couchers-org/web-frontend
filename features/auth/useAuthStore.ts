@@ -7,6 +7,7 @@ import { useQueryClient } from "react-query";
 import { service } from "service";
 import { SignupFlowRes } from "service/auth";
 import isGrpcError from "utils/isGrpcError";
+import isHttpError from "utils/isHttpError";
 
 type StorageType = "localStorage" | "sessionStorage";
 
@@ -109,13 +110,12 @@ export default function useAuthStore() {
         setLoading(true);
         try {
           const auth = await service.user.passwordLogin(username, password);
-          setUserId(auth.userId);
-          Sentry.setUser({ id: auth.userId.toString() });
+          setUserId(auth.user_id);
+          Sentry.setUser({ id: auth.user_id.toString() });
 
           //this must come after setting the userId, because calling setQueryData
           //will also cause that query to be background fetched, and it needs
           //userId to be set.
-          setJailed(auth.jailed);
           setAuthenticated(true);
         } catch (e) {
           Sentry.captureException(e, {
@@ -124,7 +124,10 @@ export default function useAuthStore() {
               action: "passwordLogin",
             },
           });
-          setError(isGrpcError(e) ? e.message : fatalErrorMessage.current);
+          const errorMessage = isHttpError(e)
+            ? (e.error_messages || [])[0]
+            : fatalErrorMessage.current;
+          setError(errorMessage);
         }
         setLoading(false);
       },
