@@ -1,4 +1,4 @@
-import { CircularProgress, Container } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import * as Sentry from "@sentry/react";
 import Alert from "components/Alert";
 import { useAppRouteStyles } from "components/AppRoute";
@@ -30,7 +30,16 @@ export default function Activation() {
     isSuccess,
     mutate: activateUser,
   } = useMutation<ActivateUserRes, HttpError, ActivateUserReq>(
-    ({ uid, token }) => service.auth.activateUser(uid, token)
+    ({ uid, token }) => service.auth.activateUser(uid, token),
+    {
+      onError: (error) => {
+        Sentry.captureException(error, {
+        tags: {
+          component: "auth/signup/Activation",
+        },
+      })
+    }
+    }
   );
 
   useEffect(() => {
@@ -39,20 +48,12 @@ export default function Activation() {
     }
   }, [activateUser, activationUID, activationToken]);
 
-  useEffect(() => {
-    Sentry.captureException(error, {
-      tags: {
-        component: "auth/signup/Activation",
-      },
-    });
-  }, [error]);
-
   const errorMessage = isHttpError(error)
     ? Object.values(error.errors || {}).flat()[0] || error.error_messages[0]
     : t("global:error.fatal_message");
 
   return (
-    <Container className={classes.standardContainer}>
+    <>
       <HtmlMeta title={t("auth:user_activation")} />
       {isLoading ? (
         <CircularProgress />
@@ -66,6 +67,6 @@ export default function Activation() {
       ) : (
         ""
       )}
-    </Container>
+    </>
   );
 }
