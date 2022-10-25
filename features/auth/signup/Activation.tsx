@@ -1,7 +1,6 @@
 import { CircularProgress } from "@material-ui/core";
 import * as Sentry from "@sentry/react";
 import Alert from "components/Alert";
-import { useAppRouteStyles } from "components/AppRoute";
 import HtmlMeta from "components/HtmlMeta";
 import StyledLink from "components/StyledLink";
 import { useTranslation } from "i18n";
@@ -18,7 +17,6 @@ import stringOrFirstString from "utils/stringOrFirstString";
 
 export default function Activation() {
   const { t } = useTranslation([AUTH, GLOBAL]);
-  const classes = useAppRouteStyles();
 
   const router = useRouter();
   const activationUID = stringOrFirstString(router.query.uid);
@@ -34,11 +32,11 @@ export default function Activation() {
     {
       onError: (error) => {
         Sentry.captureException(error, {
-        tags: {
-          component: "auth/signup/Activation",
-        },
-      })
-    }
+          tags: {
+            component: "auth/signup/Activation",
+          },
+        });
+      },
     }
   );
 

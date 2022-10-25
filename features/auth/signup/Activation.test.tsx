@@ -1,8 +1,4 @@
-import {
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 import { userActivationRoute } from "routes";
 import { service } from "service";
@@ -39,7 +35,9 @@ describe("User Activation", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByRole("link", { name: t("auth:login_prompt") })).toBeVisible()
+      expect(
+        screen.getByRole("link", { name: t("auth:login_prompt") })
+      ).toBeVisible();
     });
   });
 
