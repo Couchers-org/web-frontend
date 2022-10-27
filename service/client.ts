@@ -1,6 +1,5 @@
 import { grpcTimeout } from "appConstants";
 import { Request as RpcRequest } from "grpc-web";
-import { constants as httpConstants } from "http2"
 import { AccountPromiseClient } from "proto/account_grpc_web_pb";
 import { APIPromiseClient } from "proto/api_grpc_web_pb";
 import { AuthPromiseClient } from "proto/auth_grpc_web_pb";
@@ -26,8 +25,6 @@ import { get, HttpError, patch, post, put } from "./http";
 
 const URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const { HTTP_STATUS_UNAUTHORIZED } = httpConstants
-
 let _unauthenticatedErrorHandler: (
   e: HttpError
 ) => Promise<void> = async () => {};
@@ -43,7 +40,7 @@ export class AuthInterceptor {
     try {
       response = await invoker(request);
     } catch (e) {
-      if (isHttpError(e) && e.status_code === HTTP_STATUS_UNAUTHORIZED) {
+      if (isHttpError(e) && e.status_code === 400) {
         _unauthenticatedErrorHandler(e);
       } else {
         throw e;
