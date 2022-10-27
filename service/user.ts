@@ -277,5 +277,5 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  * Logout user
  */
 export function logout() {
-  return client.post("logout/")
+  return client.authenticatedPost("logout/", {})
 }

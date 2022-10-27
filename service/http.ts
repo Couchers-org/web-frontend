@@ -8,6 +8,14 @@ export interface HttpError {
   };
 }
 
+function getAuthToken(): string {
+  const rawToken = window.localStorage.getItem("auth.token")
+  const token = rawToken && rawToken?.length > 0
+    ? JSON.parse(rawToken)
+    : ""
+  return token
+}
+
 async function http<T>(
   endpoint: string,
   configOverride: RequestInit
@@ -31,6 +39,19 @@ async function http<T>(
   return responseBody;
 }
 
+async function authenticatedHttp<T>(endpoint: string, configOverride:RequestInit): Promise<T> {
+  const config = {
+    headers: {
+      "content-type": "application/json",
+      "authorization": `token ${getAuthToken()}`
+    },
+    mode: 'cors' as RequestMode,
+    ...configOverride,
+  };
+
+  return await http<T>(endpoint, config)
+}
+
 export async function get<T>(path: string, config?: RequestInit): Promise<T> {
   const init = { method: "get", ...config };
   return await http<T>(path, init);
@@ -45,9 +66,17 @@ export async function post<T, U>(
   return await http<U>(path, init);
 }
 
-export async function put<T, U>(
+export async function authenticatedPost<T, U>(
   path: string,
   body: T,
+  config?: Omit<RequestInit, "body">
+): Promise<U> {
+  const init = { method: "post", body: JSON.stringify(body), ...config };
+  return await authenticatedHttp<U>(path, init);
+}
+export async function put<T, U>(
+  path: string,
+  body?: T,
   config?: Omit<RequestInit, "body">
 ): Promise<U> {
   const init = { method: "put", body: JSON.stringify(body), ...config };
