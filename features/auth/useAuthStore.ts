@@ -84,7 +84,11 @@ export default function useAuthStore() {
         setError(null);
         setLoading(true);
         try {
-          await service.user.logout();
+          await service.user.logout()
+            .catch(e => {
+              const isTokenError = isHttpError(e) && e.status_code === 401
+              if (!isTokenError) throw e
+            });
           setAuthenticated(false);
           setUserId(null);
           setToken(null)
@@ -96,7 +100,10 @@ export default function useAuthStore() {
               action: "logout",
             },
           });
-          setError(isGrpcError(e) ? e.message : fatalErrorMessage.current);
+          const errorMessage = isHttpError(e)
+            ? (e.error_messages || [])[0]
+            : fatalErrorMessage.current;
+          setError(errorMessage);
         }
         window.sessionStorage.clear();
         setLoading(false);

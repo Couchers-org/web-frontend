@@ -79,6 +79,21 @@ describe("useAuthStore hook", () => {
     expect(result.current.authState.userId).toBeNull();
   });
 
+  it("logs out with an expired token", async () => {
+    logoutMock.mockRejectedValue({
+      error_messages: ["Invalid token."],
+      status_code: 401
+    });
+    addDefaultUser();
+    const { result } = renderHook(() => useAuthStore(), { wrapper });
+    expect(result.current.authState.authenticated).toBe(true);
+    await act(() => result.current.authActions.logout());
+    expect(result.current.authState.authenticated).toBe(false);
+    expect(result.current.authState.token).toBeNull();
+    expect(result.current.authState.error).toBeNull();
+    expect(result.current.authState.userId).toBeNull();
+  });
+
   it("clears sessionStorage on logout", async () => {
     logoutMock.mockResolvedValue(new Empty());
     addDefaultUser();
