@@ -25,6 +25,16 @@ interface CreateUserRes {
   id: number;
 }
 
+export interface ActivateUserReq {
+  uid: string;
+  token: string;
+}
+
+export interface ActivateUserRes {
+  uid: string;
+  token: string;
+}
+
 export async function createUser(
   username: string,
   email: string,
@@ -125,11 +135,11 @@ export async function signupFlowFeedback(
   return res.toObject();
 }
 
-export async function signupFlowEmailToken(emailToken: string) {
-  const req = new SignupFlowReq();
-  req.setEmailToken(emailToken);
-  const res = await client.auth.signupFlow(req);
-  return res.toObject();
+export async function activateUser(uid: string, token: string) {
+  return client.post<ActivateUserReq, ActivateUserRes>("users/activation/", {
+    uid,
+    token,
+  });
 }
 
 export async function signupFlowCommunityGuidelines(
