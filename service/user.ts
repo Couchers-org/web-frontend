@@ -12,7 +12,6 @@ import {
   UpdateProfileReq,
   User,
 } from "proto/api_pb";
-import { CompleteTokenLoginReq } from "proto/auth_pb";
 import client from "service/client";
 import { ProtoToJsTypes } from "utils/types";
 
@@ -66,17 +65,6 @@ export type HostingPreferenceData = Omit<
  */
 export async function passwordLogin(username: string, password: string) {
   return client.post<LoginReq, LoginRes>("login/", {username, password})
-}
-
-/**
- * Login user using a login token
- */
-export async function tokenLogin(loginToken: string) {
-  const req = new CompleteTokenLoginReq();
-  req.setLoginToken(loginToken);
-
-  const res = await client.auth.completeTokenLogin(req);
-  return res.toObject();
 }
 
 /**
