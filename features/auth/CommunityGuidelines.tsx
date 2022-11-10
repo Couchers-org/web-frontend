@@ -12,14 +12,14 @@ import * as Sentry from "@sentry/nextjs";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import { communityGuidelinesQueryKey } from "features/queryKeys";
-import { RpcError } from "grpc-web";
 import { useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
-import { GetCommunityGuidelinesRes } from "proto/resources_pb";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { service } from "service";
+import { HttpError } from "service/http";
+import { CommunityGuideline } from "service/resources";
 import { useIsMounted, useSafeState } from "utils/hooks";
 import isGrpcError from "utils/isGrpcError";
 import makeStyles from "utils/makeStyles";
@@ -64,7 +64,7 @@ export default function CommunityGuidelines({
     data,
     error: loadError,
     isLoading,
-  } = useQuery<GetCommunityGuidelinesRes.AsObject, RpcError>({
+  } = useQuery<CommunityGuideline[], HttpError>({
     queryKey: communityGuidelinesQueryKey,
     queryFn: () => service.resources.getCommunityGuidelines(),
   });
@@ -108,57 +108,55 @@ export default function CommunityGuidelines({
         {error && <Alert severity="error">{error}</Alert>}
 
         <div className={classes.grid}>
-          {data.communityGuidelinesList.map(
-            ({ title, guideline, iconSvg }, index) => (
-              <React.Fragment key={index}>
-                <Avatar
-                  className={classes.avatar}
-                  src={`data:image/svg+xml,${encodeURIComponent(iconSvg)}`}
-                />
-                <div>
-                  <Typography variant="h3" color="primary">
-                    {title}
-                  </Typography>
-                  <Typography variant="body1">{guideline}</Typography>
-                  <Controller
-                    control={control}
-                    name={`ok${index}`}
-                    defaultValue={false}
-                    rules={{
-                      required: t(
-                        "auth:community_guidelines_form.guideline.required_error"
-                      ),
-                    }}
-                    render={({ onChange, value }) => (
-                      <FormControl>
-                        <FormControlLabel
-                          label={
-                            <Typography variant="body1">
-                              {t(
-                                "auth:community_guidelines_form.guideline.checkbox_label"
-                              )}
-                            </Typography>
-                          }
-                          control={
-                            <Checkbox
-                              checked={value}
-                              onChange={(_, checked) => onChange(checked)}
-                            />
-                          }
-                        />
+          {data.map(({ title, guideline, icon }, index) => (
+            <React.Fragment key={index}>
+              <Avatar
+                className={classes.avatar}
+                src={`data:image/svg+xml,${encodeURIComponent(icon)}`}
+              />
+              <div>
+                <Typography variant="h3" color="primary">
+                  {title}
+                </Typography>
+                <Typography variant="body1">{guideline}</Typography>
+                <Controller
+                  control={control}
+                  name={`ok${index}`}
+                  defaultValue={false}
+                  rules={{
+                    required: t(
+                      "auth:community_guidelines_form.guideline.required_error"
+                    ),
+                  }}
+                  render={({ onChange, value }) => (
+                    <FormControl>
+                      <FormControlLabel
+                        label={
+                          <Typography variant="body1">
+                            {t(
+                              "auth:community_guidelines_form.guideline.checkbox_label"
+                            )}
+                          </Typography>
+                        }
+                        control={
+                          <Checkbox
+                            checked={value}
+                            onChange={(_, checked) => onChange(checked)}
+                          />
+                        }
+                      />
 
-                        {errors?.[`ok${index}`]?.message && (
-                          <FormHelperText error={true}>
-                            {errors[`ok${index}`].message}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                    )}
-                  />
-                </div>
-              </React.Fragment>
-            )
-          )}
+                      {errors?.[`ok${index}`]?.message && (
+                        <FormHelperText error={true}>
+                          {errors[`ok${index}`].message}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  )}
+                />
+              </div>
+            </React.Fragment>
+          ))}
         </div>
 
         <Button

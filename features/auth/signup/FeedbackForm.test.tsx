@@ -1,8 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
-import { EXPERTISE_LABEL, SUBMIT } from "components/ContributorForm/constants";
-import { ContributeOption } from "proto/auth_pb";
+import {
+  CONTRIBUTE_LABEL,
+  EXPERTISE_LABEL,
+  SUBMIT,
+} from "components/ContributorForm/constants";
 import { service } from "service";
 import wrapper from "test/hookWrapper";
 import { MockedService } from "test/utils";
@@ -16,34 +19,36 @@ const signupFlowFeedbackMock = service.auth.signupFlowFeedback as MockedService<
 
 const stateBeforeFeedback = {
   flowToken: "dummy-token",
-  success: false,
-  needBasic: false,
   needAccount: false,
   needFeedback: true,
   needAcceptCommunityGuidelines: true,
-  needVerifyEmail: true,
 };
 
 const stateAfterFeedback = {
   flowToken: "dummy-token",
-  success: false,
-  needBasic: false,
   needAccount: false,
   needFeedback: false,
   needAcceptCommunityGuidelines: true,
-  needVerifyEmail: true,
+};
+
+const flowResponseAfterFeedback = {
+  flow_token: "dummy-token",
+  is_completed: false,
+  account_is_filled: true,
+  filled_feedback: true,
+  accepted_community_guidelines: -1,
 };
 
 describe("signup form (feedback part)", () => {
   beforeEach(() => {
-    signupFlowFeedbackMock.mockResolvedValue(stateAfterFeedback);
+    signupFlowFeedbackMock.mockResolvedValue(flowResponseAfterFeedback);
     window.localStorage.setItem(
       "auth.flowState",
       JSON.stringify(stateBeforeFeedback)
     );
   });
 
-  it("works", async () => {
+  it.only("works", async () => {
     const { result } = renderHook(() => useAuthContext(), {
       wrapper,
     });
@@ -57,15 +62,14 @@ describe("signup form (feedback part)", () => {
       await screen.findByLabelText(EXPERTISE_LABEL),
       "I have lots of expertise!"
     );
+    userEvent.click(await screen.findByLabelText("Yes"));
     userEvent.click(await screen.findByRole("button", { name: SUBMIT }));
 
     await waitFor(() => {
       expect(signupFlowFeedbackMock).toBeCalledTimes(1);
       const params = signupFlowFeedbackMock.mock.calls[0];
       expect(params[0]).toBe("dummy-token");
-      expect(params[1].contribute).toBe(
-        ContributeOption.CONTRIBUTE_OPTION_UNSPECIFIED
-      );
+      expect(params[1].contribute).toBe("yes");
       expect(params[1].expertise).toBe("I have lots of expertise!");
     });
 
@@ -94,7 +98,7 @@ describe("signup form (feedback part)", () => {
     expect(signupFlowFeedbackMock).toHaveBeenCalledWith(
       "dummy-token",
       expect.objectContaining({
-        contribute: ContributeOption.CONTRIBUTE_OPTION_UNSPECIFIED,
+        contribute: "no",
       })
     );
 

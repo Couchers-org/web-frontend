@@ -14,14 +14,12 @@ import {
 import Alert from "components/Alert";
 import Button from "components/Button";
 import TextField from "components/TextField";
-import { RpcError } from "grpc-web";
-import {
-  ContributeOption,
-  ContributorForm as ContributorFormPb,
-} from "proto/auth_pb";
 import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import { ContributeOption, Feedback } from "service/auth";
+import { HttpError } from "service/http";
+import isHttpError from "utils/isHttpError";
 
 import {
   CONTRIBUTE_LABEL,
@@ -67,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ContributorFormProps {
-  processForm: (form: ContributorFormPb.AsObject) => Promise<void>;
+  processForm: (form: Feedback) => Promise<void>;
   autofocus?: boolean;
 }
 
@@ -83,36 +81,37 @@ export default function ContributorForm({
       shouldUnregister: false,
     });
 
-  const mutation = useMutation<void, RpcError, ContributorInputs>(
+  const mutation = useMutation<void, HttpError, ContributorInputs>(
     async (data) => {
-      let contribute = ContributeOption.CONTRIBUTE_OPTION_UNSPECIFIED;
-      switch (data.contribute) {
-        case "Yes":
-          contribute = ContributeOption.CONTRIBUTE_OPTION_YES;
-          break;
-        case "Maybe":
-          contribute = ContributeOption.CONTRIBUTE_OPTION_MAYBE;
-          break;
-        case "No":
-          contribute = ContributeOption.CONTRIBUTE_OPTION_NO;
-          break;
-      }
-      const form = new ContributorFormPb()
-        .setIdeas(data.ideas)
-        .setFeatures(data.features)
-        .setExperience(data.experience)
-        .setContribute(contribute)
-        .setContributeWaysList(
-          Object.entries(data.contributeWays).reduce<string[]>(
-            //contributeWays is an object of "ways" as keys, and "checked" booleans as values
-            //this reduces it to an array of the "ways" which were keys with "true" as a value
-            (previous, [contributeWay, checked]) =>
-              checked ? [...previous, contributeWay] : previous,
-            []
-          )
-        )
-        .setExpertise(data.expertise);
-      await processForm(form.toObject());
+      const contribute: ContributeOption | null =
+        data.contribute === "No"
+          ? "no"
+          : data.contribute === "Maybe"
+          ? "maybe"
+          : data.contribute === "Yes"
+          ? "yes"
+          : null;
+
+      const contributeWaysList = Object.entries(data.contributeWays).reduce<
+        string[]
+      >(
+        //contributeWays is an object of "ways" as keys, and "checked" booleans as values
+        //this reduces it to an array of the "ways" which were keys with "true" as a value
+        (previous, [contributeWay, checked]) =>
+          checked ? [...previous, contributeWay] : previous,
+        []
+      );
+
+      const feedback = {
+        ideas: data.ideas,
+        features: data.features,
+        experience: data.experience,
+        contribute,
+        contributeWaysList,
+        expertise: data.expertise,
+      };
+
+      await processForm(feedback);
     }
   );
 
@@ -123,11 +122,13 @@ export default function ContributorForm({
   const watchContribute = watch("contribute");
   const ideasInputRef = useRef<HTMLInputElement>();
 
+  const errorMessage = isHttpError(mutation.error)
+    ? mutation.error?.error_messages[0]
+    : "";
+
   return (
     <>
-      {mutation.error && (
-        <Alert severity="error">{mutation.error.message || ""}</Alert>
-      )}
+      {mutation.error && <Alert severity="error">{errorMessage}</Alert>}
       {mutation.isSuccess ? (
         <Typography variant="body1">{SUCCESS_MSG}</Typography>
       ) : (

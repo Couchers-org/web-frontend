@@ -70,7 +70,7 @@ function CurrentForm() {
   const classes = useStyles();
   const { authState } = useAuthContext();
   const state = authState.flowState;
-  if (!state || state.needBasic) {
+  if (!state) {
     return (
       <>
         <Typography variant="h1" gutterBottom>
@@ -123,18 +123,7 @@ function CurrentForm() {
         <FeedbackForm />
       </>
     );
-  } else if (state.needVerifyEmail) {
-    return (
-      <>
-        <Typography variant="h1" gutterBottom>
-          {t("auth:sign_up_completed_title")}
-        </Typography>
-        <Typography variant="body1">
-          {t("auth:sign_up_completed_prompt")}
-        </Typography>
-      </>
-    );
-  } else if (state.authRes) {
+  } else if (state.isCompleted) {
     return (
       <>
         <Typography variant="h1" gutterBottom>
@@ -153,7 +142,7 @@ function CurrentForm() {
 export default function Signup() {
   const { t } = useTranslation([AUTH, GLOBAL]);
   const { authState, authActions } = useAuthContext();
-  const authenticated = authState.authenticated;
+  const isSignupComplete = authState.flowState?.isCompleted;
   const error = authState.error;
   const authClasses = useAuthStyles();
   const classes = useStyles();
@@ -168,7 +157,7 @@ export default function Signup() {
 
   return (
     <>
-      {authenticated && <Redirect to={dashboardRoute} />}
+      {isSignupComplete && <Redirect to={loginRoute} />}
       <HtmlMeta title={t("global:sign_up")} />
       <div
         className={classNames(

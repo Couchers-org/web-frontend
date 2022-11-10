@@ -14,12 +14,12 @@ import { HttpError } from "service/http";
 import {
   emailValidationPattern,
   lowercaseAndTrimField,
+  nameValidationPattern,
   passwordValidationPattern,
-  usernameValidationPattern,
 } from "utils/validation";
 
 type SignupBasicInputs = {
-  username: string;
+  name: string;
   email: string;
   password: string;
 };
@@ -44,24 +44,14 @@ export default function BasicForm({
 
   const mutation = useMutation<void, HttpError, SignupBasicInputs>(
     async (data) => {
-      const sanitizedUsername = lowercaseAndTrimField(data.username);
       const sanitizedEmail = lowercaseAndTrimField(data.email);
       const { password } = data;
-      // TODO - persist the user id returned from in the createUser response
-      await service.auth.createUser(
-        sanitizedUsername,
+      const signupFlow = await service.auth.startSignup(
+        data.name,
         sanitizedEmail,
         password
       );
-      const authState = {
-        flowToken: "",
-        needBasic: false,
-        needAccount: true,
-        needFeedback: true,
-        needVerifyEmail: true,
-        needAcceptCommunityGuidelines: true,
-      };
-      return authActions.updateSignupState(authState);
+      return authActions.updateSignupState(signupFlow);
     },
     {
       onSettled() {
@@ -79,7 +69,7 @@ export default function BasicForm({
     mutation.mutate(data);
   });
 
-  const usernameInputRef = useRef<HTMLInputElement>();
+  const nameInputRef = useRef<HTMLInputElement>();
 
   const formSubmitErrors = Object.values(mutation.error?.errors || {})
     .flat()
@@ -93,28 +83,28 @@ export default function BasicForm({
     <>
       {mutation.error && formSubmitErrors}
       <form className={authClasses.form} onSubmit={onSubmit}>
-        <InputLabel className={authClasses.formLabel} htmlFor="username">
-          {t("auth:basic_form.username.field_label")}
+        <InputLabel className={authClasses.formLabel} htmlFor="name">
+          {t("auth:basic_form.name.field_label")}
         </InputLabel>
         <TextField
-          id="username"
+          id="name"
           fullWidth
           className={authClasses.formField}
-          name="username"
+          name="name"
           variant="standard"
           inputRef={(el: HTMLInputElement | null) => {
-            if (!usernameInputRef.current) el?.focus();
-            if (el) usernameInputRef.current = el;
+            if (!nameInputRef.current) el?.focus();
+            if (el) nameInputRef.current = el;
             register(el, {
               pattern: {
-                message: t("auth:basic_form.username.empty_error"),
-                value: usernameValidationPattern,
+                message: t("auth:basic_form.name.empty_error"),
+                value: nameValidationPattern,
               },
-              required: t("auth:basic_form.username.required_error"),
+              required: t("auth:basic_form.name.required_error"),
             });
           }}
-          helperText={errors?.username?.message ?? " "}
-          error={!!errors?.username?.message}
+          helperText={errors?.name?.message ?? " "}
+          error={!!errors?.name?.message}
         />
         <InputLabel className={authClasses.formLabel} htmlFor="email">
           {t("auth:basic_form.email.field_label")}

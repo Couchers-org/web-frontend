@@ -24,11 +24,11 @@ import useAuthStyles from "features/auth/useAuthStyles";
 import { RpcError } from "grpc-web";
 import { Trans, useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
-import { HostingStatus } from "proto/api_pb";
 import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
+import { HostingStatus } from "service/auth";
 import makeStyles from "utils/makeStyles";
 import {
   lowercaseAndTrimField,
@@ -86,19 +86,20 @@ export default function AccountForm() {
       hostingStatus,
       location,
     }) => {
-      const state = await service.auth.signupFlowAccount({
-        flowToken: authState.flowState!.flowToken,
-        username: lowercaseAndTrimField(username),
-        password: password,
-        birthdate: birthdate.format().split("T")[0],
-        gender,
-        acceptTOS,
-        hostingStatus,
-        city: location.address,
-        lat: location.lat,
-        lng: location.lng,
-        radius: location.radius,
-      });
+      const state = await service.auth.signupFlowAccount(
+        authState.flowState!.flowToken,
+        {
+          username: lowercaseAndTrimField(username),
+          password: password,
+          birthdate: birthdate.format().split("T")[0],
+          gender,
+          acceptedTOS: acceptTOS ? 1 : -1,
+          hostingStatus,
+          city: location.address,
+          geom: `POINT (${location.lat} ${location.lng})`,
+          geomRadius: location.radius,
+        }
+      );
       authActions.updateSignupState(state);
     },
     {
@@ -160,14 +161,6 @@ export default function AccountForm() {
                 value: usernameValidationPattern,
               },
               required: t("auth:account_form.username.required_error"),
-              validate: async (username: string) => {
-                const valid = await service.auth.validateUsername(
-                  lowercaseAndTrimField(username)
-                );
-                return (
-                  valid || t("auth:account_form.username.username_taken_error")
-                );
-              },
             });
           }}
           helperText={errors?.username?.message ?? " "}
@@ -266,29 +259,18 @@ export default function AccountForm() {
             render={({ onChange, value }) => (
               <Select
                 onChange={(event) => {
-                  onChange(Number.parseInt(event.target.value as string) || "");
+                  onChange(event.target.value);
                 }}
                 value={value}
                 id="hosting-status"
                 fullWidth
                 className={authClasses.formField}
-                options={[
-                  "",
-                  HostingStatus.HOSTING_STATUS_CAN_HOST,
-                  HostingStatus.HOSTING_STATUS_MAYBE,
-                  HostingStatus.HOSTING_STATUS_CANT_HOST,
-                ]}
+                options={["", "can_host", "maybe", "cant_host"]}
                 optionLabelMap={{
                   "": "",
-                  [HostingStatus.HOSTING_STATUS_CAN_HOST]: t(
-                    "auth:account_form.hosting_status.can_host"
-                  ),
-                  [HostingStatus.HOSTING_STATUS_MAYBE]: t(
-                    "auth:account_form.hosting_status.maybe"
-                  ),
-                  [HostingStatus.HOSTING_STATUS_CANT_HOST]: t(
-                    "auth:account_form.hosting_status.cant_host"
-                  ),
+                  can_host: t("auth:account_form.hosting_status.can_host"),
+                  maybe: t("auth:account_form.hosting_status.maybe"),
+                  cant_host: t("auth:account_form.hosting_status.cant_host"),
                 }}
               />
             )}

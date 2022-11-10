@@ -53,3 +53,12 @@ export async function put<T, U>(
   const init = { method: "put", body: JSON.stringify(body), ...config };
   return await http<U>(path, init);
 }
+
+export async function patch<T, U>(
+  path: string,
+  body: T,
+  config?: Omit<RequestInit, "body">
+): Promise<U> {
+  const init = { method: "PATCH", body: JSON.stringify(body), ...config };
+  return await http<U>(path, init);
+}

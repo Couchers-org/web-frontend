@@ -151,47 +151,23 @@ describe("tokenLogin action", () => {
   });
 });
 
-describe("firstLogin action", () => {
-  it("sets state correctly", async () => {
-    const { result } = renderHook(() => useAuthStore(), { wrapper });
-    expect(result.current.authState.error).toBe(null);
-    expect(result.current.authState.userId).toBe(null);
-    expect(result.current.authState.jailed).toBe(false);
-    expect(result.current.authState.authenticated).toBe(false);
-    await act(() =>
-      result.current.authActions.firstLogin({
-        userId: 55,
-        jailed: false,
-      })
-    );
-    expect(result.current.authState.error).toBe(null);
-    expect(result.current.authState.userId).toBe(55);
-    expect(result.current.authState.jailed).toBe(false);
-    expect(result.current.authState.authenticated).toBe(true);
-  });
-});
-
 describe("updateSignupState action", () => {
   it("sets state correctly if in progress", async () => {
     const { result } = renderHook(() => useAuthStore(), { wrapper });
     expect(result.current.authState.error).toBe(null);
     expect(result.current.authState.userId).toBe(null);
-    expect(result.current.authState.jailed).toBe(false);
     expect(result.current.authState.authenticated).toBe(false);
     expect(result.current.authState.flowState).toBe(null);
     await act(() =>
       result.current.authActions.updateSignupState({
-        flowToken: "dummy-token",
-        needBasic: false,
-        needAccount: true,
-        needFeedback: true,
-        needVerifyEmail: true,
-        needAcceptCommunityGuidelines: true,
+        flow_token: "dummy-token",
+        account_is_filled: false,
+        filled_feedback: false,
+        accepted_current_community_guidelines: false,
       })
     );
     expect(result.current.authState.error).toBe(null);
     expect(result.current.authState.userId).toBe(null);
-    expect(result.current.authState.jailed).toBe(false);
     expect(result.current.authState.authenticated).toBe(false);
     expect(result.current.authState.flowState?.flowToken).toBe("dummy-token");
   });
@@ -200,27 +176,17 @@ describe("updateSignupState action", () => {
     const { result } = renderHook(() => useAuthStore(), { wrapper });
     expect(result.current.authState.error).toBe(null);
     expect(result.current.authState.userId).toBe(null);
-    expect(result.current.authState.jailed).toBe(false);
     expect(result.current.authState.authenticated).toBe(false);
     expect(result.current.authState.flowState).toBe(null);
     await act(() =>
       result.current.authActions.updateSignupState({
-        flowToken: "",
-        authRes: {
-          userId: 51,
-          jailed: false,
-        },
-        needBasic: false,
-        needAccount: false,
-        needFeedback: false,
-        needVerifyEmail: false,
-        needAcceptCommunityGuidelines: false,
+        flow_token: "",
+        user_created: true,
       })
     );
     expect(result.current.authState.error).toBe(null);
-    expect(result.current.authState.userId).toBe(51);
-    expect(result.current.authState.jailed).toBe(false);
-    expect(result.current.authState.authenticated).toBe(true);
+    expect(result.current.authState.userId).toBe(null);
+    expect(result.current.authState.authenticated).toBe(false);
     expect(result.current.authState.flowState).toBe(null);
   });
 });

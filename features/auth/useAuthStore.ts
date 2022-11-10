@@ -2,13 +2,21 @@ import * as Sentry from "@sentry/nextjs";
 import { userKey } from "features/queryKeys";
 import { useTranslation } from "i18n";
 import { GLOBAL } from "i18n/namespaces";
-import { AuthRes, SignupFlowRes } from "proto/auth_pb";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 import { service } from "service";
+import { SignupFlowRes } from "service/auth";
 import isGrpcError from "utils/isGrpcError";
 
 type StorageType = "localStorage" | "sessionStorage";
+
+export interface SignupFlow {
+  flowToken: string;
+  needAccount: boolean;
+  needFeedback: boolean;
+  needAcceptCommunityGuidelines: boolean;
+  isCompleted: boolean;
+}
 
 export function usePersistedState<T>(
   key: string,
@@ -51,8 +59,10 @@ export default function useAuthStore() {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [flowState, setFlowState] =
-    usePersistedState<SignupFlowRes.AsObject | null>("auth.flowState", null);
+  const [flowState, setFlowState] = usePersistedState<SignupFlow | null>(
+    "auth.flowState",
+    null
+  );
 
   //this is used to set the current user in the user cache
   //may as well not waste the api call since it is needed for userId
@@ -118,20 +128,20 @@ export default function useAuthStore() {
         }
         setLoading(false);
       },
-      async updateSignupState(state: SignupFlowRes.AsObject) {
+      async updateSignupState(signupFlowRes: SignupFlowRes) {
+        const state = {
+          flowToken: signupFlowRes.flow_token,
+          isCompleted: !!signupFlowRes.user_created,
+          needAccount: !signupFlowRes.account_is_filled,
+          needFeedback: !signupFlowRes.filled_feedback,
+          needAcceptCommunityGuidelines:
+            !signupFlowRes.accepted_current_community_guidelines,
+        };
         setFlowState(state);
-        if (state.authRes) {
+        if (state.isCompleted) {
           setFlowState(null);
-          authActions.firstLogin(state.authRes!);
           return;
         }
-      },
-      async firstLogin(res: AuthRes.AsObject) {
-        setError(null);
-        setUserId(res.userId);
-        Sentry.setUser({ id: res.userId.toString() });
-        setJailed(res.jailed);
-        setAuthenticated(true);
       },
       async tokenLogin(loginToken: string) {
         setError(null);
