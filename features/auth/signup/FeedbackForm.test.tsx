@@ -47,7 +47,7 @@ describe("signup form (feedback part)", () => {
     );
   });
 
-  it("works", async () => {
+  it.only("works", async () => {
     const { result } = renderHook(() => useAuthContext(), {
       wrapper,
     });

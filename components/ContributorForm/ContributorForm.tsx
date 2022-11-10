@@ -14,8 +14,6 @@ import {
 import Alert from "components/Alert";
 import Button from "components/Button";
 import TextField from "components/TextField";
-import { useTranslation } from "i18n";
-import { GLOBAL } from "i18n/namespaces";
 import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
@@ -127,7 +125,7 @@ export default function ContributorForm({
 
   const errorMessage = isHttpError(mutation.error)
     ? mutation.error?.error_messages[0]
-    : t("global:error.fatal_message");
+    : "";
 
   return (
     <>
