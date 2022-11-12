@@ -18,7 +18,7 @@ import { Feedback } from "./auth";
 import { post } from "./http";
 
 export interface ContributorFormInfo {
-  filledContributorForm: boolean
+  filledContributorForm: boolean;
 }
 
 export async function getAccountInfo() {
@@ -70,12 +70,12 @@ export async function getContributorFormInfo() {
   // TODO implement API call to backend
   // https://github.com/Couchers-org/backend-v2/issues/65
   return Promise.resolve({
-    filledContributorForm: false
-  })
+    filledContributorForm: false,
+  });
 }
 
 export async function fillContributorForm(form: Feedback) {
-  return post("contributor_forms/", form)
+  return post("contributor_forms/", form);
 }
 
 export function deleteAccount(confirm: boolean, reason?: string) {

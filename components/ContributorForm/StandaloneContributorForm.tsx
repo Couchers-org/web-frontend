@@ -7,7 +7,7 @@ import { contributorFormInfoQueryKey } from "features/queryKeys";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { service } from "service";
-import { ContributorFormInfo } from "service/account"
+import { ContributorFormInfo } from "service/account";
 import { Feedback } from "service/auth";
 
 import { ALREADY_FILLED_IN, FILL_IN_AGAIN, SUCCESS_MSG } from "./constants";

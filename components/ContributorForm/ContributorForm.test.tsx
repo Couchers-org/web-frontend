@@ -73,7 +73,7 @@ describe("contributor form", () => {
     const processForm = jest.fn(() =>
       Promise.reject({
         error_messages: ["Unexpected error"],
-        status_code: 500
+        status_code: 500,
       })
     );
     mockConsoleError();
