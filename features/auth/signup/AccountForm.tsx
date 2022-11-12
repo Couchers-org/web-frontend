@@ -33,13 +33,11 @@ import makeStyles from "utils/makeStyles";
 import {
   lowercaseAndTrimField,
   usernameValidationPattern,
-  validatePassword,
   validatePastDate,
 } from "utils/validation";
 
 type SignupAccountInputs = {
   username: string;
-  password: string;
   name: string;
   birthdate: Dayjs;
   gender: string;
@@ -79,7 +77,6 @@ export default function AccountForm() {
   const mutation = useMutation<void, RpcError, SignupAccountInputs>(
     async ({
       username,
-      password,
       birthdate,
       gender,
       acceptTOS,
@@ -90,7 +87,6 @@ export default function AccountForm() {
         authState.flowState!.flowToken,
         {
           username: lowercaseAndTrimField(username),
-          password: password,
           birthdate: birthdate.format().split("T")[0],
           gender,
           acceptedTOS: acceptTOS ? 1 : -1,
@@ -165,25 +161,6 @@ export default function AccountForm() {
           }}
           helperText={errors?.username?.message ?? " "}
           error={!!errors?.username?.message}
-        />
-        <InputLabel className={authClasses.formLabel} htmlFor="password">
-          {t("auth:account_form.password.field_label")}
-        </InputLabel>
-        <TextField
-          className={authClasses.formField}
-          variant="standard"
-          type="password"
-          id="password"
-          name="password"
-          fullWidth
-          inputRef={register({
-            required: t("auth:account_form.password.required_error"),
-            validate: (password) =>
-              validatePassword(password) ||
-              t("auth:account_form.password.validation_error"),
-          })}
-          helperText={errors?.password?.message ?? " "}
-          error={!!errors?.password?.message}
         />
         <InputLabel className={authClasses.formLabel} htmlFor="birthdate">
           {t("auth:account_form.birthday.field_label")}

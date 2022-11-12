@@ -22,7 +22,6 @@ export interface Feedback {
 
 export interface AccountDetails {
   username: string;
-  password: string;
   birthdate: string;
   city: string;
   geom: string;
@@ -124,7 +123,6 @@ export async function signupFlowAccount(
 ): Promise<SignupFlowRes> {
   return client.patch(`signup_flows/${flowToken}/`, {
     username: accountDetails.username,
-    password: accountDetails.password,
     birthdate: accountDetails.birthdate,
     city: accountDetails.city,
     geom: accountDetails.geom,

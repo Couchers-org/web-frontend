@@ -68,12 +68,6 @@ describe("AccountForm", () => {
         ),
         "test"
       );
-      userEvent.type(
-        await screen.findByLabelText(
-          t("auth:account_form.password.field_label")
-        ),
-        "a very insecure password"
-      );
       const birthdayField = screen.getByLabelText(
         t("auth:account_form.birthday.field_label")
       );
@@ -111,7 +105,6 @@ describe("AccountForm", () => {
       await waitFor(() => {
         expect(signupFlowAccountMock).toHaveBeenCalledWith("token", {
           username: "test",
-          password: "a very insecure password",
           birthdate: "1990-01-01",
           gender: "Woman",
           acceptedTOS: 1,
@@ -136,7 +129,6 @@ describe("AccountForm", () => {
       await waitFor(() => {
         expect(signupFlowAccountMock).toHaveBeenCalledWith("token", {
           username: "test",
-          password: "a very insecure password",
           birthdate: "1990-01-01",
           gender: "Woman",
           acceptedTOS: 1,
