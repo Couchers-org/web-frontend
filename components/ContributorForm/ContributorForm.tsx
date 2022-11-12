@@ -73,7 +73,6 @@ export default function ContributorForm({
   processForm,
   autofocus = false,
 }: ContributorFormProps) {
-  const { t } = useTranslation([GLOBAL]);
   const classes = useStyles();
 
   const { control, register, handleSubmit, errors, watch } =
