@@ -65,7 +65,7 @@ export type HostingPreferenceData = Omit<
  * Login user using password
  */
 export async function passwordLogin(username: string, password: string) {
-  return http.post<LoginReq, LoginRes>("login/", {username, password})
+  return http.post<LoginReq, LoginRes>("login/", { username, password });
 }
 
 /**
@@ -266,5 +266,5 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  * Logout user
  */
 export function logout() {
-  return http.authenticatedPost("logout/", {})
+  return http.authenticatedPost("logout/", {});
 }

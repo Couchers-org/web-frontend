@@ -32,11 +32,9 @@ describe("AuthProvider", () => {
     expect(mockSetHandler).toBeCalled();
     await act(async () => {
       await handler({
-        error_messages: [
-          "Unable to log in with provided credentials."
-        ],
+        error_messages: ["Unable to log in with provided credentials."],
         errors: {},
-        status_code: 400
+        status_code: 400,
       } as HttpError);
     });
     expect(result.current.authState.authenticated).toBe(false);

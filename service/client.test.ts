@@ -14,11 +14,9 @@ describe("AuthInterceptor", () => {
     const errorHandler = jest.fn();
     const invokerMock = jest.fn(() => {
       throw {
-        error_messages: [
-          "Invalid token."
-        ],
-        status_code: 401
-      }
+        error_messages: ["Invalid token."],
+        status_code: 401,
+      };
     });
     const interceptor = new AuthInterceptor();
     setUnauthenticatedErrorHandler(errorHandler);

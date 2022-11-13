@@ -62,7 +62,7 @@ export default function LoginForm() {
         });
         const errorMessage = isHttpError(e)
           ? (e.error_messages || [])[0]
-          :  t("global:error.fatal_message");
+          : t("global:error.fatal_message");
         authActions.authError(errorMessage);
       }
       setLoading(false);

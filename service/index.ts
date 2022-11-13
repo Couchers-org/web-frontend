@@ -8,7 +8,6 @@ import * as discussions from "./discussions";
 import * as donations from "./donations";
 import * as events from "./events";
 import * as groups from "./groups";
-import * as http from "./http";
 import * as jail from "./jail";
 import * as notifications from "./notifications";
 import * as pages from "./pages";
@@ -43,5 +42,5 @@ export const service = {
   user,
 } as const;
 
-export * as http from "./http"
+export * as http from "./http";
 export type { HostingPreferenceData, UpdateUserProfileData } from "./user";

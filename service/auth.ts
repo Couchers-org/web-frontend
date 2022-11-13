@@ -5,7 +5,7 @@ import {
   UnsubscribeReq,
   UsernameValidReq,
 } from "proto/auth_pb";
-import { http } from "service"
+import { http } from "service";
 import client from "service/client";
 
 export type HostingStatus = "can_host" | "maybe" | "cant_host";

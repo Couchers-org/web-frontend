@@ -58,7 +58,10 @@ export default function useAuthStore() {
     "auth.userId",
     null
   );
-  const [token, setToken] = usePersistedState<string | null>("auth.token", null)
+  const [token, setToken] = usePersistedState<string | null>(
+    "auth.token",
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [flowState, setFlowState] = usePersistedState<SignupFlow | null>(
@@ -84,14 +87,13 @@ export default function useAuthStore() {
         setError(null);
         setLoading(true);
         try {
-          await service.user.logout()
-            .catch(e => {
-              const isTokenError = isHttpError(e) && e.status_code === 401
-              if (!isTokenError) throw e
-            });
+          await service.user.logout().catch((e) => {
+            const isTokenError = isHttpError(e) && e.status_code === 401;
+            if (!isTokenError) throw e;
+          });
           setAuthenticated(false);
           setUserId(null);
-          setToken(null)
+          setToken(null);
           Sentry.setUser({ id: undefined });
         } catch (e) {
           Sentry.captureException(e, {
@@ -119,7 +121,7 @@ export default function useAuthStore() {
         setLoading(true);
         try {
           const auth = await service.user.passwordLogin(username, password);
-          setToken(auth.auth_token)
+          setToken(auth.auth_token);
           setUserId(auth.user_id);
           Sentry.setUser({ id: auth.user_id.toString() });
 
@@ -181,7 +183,14 @@ export default function useAuthStore() {
     }),
     //note: there should be no dependenices on the state or t, or
     //some useEffects will break. Eg. the token login in Login.tsx
-    [setAuthenticated, setJailed, setUserId, setToken, setFlowState, queryClient]
+    [
+      setAuthenticated,
+      setJailed,
+      setUserId,
+      setToken,
+      setFlowState,
+      queryClient,
+    ]
   );
 
   return {

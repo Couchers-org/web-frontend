@@ -9,11 +9,9 @@ export interface HttpError {
 }
 
 function getAuthToken(): string {
-  const rawToken = window.localStorage.getItem("auth.token")
-  const token = rawToken && rawToken?.length > 0
-    ? JSON.parse(rawToken)
-    : ""
-  return token
+  const rawToken = window.localStorage.getItem("auth.token");
+  const token = rawToken && rawToken?.length > 0 ? JSON.parse(rawToken) : "";
+  return token;
 }
 
 async function http<T>(
@@ -39,17 +37,20 @@ async function http<T>(
   return responseBody;
 }
 
-async function authenticatedHttp<T>(endpoint: string, configOverride:RequestInit): Promise<T> {
+async function authenticatedHttp<T>(
+  endpoint: string,
+  configOverride: RequestInit
+): Promise<T> {
   const config = {
     headers: {
       "content-type": "application/json",
-      "authorization": `token ${getAuthToken()}`
+      authorization: `token ${getAuthToken()}`,
     },
-    mode: 'cors' as RequestMode,
+    mode: "cors" as RequestMode,
     ...configOverride,
   };
 
-  return await http<T>(endpoint, config)
+  return await http<T>(endpoint, config);
 }
 
 export async function get<T>(path: string, config?: RequestInit): Promise<T> {

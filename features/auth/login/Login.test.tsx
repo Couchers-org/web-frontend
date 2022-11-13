@@ -12,11 +12,9 @@ const passwordLoginMock = service.user.passwordLogin as jest.MockedFunction<
 
 it("shows the known error from the API", async () => {
   passwordLoginMock.mockRejectedValue({
-    error_messages: [
-      "Unable to log in with provided credentials."
-    ],
+    error_messages: ["Unable to log in with provided credentials."],
     errors: {},
-    status_code: 400
+    status_code: 400,
   });
   render(<Login />, { wrapper });
 
@@ -41,7 +39,7 @@ it("shows the known error from the API", async () => {
 
 it("shows the fatal error message for unknown errors", async () => {
   passwordLoginMock.mockRejectedValue({
-    status_code: 500
+    status_code: 500,
   });
   render(<Login />, { wrapper });
 

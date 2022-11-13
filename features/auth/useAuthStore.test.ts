@@ -82,7 +82,7 @@ describe("useAuthStore hook", () => {
   it("logs out with an expired token", async () => {
     logoutMock.mockRejectedValue({
       error_messages: ["Invalid token."],
-      status_code: 401
+      status_code: 401,
     });
     addDefaultUser();
     const { result } = renderHook(() => useAuthStore(), { wrapper });
@@ -108,7 +108,10 @@ describe("useAuthStore hook", () => {
 
 describe("passwordLogin action", () => {
   it("sets authenticated state correctly", async () => {
-    passwordLoginMock.mockResolvedValue({ auth_token: 'test-token', user_id: 1 });
+    passwordLoginMock.mockResolvedValue({
+      auth_token: "test-token",
+      user_id: 1,
+    });
     const { result } = renderHook(() => useAuthStore(), {
       wrapper,
     });
@@ -125,11 +128,9 @@ describe("passwordLogin action", () => {
   });
   it("sets error correctly for login fail", async () => {
     passwordLoginMock.mockRejectedValue({
-      error_messages: [
-        "Unable to log in with provided credentials."
-      ],
+      error_messages: ["Unable to log in with provided credentials."],
       errors: {},
-      status_code: 400
+      status_code: 400,
     });
     const { result } = renderHook(() => useAuthStore(), { wrapper });
     expect(result.current.authState.authenticated).toBe(false);
