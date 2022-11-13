@@ -21,7 +21,7 @@ import { SearchPromiseClient } from "proto/search_grpc_web_pb";
 import { ThreadsPromiseClient } from "proto/threads_grpc_web_pb";
 import isHttpError from "utils/isHttpError";
 
-import { authenticatedPost, get, HttpError, patch, post, put } from "./http";
+import { HttpError } from "./http";
 
 const URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -93,11 +93,6 @@ const client = {
   resources: new ResourcesPromiseClient(URL, null, opts),
   search: new SearchPromiseClient(URL, null, opts),
   threads: new ThreadsPromiseClient(URL, null, opts),
-  get,
-  patch,
-  post,
-  authenticatedPost,
-  put,
 };
 
 if (

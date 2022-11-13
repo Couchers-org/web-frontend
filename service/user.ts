@@ -12,6 +12,7 @@ import {
   UpdateProfileReq,
   User,
 } from "proto/api_pb";
+import { http } from "service";
 import client from "service/client";
 import { ProtoToJsTypes } from "utils/types";
 
@@ -64,7 +65,7 @@ export type HostingPreferenceData = Omit<
  * Login user using password
  */
 export async function passwordLogin(username: string, password: string) {
-  return client.post<LoginReq, LoginRes>("login/", {username, password})
+  return http.post<LoginReq, LoginRes>("login/", {username, password})
 }
 
 /**
@@ -265,5 +266,5 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  * Logout user
  */
 export function logout() {
-  return client.authenticatedPost("logout/", {})
+  return http.authenticatedPost("logout/", {})
 }

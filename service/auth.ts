@@ -5,6 +5,7 @@ import {
   UnsubscribeReq,
   UsernameValidReq,
 } from "proto/auth_pb";
+import { http } from "service"
 import client from "service/client";
 
 export type HostingStatus = "can_host" | "maybe" | "cant_host";
@@ -91,7 +92,7 @@ export async function createUser(
   email: string,
   password: string
 ) {
-  return client.post<CreateUserReq, CreateUserRes>("users/", {
+  return http.post<CreateUserReq, CreateUserRes>("users/", {
     username,
     email,
     password,
@@ -110,7 +111,7 @@ export async function startSignup(
   email: string,
   password: string
 ) {
-  return client.post<CreateSignupFlowReq, SignupFlowRes>("signup_flows/", {
+  return http.post<CreateSignupFlowReq, SignupFlowRes>("signup_flows/", {
     name,
     email,
     password,
@@ -121,7 +122,7 @@ export async function signupFlowAccount(
   flowToken: string,
   accountDetails: AccountDetails
 ): Promise<SignupFlowRes> {
-  return client.patch(`signup_flows/${flowToken}/`, {
+  return http.patch(`signup_flows/${flowToken}/`, {
     username: accountDetails.username,
     birthdate: accountDetails.birthdate,
     city: accountDetails.city,
@@ -137,7 +138,7 @@ export async function signupFlowFeedback(
   flowToken: string,
   feedback: Feedback
 ): Promise<SignupFlowRes> {
-  return client.patch(`signup_flows/${flowToken}/`, {
+  return http.patch(`signup_flows/${flowToken}/`, {
     filled_feedback: true,
     ideas: feedback.ideas,
     features: feedback.features,
@@ -149,7 +150,7 @@ export async function signupFlowFeedback(
 }
 
 export async function activateUser(uid: string, token: string) {
-  return client.post<ActivateUserReq, ActivateUserRes>("users/activation/", {
+  return http.post<ActivateUserReq, ActivateUserRes>("users/activation/", {
     uid,
     token,
   });
@@ -159,7 +160,7 @@ export async function signupFlowCommunityGuidelines(
   flowToken: string,
   guidelinesVersion: number
 ): Promise<SignupFlowRes> {
-  return client.patch(`signup_flows/${flowToken}/`, {
+  return http.patch(`signup_flows/${flowToken}/`, {
     accepted_community_guidelines: guidelinesVersion,
   });
 }
