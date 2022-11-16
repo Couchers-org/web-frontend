@@ -300,7 +300,7 @@ describe("Signup", () => {
     expect(await screen.findByText("Guideline 1")).toBeVisible();
   });
 
-  it("displays the feedback form when  feedback is pending", async () => {
+  it("displays the feedback form when feedback is pending", async () => {
     const state: SignupFlow = {
       isCompleted: false,
       needAccount: false,
