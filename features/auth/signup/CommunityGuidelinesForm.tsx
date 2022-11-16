@@ -32,7 +32,7 @@ export default function CommunityGuidelinesForm() {
 
   const errorMessage = isHttpError(mutation.error)
     ? mutation.error?.error_messages[0]
-    : "";
+    : t("global:error.fatal_message");
 
   return (
     <>
