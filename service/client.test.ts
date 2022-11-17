@@ -13,10 +13,7 @@ describe("AuthInterceptor", () => {
   it("calls a set UnauthenticatedErrorHandler on unauthenticated error", async () => {
     const errorHandler = jest.fn();
     const invokerMock = jest.fn(() => {
-      throw {
-        error_messages: ["Invalid token."],
-        status_code: 401,
-      };
+      throw { code: StatusCode.UNAUTHENTICATED, message: "Unauthenticated" }; //eslint-disable-line no-throw-literal
     });
     const interceptor = new AuthInterceptor();
     setUnauthenticatedErrorHandler(errorHandler);

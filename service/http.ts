@@ -1,3 +1,6 @@
+import { httpTimeout } from "appConstants";
+import isHttpError from "utils/isHttpError";
+
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export interface HttpError {
@@ -8,11 +11,22 @@ export interface HttpError {
   };
 }
 
+let _unauthenticatedErrorHandler: (
+  e: HttpError
+) => Promise<void> = async () => {};
+export const setUnauthenticatedErrorHandler = (
+  f: (e: HttpError) => Promise<void>
+) => {
+  _unauthenticatedErrorHandler = f;
+};
+
 function getAuthToken(): string {
   const rawToken = window.localStorage.getItem("auth.token");
   const token = rawToken && rawToken?.length > 0 ? JSON.parse(rawToken) : "";
   return token;
 }
+
+const httpAbortController = new AbortController();
 
 async function http<T>(
   endpoint: string,
@@ -23,10 +37,13 @@ async function http<T>(
     headers: {
       "content-type": "application/json",
     },
+    signal: httpAbortController.signal,
     ...configOverride,
   };
   const request = new Request(url, config);
   const response = await fetch(request);
+
+  setTimeout(httpAbortController.abort, httpTimeout);
 
   const responseBody = await response.json().catch(() => ({}));
 
@@ -50,7 +67,12 @@ async function authenticatedHttp<T>(
     ...configOverride,
   };
 
-  return await http<T>(endpoint, config);
+  return http<T>(endpoint, config).catch((e) => {
+    if (isHttpError(e) && e.status_code === 401) {
+      _unauthenticatedErrorHandler(e);
+    }
+    throw e;
+  });
 }
 
 export async function get<T>(path: string, config?: RequestInit): Promise<T> {
@@ -75,6 +97,7 @@ export async function authenticatedPost<T, U>(
   const init = { method: "post", body: JSON.stringify(body), ...config };
   return await authenticatedHttp<U>(path, init);
 }
+
 export async function put<T, U>(
   path: string,
   body?: T,
