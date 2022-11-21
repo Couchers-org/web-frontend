@@ -88,12 +88,7 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * @returns {Promise<User.AsObject>}
  */
 export async function getUser(user: string): Promise<User.AsObject> {
-  const userReq = new GetUserReq();
-  userReq.setUser(user || "");
-
-  const response = await client.api.getUser(userReq);
-
-  return response.toObject();
+  return http.authenticedGet(`users/${user}/`)
 }
 
 /**
