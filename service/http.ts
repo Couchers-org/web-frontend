@@ -26,13 +26,12 @@ function getAuthToken(): string {
   return token;
 }
 
-const httpAbortController = new AbortController();
-
 async function http<T>(
   endpoint: string,
   configOverride: RequestInit
 ): Promise<T> {
   const url = new URL(endpoint, API_URL).toString();
+  const httpAbortController = new AbortController();
   const config = {
     headers: {
       "content-type": "application/json",
@@ -43,7 +42,7 @@ async function http<T>(
   const request = new Request(url, config);
   const response = await fetch(request);
 
-  setTimeout(httpAbortController.abort, httpTimeout);
+  setTimeout(() => httpAbortController.abort(), httpTimeout);
 
   const responseBody = await response.json().catch(() => ({}));
 
@@ -67,11 +66,11 @@ async function authenticatedHttp<T>(
     ...configOverride,
   };
 
-  return http<T>(endpoint, config).catch((e) => {
-    if (isHttpError(e) && e.status_code === 401) {
-      _unauthenticatedErrorHandler(e);
+  return http<T>(endpoint, config).catch((error) => {
+    if (isHttpError(error) && error.status_code === 401) {
+      _unauthenticatedErrorHandler(error);
     }
-    throw e;
+    throw error;
   });
 }
 

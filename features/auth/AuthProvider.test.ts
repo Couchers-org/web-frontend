@@ -3,7 +3,7 @@ import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { service } from "service";
 import { HttpError } from "service/http";
 
-import * as client from "../../service/client";
+import * as client from "../../service/http";
 import wrapper from "../../test/hookWrapper";
 import { addDefaultUser, t } from "../../test/utils";
 import { useAuthContext } from "./AuthProvider";
@@ -34,7 +34,7 @@ describe("AuthProvider", () => {
       await handler({
         error_messages: ["Unable to log in with provided credentials."],
         errors: {},
-        status_code: 400,
+        status_code: 401,
       } as HttpError);
     });
     expect(result.current.authState.authenticated).toBe(false);

@@ -2,7 +2,7 @@ import { useTranslation } from "i18n";
 import { AUTH } from "i18n/namespaces";
 import React, { Context, ReactNode, useContext, useEffect } from "react";
 import { loginRoute } from "routes";
-import { setUnauthenticatedErrorHandler } from "service/client";
+import { setUnauthenticatedErrorHandler } from "service/http";
 import useStablePush from "utils/useStablePush";
 
 import useAuthStore, { AuthStoreType } from "./useAuthStore";
@@ -25,7 +25,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setUnauthenticatedErrorHandler(async () => {
-      await store.authActions.logout();
+      store.authActions.resetAuthState();
       store.authActions.authError(t("logged_out_message"));
       push(loginRoute);
     });

@@ -83,18 +83,22 @@ export default function useAuthStore() {
       clearError() {
         setError(null);
       },
+      async resetAuthState() {
+        setAuthenticated(false);
+        setUserId(null);
+        setToken(null);
+        window.sessionStorage.clear();
+        Sentry.setUser({ id: undefined });
+      },
       async logout() {
         setError(null);
         setLoading(true);
         try {
-          await service.user.logout().catch((e) => {
-            const isTokenError = isHttpError(e) && e.status_code === 401;
-            if (!isTokenError) throw e;
-          });
-          setAuthenticated(false);
-          setUserId(null);
-          setToken(null);
-          Sentry.setUser({ id: undefined });
+          await service.user.logout()
+            .catch((e) => {
+              const isTokenError = isHttpError(e) && e.status_code === 401;
+              if (!isTokenError) throw e;
+            });
         } catch (e) {
           Sentry.captureException(e, {
             tags: {
@@ -107,7 +111,8 @@ export default function useAuthStore() {
             : fatalErrorMessage.current;
           setError(errorMessage);
         }
-        window.sessionStorage.clear();
+
+        this.resetAuthState();
         setLoading(false);
       },
       async passwordLogin({
