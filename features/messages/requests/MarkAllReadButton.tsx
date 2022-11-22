@@ -14,12 +14,12 @@ const useStyles = makeStyles((theme) => ({
   markAsReadButton: {
     border: `1px solid ${theme.palette.grey[800]}`,
     borderRadius: theme.shape.borderRadius,
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   markAsReadIcon: {
     marginInlineEnd: theme.spacing(1),
-    fontSize: theme.typography.body1.fontSize
-  }
+    fontSize: theme.typography.body1.fontSize,
+  },
 }));
 
 export default function MarkAllReadButton({
@@ -87,7 +87,12 @@ export default function MarkAllReadButton({
         <Snackbar severity="error">{markAll.error.message}</Snackbar>
       )}
 
-      <Button className={classes.markAsReadButton} loading={markAll.isLoading} variant="text" onClick={() => markAll.mutate()}>
+      <Button
+        className={classes.markAsReadButton}
+        loading={markAll.isLoading}
+        variant="text"
+        onClick={() => markAll.mutate()}
+      >
         <DoneAllIcon className={classes.markAsReadIcon} />
         <Typography component="span">
           {t("mark_all_read_button_text")}

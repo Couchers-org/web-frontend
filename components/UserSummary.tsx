@@ -36,12 +36,12 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
-  linkIcon: { 
-    display: "block", 
+  linkIcon: {
+    display: "block",
     marginInlineStart: theme.spacing(0.5),
     height: "1.25rem",
     width: "1.25rem",
-},
+  },
   titleAndBarContainer: {
     display: "grid",
     gridGap: theme.spacing(0.5),
