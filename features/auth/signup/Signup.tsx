@@ -8,10 +8,12 @@ import MobileAuthBg from "features/auth/resources/mobile-auth-bg.jpg";
 import CommunityGuidelinesForm from "features/auth/signup/CommunityGuidelinesForm";
 import { Trans, useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import vercelLogo from "resources/vercel.svg";
-import { loginRoute, tosRoute } from "routes";
+import { dashboardRoute, loginRoute, tosRoute } from "routes";
 import makeStyles from "utils/makeStyles";
+import stringOrFirstString from "utils/stringOrFirstString";
 
 import { useAuthContext } from "../AuthProvider";
 import useAuthStyles from "../useAuthStyles";
@@ -141,8 +143,10 @@ function CurrentForm() {
 
 export default function Signup() {
   const { t } = useTranslation([AUTH, GLOBAL]);
+  const router = useRouter();
   const { authState, authActions } = useAuthContext();
   const isSignupComplete = authState.flowState?.isCompleted;
+  const authenticated = authState.authenticated
   const error = authState.error;
   const authClasses = useAuthStyles();
   const classes = useStyles();
@@ -155,9 +159,19 @@ export default function Signup() {
     if (authState.error) window.scroll({ top: 0, behavior: "smooth" });
   }, [authState.error]);
 
+
+  const redirectFrom = stringOrFirstString(router.query.from) ?? dashboardRoute;
+  const redirectTo = isSignupComplete
+    ? loginRoute
+    : authenticated
+      ? redirectFrom === "/" || redirectFrom === "%2F"
+        ? dashboardRoute
+        : redirectFrom
+      : "";
+
   return (
     <>
-      {isSignupComplete && <Redirect to={loginRoute} />}
+      {redirectTo && <Redirect to={redirectTo} />}
       <HtmlMeta title={t("global:sign_up")} />
       <div
         className={classNames(

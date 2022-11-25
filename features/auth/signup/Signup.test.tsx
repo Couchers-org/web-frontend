@@ -7,7 +7,7 @@ import { hostingStatusLabels } from "features/profile/constants";
 import mockRouter from "next-router-mock";
 import { HostingStatus } from "proto/api_pb";
 import TagManager from "react-gtm-module";
-import { loginRoute, signupRoute } from "routes";
+import { dashboardRoute,loginRoute, signupRoute } from "routes";
 import { service } from "service";
 import wrapper from "test/hookWrapper";
 import {
@@ -339,4 +339,10 @@ describe("Signup", () => {
     mockConsoleError();
     await assertErrorAlert("Permission denied");
   });
+
+  it("redirects authenticated users away from the signup flow", async () => {
+    window.localStorage.setItem("auth.authenticated", "true");
+    render(<View />, { wrapper });
+    await waitFor(() => expect(mockRouter.pathname).toBe(dashboardRoute));
+  })
 });
