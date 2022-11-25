@@ -88,7 +88,7 @@ export default function useAuthStore() {
         setUserId(null);
         setToken(null);
         window.sessionStorage.clear();
-        Sentry.setUser({ id: undefined });
+        Sentry.setUser(null);
       },
       async logout() {
         setError(null);
