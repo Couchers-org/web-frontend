@@ -26,10 +26,10 @@ function getAuthToken(): string {
   return token;
 }
 
-async function http<T>(
+async function http<TResponse>(
   endpoint: string,
   configOverride: RequestInit
-): Promise<T> {
+): Promise<TResponse> {
   const url = new URL(endpoint, API_URL).toString();
   const httpAbortController = new AbortController();
   const config = {
@@ -53,10 +53,10 @@ async function http<T>(
   return responseBody;
 }
 
-async function authenticatedHttp<T>(
+async function authenticatedHttp<TResponse>(
   endpoint: string,
   configOverride: RequestInit
-): Promise<T> {
+): Promise<TResponse> {
   const config = {
     headers: {
       "content-type": "application/json",
@@ -66,7 +66,7 @@ async function authenticatedHttp<T>(
     ...configOverride,
   };
 
-  return http<T>(endpoint, config).catch((error) => {
+  return http<TResponse>(endpoint, config).catch((error) => {
     if (isHttpError(error) && error.status_code === 401) {
       _unauthenticatedErrorHandler(error);
     }
@@ -74,51 +74,54 @@ async function authenticatedHttp<T>(
   });
 }
 
-export async function get<T>(path: string, config?: RequestInit): Promise<T> {
-  const init = { method: "get", ...config };
-  return await http<T>(path, init);
-}
-
-export async function authenticedGet<T>(
+export async function get<TResponse>(
   path: string,
   config?: RequestInit
-): Promise<T> {
+): Promise<TResponse> {
   const init = { method: "get", ...config };
-  return await authenticatedHttp<T>(path, init);
+  return await http<TResponse>(path, init);
 }
 
-export async function post<T, U>(
+export async function authenticedGet<TResponse>(
   path: string,
-  body: T,
+  config?: RequestInit
+): Promise<TResponse> {
+  const init = { method: "get", ...config };
+  return await authenticatedHttp<TResponse>(path, init);
+}
+
+export async function post<TBody, TResponse>(
+  path: string,
+  body: TBody,
   config?: Omit<RequestInit, "body">
-): Promise<U> {
+): Promise<TResponse> {
   const init = { method: "post", body: JSON.stringify(body), ...config };
-  return await http<U>(path, init);
+  return await http<TResponse>(path, init);
 }
 
-export async function authenticatedPost<T, U>(
+export async function authenticatedPost<TBody, TResponse>(
   path: string,
-  body: T,
+  body: TBody,
   config?: Omit<RequestInit, "body">
-): Promise<U> {
+): Promise<TResponse> {
   const init = { method: "post", body: JSON.stringify(body), ...config };
-  return await authenticatedHttp<U>(path, init);
+  return await authenticatedHttp<TResponse>(path, init);
 }
 
-export async function put<T, U>(
+export async function put<TBody, TResponse>(
   path: string,
-  body?: T,
+  body?: TBody,
   config?: Omit<RequestInit, "body">
-): Promise<U> {
+): Promise<TResponse> {
   const init = { method: "put", body: JSON.stringify(body), ...config };
-  return await http<U>(path, init);
+  return await http<TResponse>(path, init);
 }
 
-export async function patch<T, U>(
+export async function patch<TBody, TResponse>(
   path: string,
-  body: T,
+  body: TBody,
   config?: Omit<RequestInit, "body">
-): Promise<U> {
+): Promise<TResponse> {
   const init = { method: "PATCH", body: JSON.stringify(body), ...config };
-  return await http<U>(path, init);
+  return await http<TResponse>(path, init);
 }
