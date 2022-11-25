@@ -94,11 +94,10 @@ export default function useAuthStore() {
         setError(null);
         setLoading(true);
         try {
-          await service.user.logout()
-            .catch((e) => {
-              const isTokenError = isHttpError(e) && e.status_code === 401;
-              if (!isTokenError) throw e;
-            });
+          await service.user.logout().catch((e) => {
+            const isTokenError = isHttpError(e) && e.status_code === 401;
+            if (!isTokenError) throw e;
+          });
         } catch (e) {
           Sentry.captureException(e, {
             tags: {

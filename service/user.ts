@@ -1,7 +1,6 @@
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import wrappers from "google-protobuf/google/protobuf/wrappers_pb";
 import {
-  GetUserReq,
   LanguageAbility,
   NullableBoolValue,
   NullableStringValue,
@@ -88,7 +87,7 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * @returns {Promise<User.AsObject>}
  */
 export async function getUser(user: string): Promise<User.AsObject> {
-  return http.authenticedGet(`users/${user}/`)
+  return http.authenticedGet(`users/${user}/`);
 }
 
 /**

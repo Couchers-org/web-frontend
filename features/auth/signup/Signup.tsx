@@ -141,7 +141,7 @@ function CurrentForm() {
 }
 
 export default function Signup() {
-  useRedirectAuthenticatedUsers()
+  useRedirectAuthenticatedUsers();
   const { t } = useTranslation([AUTH, GLOBAL]);
   const { authState, authActions } = useAuthContext();
   const isSignupComplete = authState.flowState?.isCompleted;

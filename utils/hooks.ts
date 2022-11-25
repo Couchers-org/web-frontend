@@ -1,5 +1,3 @@
-import stringOrFirstString from "utils/stringOrFirstString";
-
 import * as Sentry from "@sentry/nextjs";
 import { useAuthContext } from "features/auth/AuthProvider";
 import { LngLat } from "maplibre-gl";
@@ -13,14 +11,13 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  dashboardRoute,
-} from "routes";
+import { dashboardRoute } from "routes";
 import {
   filterDuplicatePlaces,
   NominatimPlace,
   simplifyPlaceDisplayName,
 } from "utils/nominatim";
+import stringOrFirstString from "utils/stringOrFirstString";
 
 // Locations having one of these keys are considered non-regions.
 // https://nominatim.org/release-docs/latest/api/Output/#addressdetails
@@ -186,17 +183,18 @@ function useRedirectAuthenticatedUsers() {
   const router = useRouter();
   const { authState } = useAuthContext();
 
-  const authenticated = authState.authenticated
+  const authenticated = authState.authenticated;
   const redirectFrom = stringOrFirstString(router.query.from) ?? dashboardRoute;
-  const redirectTo = redirectFrom === "/" || redirectFrom === "%2F"
-    ? dashboardRoute
-    : redirectFrom
+  const redirectTo =
+    redirectFrom === "/" || redirectFrom === "%2F"
+      ? dashboardRoute
+      : redirectFrom;
 
   useEffect(() => {
     if (authenticated) {
       router.push(redirectTo);
     }
-  }, [authenticated, redirectTo]);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [authenticated, redirectTo]); // eslint-disable-line react-hooks/exhaustive-deps
   // router excluded from deps because instance changes. @see https://github.com/vercel/next.js/issues/18127
 }
 

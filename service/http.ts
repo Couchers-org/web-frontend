@@ -79,7 +79,10 @@ export async function get<T>(path: string, config?: RequestInit): Promise<T> {
   return await http<T>(path, init);
 }
 
-export async function authenticedGet<T>(path: string, config?: RequestInit): Promise<T> {
+export async function authenticedGet<T>(
+  path: string,
+  config?: RequestInit
+): Promise<T> {
   const init = { method: "get", ...config };
   return await authenticatedHttp<T>(path, init);
 }
