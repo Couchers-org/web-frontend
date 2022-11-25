@@ -25,10 +25,6 @@ const startSignupMock = service.auth.startSignup as MockedService<
 const signupFlowAccountMock = service.auth.signupFlowAccount as MockedService<
   typeof service.auth.signupFlowAccount
 >;
-const getCommunityGuidelinesMock = service.resources
-  .getCommunityGuidelines as MockedService<
-  typeof service.resources.getCommunityGuidelines
->;
 const signupFlowCommunityGuidelinesMock = service.auth
   .signupFlowCommunityGuidelines as MockedService<
   typeof service.auth.signupFlowCommunityGuidelines
@@ -64,18 +60,6 @@ jest.mock("components/EditLocationMap", () => ({
 describe("Signup", () => {
   beforeEach(() => {
     mockRouter.setCurrentUrl(signupRoute);
-    getCommunityGuidelinesMock.mockResolvedValue([
-      {
-        title: "Guideline 1",
-        guideline: "Follow guideline 1",
-        icon: "<svg></svg>",
-      },
-      {
-        title: "Guideline 2",
-        guideline: "Follow guideline 2",
-        icon: "<svg></svg>",
-      },
-    ]);
   });
 
   describe("flow steps", () => {
@@ -158,7 +142,7 @@ describe("Signup", () => {
         screen.getByRole("button", { name: t("global:sign_up") })
       );
 
-      expect(await screen.findByText("Guideline 1")).toBeVisible();
+      expect(await screen.findByText(t("auth:community_guidelines_form.header"))).toBeVisible();
     });
 
     it("guidelines -> contributor form works", async () => {
@@ -284,7 +268,7 @@ describe("Signup", () => {
     };
     window.localStorage.setItem("auth.flowState", JSON.stringify(state));
     render(<View />, { wrapper });
-    expect(await screen.findByText("Guideline 1")).toBeVisible();
+    expect(await screen.findByText(t("auth:community_guidelines_form.header"))).toBeVisible();
   });
 
   it("displays the guidelines form when only it and feedback are pending", async () => {
@@ -297,7 +281,7 @@ describe("Signup", () => {
     };
     window.localStorage.setItem("auth.flowState", JSON.stringify(state));
     render(<View />, { wrapper });
-    expect(await screen.findByText("Guideline 1")).toBeVisible();
+    expect(await screen.findByText(t("auth:community_guidelines_form.header"))).toBeVisible();
   });
 
   it("displays the feedback form when feedback is pending", async () => {

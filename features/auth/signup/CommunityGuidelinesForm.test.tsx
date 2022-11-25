@@ -14,10 +14,6 @@ const signupFlowCommunityGuidelinesMock = service.auth
   .signupFlowCommunityGuidelines as MockedService<
   typeof service.auth.signupFlowCommunityGuidelines
 >;
-const getCommunityGuidelinesMock = service.resources
-  .getCommunityGuidelines as MockedService<
-  typeof service.resources.getCommunityGuidelines
->;
 
 describe("community guidelines signup form", () => {
   beforeEach(() => {
@@ -30,18 +26,6 @@ describe("community guidelines signup form", () => {
         needAcceptCommunityGuidelines: true,
       })
     );
-    getCommunityGuidelinesMock.mockResolvedValue([
-      {
-        title: "Guideline 1",
-        guideline: "Follow guideline 1",
-        icon: "<svg></svg>",
-      },
-      {
-        title: "Guideline 2",
-        guideline: "Follow guideline 2",
-        icon: "<svg></svg>",
-      },
-    ]);
   });
   it("works only with all boxes checked", async () => {
     signupFlowCommunityGuidelinesMock.mockResolvedValue({

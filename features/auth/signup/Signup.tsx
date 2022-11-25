@@ -10,7 +10,7 @@ import { Trans, useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
 import { useEffect } from "react";
 import vercelLogo from "resources/vercel.svg";
-import { dashboardRoute, loginRoute, tosRoute } from "routes";
+import { loginRoute, tosRoute } from "routes";
 import makeStyles from "utils/makeStyles";
 
 import { useAuthContext } from "../AuthProvider";
