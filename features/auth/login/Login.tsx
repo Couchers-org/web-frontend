@@ -5,33 +5,20 @@ import HtmlMeta from "components/HtmlMeta";
 import StyledLink from "components/StyledLink";
 import { Trans, useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import vercelLogo from "resources/vercel.svg";
-import { dashboardRoute, signupRoute } from "routes";
-import stringOrFirstString from "utils/stringOrFirstString";
+import { signupRoute } from "routes";
+import { useRedirectAuthenticatedUsers } from "utils/hooks";
 
 import { useAuthContext } from "../AuthProvider";
 import useAuthStyles from "../useAuthStyles";
 import LoginForm from "./LoginForm";
 
 export default function Login() {
+  useRedirectAuthenticatedUsers()
   const { t } = useTranslation([AUTH, GLOBAL]);
   const { authState } = useAuthContext();
-  const authenticated = authState.authenticated;
   const error = authState.error;
-
-  const router = useRouter();
-  const from = stringOrFirstString(router.query.from) ?? dashboardRoute;
-  const redirectTo = from === "/" || from === "%2F" ? dashboardRoute : from;
-
   const authClasses = useAuthStyles();
-
-  useEffect(() => {
-    if (authenticated) {
-      router.push(redirectTo);
-    }
-  }, [authenticated, router, redirectTo]);
 
   return (
     <>

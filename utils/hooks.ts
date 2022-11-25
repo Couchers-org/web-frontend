@@ -1,4 +1,7 @@
+import stringOrFirstString from "utils/stringOrFirstString";
+
 import * as Sentry from "@sentry/nextjs";
+import { useAuthContext } from "features/auth/AuthProvider";
 import { LngLat } from "maplibre-gl";
 import { useRouter } from "next/router";
 import {
@@ -10,6 +13,9 @@ import {
   useRef,
   useState,
 } from "react";
+import {
+  dashboardRoute,
+} from "routes";
 import {
   filterDuplicatePlaces,
   NominatimPlace,
@@ -176,10 +182,29 @@ function useUnsavedChangesWarning({
   }, [isDirty, router.events, isSubmitted, warningMessage]);
 }
 
+function useRedirectAuthenticatedUsers() {
+  const router = useRouter();
+  const { authState } = useAuthContext();
+
+  const authenticated = authState.authenticated
+  const redirectFrom = stringOrFirstString(router.query.from) ?? dashboardRoute;
+  const redirectTo = redirectFrom === "/" || redirectFrom === "%2F"
+    ? dashboardRoute
+    : redirectFrom
+
+  useEffect(() => {
+    if (authenticated) {
+      router.push(redirectTo);
+    }
+  }, [authenticated, redirectTo]);  // eslint-disable-line react-hooks/exhaustive-deps
+  // router excluded from deps because instance changes. @see https://github.com/vercel/next.js/issues/18127
+}
+
 export {
   useGeocodeQuery,
   useIsMounted,
   usePrevious,
+  useRedirectAuthenticatedUsers,
   useSafeState,
   useUnsavedChangesWarning,
 };

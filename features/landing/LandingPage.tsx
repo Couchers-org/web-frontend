@@ -22,11 +22,11 @@ import { Trans, useTranslation } from "next-i18next";
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 import vercelLogo from "resources/vercel.svg";
+import { useRedirectAuthenticatedUsers } from "utils/hooks"
 import makeStyles from "utils/makeStyles";
 
 import {
   blogRoute,
-  dashboardRoute,
   forumURL,
   loginRoute,
   signupRoute,
@@ -87,9 +87,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LandingPage() {
+  useRedirectAuthenticatedUsers()
   const { t } = useTranslation([GLOBAL, LANDING, AUTH]);
   const { authState } = useAuthContext();
-  const authenticated = authState.authenticated
   const flowState = authState.flowState;
 
   const router = useRouter();
@@ -117,13 +117,6 @@ export default function LandingPage() {
       block: "center",
     });
   };
-
-  useEffect(() => {
-    if (authenticated) {
-      router.push(dashboardRoute);
-    }
-  }, [authenticated]);  // eslint-disable-line react-hooks/exhaustive-deps
-  // router excluded from deps because instance changes. @see https://github.com/vercel/next.js/issues/18127
 
   return (
     <>
