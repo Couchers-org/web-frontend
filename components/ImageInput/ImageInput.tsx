@@ -22,21 +22,6 @@ import { useMutation } from "react-query";
 import { service } from "service";
 import { ImageInputValues } from "service/api";
 
-import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from "./constants";
-
-/*
-  .eventConverPhoto {
-    width: 100%;
-  }
-
-  @media (min-width: 960px) {
-    .eventCoverPhoto {
-      height: 200px;
-    }
-  }
-
-*/
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -105,7 +90,6 @@ interface RectImgInputProps extends ImageInputProps {
   width?: number;
 }
 
-//TODO: Here sends the cropped image to the server??
 export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
   const { className, control, id, initialPreviewSrc, name } = props;
   const classes = useStyles();
@@ -123,7 +107,7 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
     {
       onSuccess: async (data: ImageInputValues) => {
         field.onChange(data.key);
-        setImageUrl(data.thumbnail_url);
+        setImageUrl(data.full_url);
         confirmedUpload.current = data;
         setFile(null);
         await props.onSuccess?.(data);
