@@ -39,6 +39,7 @@ const MOCK_FILE = new File([], "example.jpg");
 const MOCK_KEY = "key123";
 const MOCK_INITIAL_SRC = "https://example.com/initialPreview.jpg";
 const MOCK_THUMB = "thumb.jpg";
+const MOCK_FULL_IMAGE = "full.jpg";
 const NAME = "Test User";
 
 describe.each`
@@ -124,7 +125,7 @@ describe.each`
       expect(submitForm).toHaveBeenCalledWith({ imageInput: MOCK_KEY });
       expect(
         screen.getByAltText(getAvatarLabel(NAME)).getAttribute("src")
-      ).toMatch(new RegExp(MOCK_THUMB));
+      ).toMatch(new RegExp(MOCK_FULL_IMAGE));
     });
   });
 
@@ -197,7 +198,7 @@ describe.each`
     });
     expect(
       screen.getByAltText(getAvatarLabel(NAME)).getAttribute("src")
-    ).toMatch(/thumb0.jpg/);
+    ).toMatch(/full0.jpg/);
 
     //2nd upload and cancel
     userEvent.upload(
@@ -208,7 +209,7 @@ describe.each`
     userEvent.click(screen.getByLabelText(CANCEL_UPLOAD));
     expect(
       (await screen.findByAltText(getAvatarLabel(NAME))).getAttribute("src")
-    ).toMatch(/thumb0.jpg/);
+    ).toMatch(/full0.jpg/);
 
     //submit
     userEvent.click(screen.getByRole("button", { name: t("global:submit") }));
