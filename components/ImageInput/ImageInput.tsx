@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     display: "flex",
-    width: "100%"
+    width: "100%",
   },
   avatar: {
     "& img": { objectFit: "cover" },
