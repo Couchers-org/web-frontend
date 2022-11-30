@@ -23,6 +23,12 @@ import { service } from "service";
 import { ImageInputValues } from "service/api";
 
 const useStyles = makeStyles((theme) => ({
+  eventPhoto: {
+    height: 100,
+    [theme.breakpoints.up("md")]: {
+      height: 200,
+    },
+  },
   root: {
     display: "flex",
     flexDirection: "column",
@@ -192,14 +198,13 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
             </MuiIconButton>
           ) : (
             <img
-              className={classNames(classes.image, className, {
+              className={classNames(classes.image, classes.eventPhoto, className, {
                 [classes.imageGrow]: props.grow,
               })}
               src={imageUrl ?? "/img/imagePlaceholder.svg"}
               style={{ objectFit: !imageUrl ? "contain" : undefined }}
               alt={props.alt}
               width={"100%"}
-              height={"200px"}
             />
           )}
           {mutation.isLoading && (
