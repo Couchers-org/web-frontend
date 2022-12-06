@@ -119,6 +119,7 @@ export default function UserSummary({
             <StyledLink
               href={routeToUser(user.username)}
               target="_blank"
+              rel="noopener noreferrer"
               className={classes.link}
             >
               {title}
