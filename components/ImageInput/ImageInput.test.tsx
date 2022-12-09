@@ -119,7 +119,7 @@ describe.each`
       full_url: MOCK_FULL_IMAGE,
     });
 
-    let expectedImage:string = MOCK_FULL_IMAGE;
+    let expectedImage: string = MOCK_FULL_IMAGE;
     if (type === "avatar") {
       expectedImage = MOCK_THUMB;
     }
@@ -190,13 +190,11 @@ describe.each`
       full_url: "full0.jpg",
     });
 
-    
-    let expectedImage:RegExp = /full0.jpg/;
+    let expectedImage = /full0.jpg/;
     if (type === "avatar") {
       expectedImage = /thumb0.jpg/;
     }
 
-    
     //first upload and confirm
     userEvent.upload(
       screen.getByLabelText(SELECT_AN_IMAGE) as HTMLInputElement,

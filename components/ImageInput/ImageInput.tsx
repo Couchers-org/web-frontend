@@ -21,6 +21,7 @@ import { Control, useController } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
 import { ImageInputValues } from "service/api";
+
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from "./constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -109,7 +110,9 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
     {
       onSuccess: async (data: ImageInputValues) => {
         field.onChange(data.key);
-        setImageUrl(props.type === "avatar" ? data.thumbnail_url : data.full_url);
+        setImageUrl(
+          props.type === "avatar" ? data.thumbnail_url : data.full_url
+        );
         confirmedUpload.current = data;
         setFile(null);
         await props.onSuccess?.(data);
@@ -160,7 +163,10 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
 
   const handleCancel = () => {
     field.onChange(confirmedUpload.current?.key ?? "");
-    let imageUrl = props.type === "avatar" ? confirmedUpload.current?.thumbnail_url : confirmedUpload.current?.full_url;
+    const imageUrl =
+      props.type === "avatar"
+        ? confirmedUpload.current?.thumbnail_url
+        : confirmedUpload.current?.full_url;
     setImageUrl(imageUrl ?? initialPreviewSrc);
     setFile(null);
   };
