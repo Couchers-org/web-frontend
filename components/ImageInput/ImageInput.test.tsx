@@ -218,7 +218,7 @@ describe.each`
     expect(await screen.findByLabelText(CANCEL_UPLOAD)).toBeVisible();
     userEvent.click(screen.getByLabelText(CANCEL_UPLOAD));
     expect(
-      (await screen.findByAltText(getAvatarLabel(NAME))).getAttribute("src") // FIXME: Here fails for the react variation
+      (await screen.findByAltText(getAvatarLabel(NAME))).getAttribute("src")
     ).toMatch(expectedImage);
 
     //submit
