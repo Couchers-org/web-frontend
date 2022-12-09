@@ -53,7 +53,7 @@ describe.each`
       filename: MOCK_FILE.name,
       key: MOCK_KEY,
       thumbnail_url: MOCK_THUMB,
-      full_url: "full.jpg",
+      full_url: MOCK_FULL_IMAGE,
     });
     const Form = () => {
       const { control, handleSubmit, errors } = useForm();
@@ -116,8 +116,13 @@ describe.each`
       filename: MOCK_FILE.name,
       key: MOCK_KEY,
       thumbnail_url: MOCK_THUMB,
-      full_url: "full.jpg",
+      full_url: MOCK_FULL_IMAGE,
     });
+
+    let expectedImage:string = MOCK_FULL_IMAGE;
+    if (type === "avatar") {
+      expectedImage = MOCK_THUMB;
+    }
 
     userEvent.click(screen.getByRole("button", { name: t("global:submit") }));
 
@@ -125,7 +130,7 @@ describe.each`
       expect(submitForm).toHaveBeenCalledWith({ imageInput: MOCK_KEY });
       expect(
         screen.getByAltText(getAvatarLabel(NAME)).getAttribute("src")
-      ).toMatch(new RegExp(MOCK_FULL_IMAGE));
+      ).toMatch(new RegExp(expectedImage));
     });
   });
 
@@ -185,6 +190,13 @@ describe.each`
       full_url: "full0.jpg",
     });
 
+    
+    let expectedImage:RegExp = /full0.jpg/;
+    if (type === "avatar") {
+      expectedImage = /thumb0.jpg/;
+    }
+
+    
     //first upload and confirm
     userEvent.upload(
       screen.getByLabelText(SELECT_AN_IMAGE) as HTMLInputElement,
@@ -198,7 +210,7 @@ describe.each`
     });
     expect(
       screen.getByAltText(getAvatarLabel(NAME)).getAttribute("src")
-    ).toMatch(/full0.jpg/);
+    ).toMatch(expectedImage);
 
     //2nd upload and cancel
     userEvent.upload(
@@ -208,8 +220,8 @@ describe.each`
     expect(await screen.findByLabelText(CANCEL_UPLOAD)).toBeVisible();
     userEvent.click(screen.getByLabelText(CANCEL_UPLOAD));
     expect(
-      (await screen.findByAltText(getAvatarLabel(NAME))).getAttribute("src")
-    ).toMatch(/full0.jpg/);
+      (await screen.findByAltText(getAvatarLabel(NAME))).getAttribute("src") // FIXME: Here fails for the react variation
+    ).toMatch(expectedImage);
 
     //submit
     userEvent.click(screen.getByRole("button", { name: t("global:submit") }));

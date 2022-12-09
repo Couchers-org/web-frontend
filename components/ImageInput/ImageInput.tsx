@@ -21,14 +21,9 @@ import { Control, useController } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
 import { ImageInputValues } from "service/api";
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from "./constants";
 
 const useStyles = makeStyles((theme) => ({
-  eventPhoto: {
-    height: 100,
-    [theme.breakpoints.up("md")]: {
-      height: 200,
-    },
-  },
   root: {
     display: "flex",
     flexDirection: "column",
@@ -92,8 +87,8 @@ interface RectImgInputProps extends ImageInputProps {
   type: "rect";
   alt: string;
   grow?: boolean;
-  height?: number;
-  width?: number;
+  height?: string;
+  width?: string;
 }
 
 export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
@@ -105,6 +100,7 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
   const [imageUrl, setImageUrl] = useState(initialPreviewSrc);
   const [file, setFile] = useState<File | null>(null);
   const [readerError, setReaderError] = useState("");
+
   const mutation = useMutation<ImageInputValues, Error>(
     () =>
       file
@@ -113,7 +109,7 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
     {
       onSuccess: async (data: ImageInputValues) => {
         field.onChange(data.key);
-        setImageUrl(data.full_url);
+        setImageUrl(props.type === "avatar" ? data.thumbnail_url : data.full_url);
         confirmedUpload.current = data;
         setFile(null);
         await props.onSuccess?.(data);
@@ -164,7 +160,8 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
 
   const handleCancel = () => {
     field.onChange(confirmedUpload.current?.key ?? "");
-    setImageUrl(confirmedUpload.current?.thumbnail_url ?? initialPreviewSrc);
+    let imageUrl = props.type === "avatar" ? confirmedUpload.current?.thumbnail_url : confirmedUpload.current?.full_url;
+    setImageUrl(imageUrl ?? initialPreviewSrc);
     setFile(null);
   };
 
@@ -198,13 +195,14 @@ export function ImageInput(props: AvatarInputProps | RectImgInputProps) {
             </MuiIconButton>
           ) : (
             <img
-              className={classNames(classes.image, classes.eventPhoto, className, {
+              className={classNames(classes.image, className, {
                 [classes.imageGrow]: props.grow,
               })}
               src={imageUrl ?? "/img/imagePlaceholder.svg"}
               style={{ objectFit: !imageUrl ? "contain" : undefined }}
               alt={props.alt}
-              width={"100%"}
+              width={props.width ?? DEFAULT_WIDTH}
+              height={props.height ?? DEFAULT_HEIGHT}
             />
           )}
           {mutation.isLoading && (
