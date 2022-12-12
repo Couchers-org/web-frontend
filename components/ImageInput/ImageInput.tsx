@@ -46,6 +46,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   image: {
+    height: 100,
+    [theme.breakpoints.up("md")]: {
+      height: 200,
+    },
+    width: "100%",
     objectFit: "cover",
     cursor: "pointer",
     "&:hover": {
