@@ -4,11 +4,11 @@ import Button from "components/Button";
 import CircularProgress from "components/CircularProgress";
 import ContributorForm from "components/ContributorForm";
 import { contributorFormInfoQueryKey } from "features/queryKeys";
-import { GetContributorFormInfoRes } from "proto/account_pb";
-import { ContributorForm as ContributorFormPb } from "proto/auth_pb";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { service } from "service";
+import { ContributorFormInfo } from "service/account";
+import { Feedback } from "service/auth";
 
 import { ALREADY_FILLED_IN, FILL_IN_AGAIN, SUCCESS_MSG } from "./constants";
 
@@ -23,12 +23,12 @@ export default function StandaloneContributorForm() {
     data,
     isLoading: queryLoading,
     error: queryError,
-  } = useQuery<GetContributorFormInfoRes.AsObject, Error>(
+  } = useQuery<ContributorFormInfo, Error>(
     contributorFormInfoQueryKey,
     service.account.getContributorFormInfo
   );
 
-  const handleSubmit = async (form: ContributorFormPb.AsObject) => {
+  const handleSubmit = async (form: Feedback) => {
     await service.account.fillContributorForm(form);
     queryClient.invalidateQueries(contributorFormInfoQueryKey);
     setFillState("success");

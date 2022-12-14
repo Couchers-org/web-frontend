@@ -6,11 +6,6 @@ export async function getTermsOfService() {
   return res.toObject();
 }
 
-export async function getCommunityGuidelines() {
-  const res = await client.resources.getCommunityGuidelines(new Empty());
-  return res.toObject();
-}
-
 export async function getRegions() {
   const regions = await client.resources.getRegions(new Empty());
   return regions.toObject();

@@ -42,12 +42,9 @@ jest.mock("components/EditLocationMap", () => ({
 describe("AccountForm", () => {
   beforeEach(() => {
     signupFlowAccountMock.mockResolvedValue({
-      flowToken: "token",
-      needBasic: false,
-      needAccount: false,
-      needFeedback: true,
-      needAcceptCommunityGuidelines: true,
-      needVerifyEmail: false,
+      flow_token: "token",
+      account_is_filled: true,
+      filled_feedback: false,
     });
     validateUsernameMock.mockResolvedValue(true);
   });
@@ -58,10 +55,8 @@ describe("AccountForm", () => {
         "auth.flowState",
         JSON.stringify({
           flowToken: "token",
-          needBasic: false,
           needAccount: true,
           needFeedback: false,
-          needVerifyEmail: false,
           needAcceptCommunityGuidelines: true,
         })
       );
@@ -72,12 +67,6 @@ describe("AccountForm", () => {
           t("auth:account_form.username.field_label")
         ),
         "test"
-      );
-      userEvent.type(
-        await screen.findByLabelText(
-          t("auth:account_form.password.field_label")
-        ),
-        "a very insecure password"
       );
       const birthdayField = screen.getByLabelText(
         t("auth:account_form.birthday.field_label")
@@ -114,18 +103,15 @@ describe("AccountForm", () => {
       );
 
       await waitFor(() => {
-        expect(signupFlowAccountMock).toHaveBeenCalledWith({
-          flowToken: "token",
+        expect(signupFlowAccountMock).toHaveBeenCalledWith("token", {
           username: "test",
-          password: "a very insecure password",
           birthdate: "1990-01-01",
           gender: "Woman",
-          acceptTOS: true,
-          hostingStatus: HostingStatus.HOSTING_STATUS_CAN_HOST,
+          acceptedTOS: 1,
+          hostingStatus: "can_host",
           city: "test city, test country",
-          lat: 1,
-          lng: 2,
-          radius: 5,
+          geom: "POINT (1 2)",
+          geomRadius: 5,
         });
       });
     });
@@ -141,18 +127,15 @@ describe("AccountForm", () => {
       );
 
       await waitFor(() => {
-        expect(signupFlowAccountMock).toHaveBeenCalledWith({
-          flowToken: "token",
+        expect(signupFlowAccountMock).toHaveBeenCalledWith("token", {
           username: "test",
-          password: "a very insecure password",
           birthdate: "1990-01-01",
           gender: "Woman",
-          acceptTOS: true,
-          hostingStatus: HostingStatus.HOSTING_STATUS_CAN_HOST,
+          acceptedTOS: 1,
+          hostingStatus: "can_host",
           city: "test city, test country",
-          lat: 1,
-          lng: 2,
-          radius: 5,
+          geom: "POINT (1 2)",
+          geomRadius: 5,
         });
       });
     });

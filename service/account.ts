@@ -5,18 +5,21 @@ import {
   ChangePasswordReq,
   ChangePhoneReq,
   DeleteAccountReq,
-  FillContributorFormReq,
   VerifyPhoneReq,
 } from "proto/account_pb";
 import {
   CompletePasswordResetReq,
   ConfirmChangeEmailReq,
-  ContributorForm as ContributorFormPb,
   ResetPasswordReq,
 } from "proto/auth_pb";
 import client from "service/client";
 
-import { contributorFormFromObject } from "./auth";
+import { Feedback } from "./auth";
+import { post } from "./http";
+
+export interface ContributorFormInfo {
+  filledContributorForm: boolean;
+}
 
 export async function getAccountInfo() {
   const res = await client.account.getAccountInfo(new Empty());
@@ -64,17 +67,15 @@ export async function confirmChangeEmail(resetToken: string) {
 }
 
 export async function getContributorFormInfo() {
-  const res = await client.account.getContributorFormInfo(new Empty());
-  return res.toObject();
+  // TODO implement API call to backend
+  // https://github.com/Couchers-org/backend-v2/issues/65
+  return Promise.resolve({
+    filledContributorForm: false,
+  });
 }
 
-export async function fillContributorForm(form: ContributorFormPb.AsObject) {
-  const res = await client.account.fillContributorForm(
-    new FillContributorFormReq().setContributorForm(
-      contributorFormFromObject(form)
-    )
-  );
-  return res.toObject();
+export async function fillContributorForm(form: Feedback) {
+  return post("contributor_forms/", form);
 }
 
 export function deleteAccount(confirm: boolean, reason?: string) {

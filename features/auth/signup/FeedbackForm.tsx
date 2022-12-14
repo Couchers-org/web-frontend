@@ -5,17 +5,17 @@ import StyledLink from "components/StyledLink";
 import { useAuthContext } from "features/auth/AuthProvider";
 import { Trans, useTranslation } from "i18n";
 import { GLOBAL } from "i18n/namespaces";
-import { ContributorForm as ContributorFormPb } from "proto/auth_pb";
 import TagManager from "react-gtm-module";
 import { service } from "service";
+import { Feedback } from "service/auth";
 import getRandomId from "utils/getRandomId";
-import isGrpcError from "utils/isGrpcError";
+import isHttpError from "utils/isHttpError";
 
 export default function FeedbackForm() {
   const { t } = useTranslation(GLOBAL);
   const { authActions, authState } = useAuthContext();
 
-  const handleSubmit = async (form: ContributorFormPb.AsObject) => {
+  const handleSubmit = async (form: Feedback) => {
     authActions.clearError();
     try {
       const res = await service.auth.signupFlowFeedback(
@@ -37,11 +37,18 @@ export default function FeedbackForm() {
           component: "auth/signup/feedbackForm",
         },
       });
-      authActions.authError(
-        isGrpcError(err) ? err.message : t("error.fatal_message")
-      );
+      const errorMessage = isHttpError(err)
+        ? Object.values(err.errors || {}).flat()[0] || err.error_messages[0]
+        : t("error.fatal_message");
+      authActions.authError(errorMessage);
     }
     window.scroll({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSkip = () => {
+    handleSubmit({
+      contribute: "no",
+    });
   };
 
   return (
@@ -54,7 +61,7 @@ export default function FeedbackForm() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              handleSubmit(new ContributorFormPb().toObject());
+              handleSkip();
             }}
           >
             Skip this step
