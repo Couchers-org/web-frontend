@@ -64,7 +64,11 @@ export type HostingPreferenceData = Omit<
  * Login user using password
  */
 export async function passwordLogin(username: string, password: string) {
-  return http.post<LoginReq, LoginRes>("login/", { username, password });
+  return http.post<LoginReq, LoginRes>(
+    "login/",
+    { username, password },
+    { omitAuthentication: true }
+  );
 }
 
 /**
@@ -87,7 +91,7 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * @returns {Promise<User.AsObject>}
  */
 export async function getUser(user: string): Promise<User.AsObject> {
-  return http.authenticedGet(`users/${user}/`);
+  return http.get(`users/${user}/`);
 }
 
 /**
@@ -260,5 +264,5 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  * Logout user
  */
 export function logout() {
-  return http.authenticatedPost("logout/", {});
+  return http.post("logout/", {});
 }
