@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { useAuthContext } from "features/auth/AuthProvider";
 import { LngLat } from "maplibre-gl";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import {
   Dispatch,
   MutableRefObject,
@@ -192,10 +192,9 @@ function useRedirectAuthenticatedUsers() {
 
   useEffect(() => {
     if (authenticated) {
-      router.push(redirectTo);
+      Router.push(redirectTo);
     }
-  }, [authenticated, redirectTo]); // eslint-disable-line react-hooks/exhaustive-deps
-  // router excluded from deps because instance changes. @see https://github.com/vercel/next.js/issues/18127
+  }, [authenticated, redirectTo]);
 }
 
 export {
