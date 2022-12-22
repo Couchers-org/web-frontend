@@ -6,19 +6,15 @@ import { t } from "test/utils";
 
 import LandingPage from "./LandingPage";
 
-const View = () => {
-  return <LandingPage />;
-};
-
 describe("LandingPage", () => {
   it("shows the signup form", async () => {
-    render(<View />, { wrapper });
+    render(<LandingPage />, { wrapper });
     expect(screen.getByText(t("landing:signup_header"))).toBeVisible();
   });
   it("redirects authenticated users to the dashboard", async () => {
     mockRouter.setCurrentUrl("/");
     window.localStorage.setItem("auth.authenticated", "true");
-    render(<View />, { wrapper });
+    render(<LandingPage />, { wrapper });
     await waitFor(() => expect(mockRouter.pathname).toBe(dashboardRoute));
   });
 });
