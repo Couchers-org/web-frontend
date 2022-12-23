@@ -15,11 +15,6 @@ import { http } from "service";
 import client from "service/client";
 import { ProtoToJsTypes } from "utils/types";
 
-export interface LoginReq {
-  username: string;
-  password: string;
-}
-
 export interface LoginRes {
   auth_token: string;
   user_id: number;
@@ -63,8 +58,11 @@ export type HostingPreferenceData = Omit<
 /**
  * Login user using password
  */
-export async function passwordLogin(username: string, password: string) {
-  return http.post<LoginReq, LoginRes>(
+export async function passwordLogin(
+  username: string,
+  password: string
+): Promise<LoginRes> {
+  return http.post(
     "login/",
     { username, password },
     { omitAuthentication: true }

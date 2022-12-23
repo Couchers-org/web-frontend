@@ -59,18 +59,6 @@ export interface SignupFlowRes {
   accepted_community_guidelines?: number;
 }
 
-interface CreateSignupFlowReq {
-  email: string;
-  name: string;
-  password: string;
-}
-
-interface CreateUserReq {
-  email: string;
-  username: string;
-  password: string;
-}
-
 interface CreateUserRes {
   email: string;
   username: string;
@@ -91,8 +79,8 @@ export async function createUser(
   username: string,
   email: string,
   password: string
-) {
-  return http.post<CreateUserReq, CreateUserRes>(
+): Promise<CreateUserRes> {
+  return http.post(
     "users/",
     {
       username,
@@ -114,8 +102,8 @@ export async function startSignup(
   name: string,
   email: string,
   password: string
-) {
-  return http.post<CreateSignupFlowReq, SignupFlowRes>(
+): Promise<SignupFlowRes> {
+  return http.post(
     "signup_flows/",
     {
       name,
@@ -165,8 +153,11 @@ export async function signupFlowFeedback(
   );
 }
 
-export async function activateUser(uid: string, token: string) {
-  return http.post<ActivateUserReq, ActivateUserRes>(
+export async function activateUser(
+  uid: string,
+  token: string
+): Promise<ActivateUserRes> {
+  return http.post(
     "users/activation/",
     {
       uid,
