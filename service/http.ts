@@ -1,4 +1,3 @@
-import { httpTimeout } from "appConstants";
 import isHttpError from "utils/isHttpError";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -36,18 +35,14 @@ async function http<TResponse>(
   configOverride: RequestInit
 ): Promise<TResponse> {
   const url = new URL(endpoint, API_URL).toString();
-  const httpAbortController = new AbortController();
   const config = {
     headers: {
       "content-type": "application/json",
     },
-    signal: httpAbortController.signal,
     ...configOverride,
   };
   const request = new Request(url, config);
   const response = await fetch(request);
-
-  setTimeout(() => httpAbortController.abort(), httpTimeout);
 
   const responseBody = await response.json().catch(() => ({}));
 
