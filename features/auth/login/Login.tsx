@@ -14,9 +14,9 @@ import useAuthStyles from "../useAuthStyles";
 import LoginForm from "./LoginForm";
 
 export default function Login() {
-  useRedirectAuthenticatedUsers();
   const { t } = useTranslation([AUTH, GLOBAL]);
   const { authState } = useAuthContext();
+  useRedirectAuthenticatedUsers(authState);
   const error = authState.error;
   const authClasses = useAuthStyles();
 

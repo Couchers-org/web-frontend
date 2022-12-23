@@ -87,9 +87,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LandingPage() {
-  useRedirectAuthenticatedUsers();
   const { t } = useTranslation([GLOBAL, LANDING, AUTH]);
   const { authState } = useAuthContext();
+  useRedirectAuthenticatedUsers(authState);
   const flowState = authState.flowState;
 
   const router = useRouter();

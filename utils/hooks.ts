@@ -179,11 +179,9 @@ function useUnsavedChangesWarning({
   }, [isDirty, router.events, isSubmitted, warningMessage]);
 }
 
-function useRedirectAuthenticatedUsers() {
+function useRedirectAuthenticatedUsers({authenticated}: {authenticated?:boolean}) {
   const router = useRouter();
-  const { authState } = useAuthContext();
 
-  const authenticated = authState.authenticated;
   const redirectFrom = stringOrFirstString(router.query.from) ?? dashboardRoute;
   const redirectTo =
     redirectFrom === "/" || redirectFrom === "%2F"
