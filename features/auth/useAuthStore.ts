@@ -60,7 +60,8 @@ export default function useAuthStore() {
   );
   const [token, setToken] = usePersistedState<string | null>(
     "auth.token",
-    null
+    null,
+    "sessionStorage"
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -25,7 +25,7 @@ export const setUnauthenticatedErrorHandler = (
 };
 
 function getAuthToken(): string {
-  const rawToken = window.localStorage.getItem("auth.token");
+  const rawToken = window.sessionStorage.getItem("auth.token");
   const token = rawToken && rawToken?.length > 0 ? JSON.parse(rawToken) : "";
   return token;
 }
