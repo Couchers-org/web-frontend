@@ -1,5 +1,4 @@
 import * as Sentry from "@sentry/nextjs";
-import { useAuthContext } from "features/auth/AuthProvider";
 import { LngLat } from "maplibre-gl";
 import Router, { useRouter } from "next/router";
 import {
@@ -179,7 +178,11 @@ function useUnsavedChangesWarning({
   }, [isDirty, router.events, isSubmitted, warningMessage]);
 }
 
-function useRedirectAuthenticatedUsers({authenticated}: {authenticated?:boolean}) {
+function useRedirectAuthenticatedUsers({
+  authenticated,
+}: {
+  authenticated?: boolean;
+}) {
   const router = useRouter();
 
   const redirectFrom = stringOrFirstString(router.query.from) ?? dashboardRoute;
