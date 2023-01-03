@@ -42,4 +42,5 @@ export const service = {
   user,
 } as const;
 
+export * as http from "./http";
 export type { HostingPreferenceData, UpdateUserProfileData } from "./user";

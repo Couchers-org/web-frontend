@@ -1,7 +1,6 @@
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import wrappers from "google-protobuf/google/protobuf/wrappers_pb";
 import {
-  GetUserReq,
   LanguageAbility,
   NullableBoolValue,
   NullableStringValue,
@@ -12,9 +11,14 @@ import {
   UpdateProfileReq,
   User,
 } from "proto/api_pb";
-import { AuthReq, CompleteTokenLoginReq } from "proto/auth_pb";
+import { http } from "service";
 import client from "service/client";
 import { ProtoToJsTypes } from "utils/types";
+
+export interface LoginRes {
+  auth_token: string;
+  user_id: number;
+}
 
 type RequiredUpdateProfileReq = Required<UpdateProfileReq.AsObject>;
 type ProfileFormData = {
@@ -54,24 +58,15 @@ export type HostingPreferenceData = Omit<
 /**
  * Login user using password
  */
-export async function passwordLogin(username: string, password: string) {
-  const req = new AuthReq();
-  req.setUser(username);
-  req.setPassword(password);
-
-  const res = await client.auth.authenticate(req);
-  return res.toObject();
-}
-
-/**
- * Login user using a login token
- */
-export async function tokenLogin(loginToken: string) {
-  const req = new CompleteTokenLoginReq();
-  req.setLoginToken(loginToken);
-
-  const res = await client.auth.completeTokenLogin(req);
-  return res.toObject();
+export async function passwordLogin(
+  username: string,
+  password: string
+): Promise<LoginRes> {
+  return http.post(
+    "login/",
+    { username, password },
+    { omitAuthentication: true }
+  );
 }
 
 /**
@@ -94,12 +89,7 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * @returns {Promise<User.AsObject>}
  */
 export async function getUser(user: string): Promise<User.AsObject> {
-  const userReq = new GetUserReq();
-  userReq.setUser(user || "");
-
-  const response = await client.api.getUser(userReq);
-
-  return response.toObject();
+  return http.get(`users/${user}/`);
 }
 
 /**
@@ -272,5 +262,5 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  * Logout user
  */
 export function logout() {
-  return client.auth.deauthenticate(new Empty());
+  return http.post("logout/", {});
 }

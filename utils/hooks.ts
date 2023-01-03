@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/nextjs";
 import { LngLat } from "maplibre-gl";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import {
   Dispatch,
   MutableRefObject,
@@ -10,11 +10,13 @@ import {
   useRef,
   useState,
 } from "react";
+import { dashboardRoute } from "routes";
 import {
   filterDuplicatePlaces,
   NominatimPlace,
   simplifyPlaceDisplayName,
 } from "utils/nominatim";
+import stringOrFirstString from "utils/stringOrFirstString";
 
 // Locations having one of these keys are considered non-regions.
 // https://nominatim.org/release-docs/latest/api/Output/#addressdetails
@@ -176,10 +178,31 @@ function useUnsavedChangesWarning({
   }, [isDirty, router.events, isSubmitted, warningMessage]);
 }
 
+function useRedirectAuthenticatedUsers({
+  authenticated,
+}: {
+  authenticated?: boolean;
+}) {
+  const router = useRouter();
+
+  const redirectFrom = stringOrFirstString(router.query.from) ?? dashboardRoute;
+  const redirectTo =
+    redirectFrom === "/" || redirectFrom === "%2F"
+      ? dashboardRoute
+      : redirectFrom;
+
+  useEffect(() => {
+    if (authenticated) {
+      Router.push(redirectTo);
+    }
+  }, [authenticated, redirectTo]);
+}
+
 export {
   useGeocodeQuery,
   useIsMounted,
   usePrevious,
+  useRedirectAuthenticatedUsers,
   useSafeState,
   useUnsavedChangesWarning,
 };

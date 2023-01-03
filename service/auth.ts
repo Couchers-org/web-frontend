@@ -5,6 +5,7 @@ import {
   UnsubscribeReq,
   UsernameValidReq,
 } from "proto/auth_pb";
+import { http } from "service";
 import client from "service/client";
 
 export type HostingStatus = "can_host" | "maybe" | "cant_host";
@@ -58,18 +59,6 @@ export interface SignupFlowRes {
   accepted_community_guidelines?: number;
 }
 
-interface CreateSignupFlowReq {
-  email: string;
-  name: string;
-  password: string;
-}
-
-interface CreateUserReq {
-  email: string;
-  username: string;
-  password: string;
-}
-
 interface CreateUserRes {
   email: string;
   username: string;
@@ -90,12 +79,16 @@ export async function createUser(
   username: string,
   email: string,
   password: string
-) {
-  return client.post<CreateUserReq, CreateUserRes>("users/", {
-    username,
-    email,
-    password,
-  });
+): Promise<CreateUserRes> {
+  return http.post(
+    "users/",
+    {
+      username,
+      email,
+      password,
+    },
+    { omitAuthentication: true }
+  );
 }
 
 export async function checkUsername(username: string) {
@@ -109,59 +102,82 @@ export async function startSignup(
   name: string,
   email: string,
   password: string
-) {
-  return client.post<CreateSignupFlowReq, SignupFlowRes>("signup_flows/", {
-    name,
-    email,
-    password,
-  });
+): Promise<SignupFlowRes> {
+  return http.post(
+    "signup_flows/",
+    {
+      name,
+      email,
+      password,
+    },
+    { omitAuthentication: true }
+  );
 }
 
 export async function signupFlowAccount(
   flowToken: string,
   accountDetails: AccountDetails
 ): Promise<SignupFlowRes> {
-  return client.patch(`signup_flows/${flowToken}/`, {
-    username: accountDetails.username,
-    birthdate: accountDetails.birthdate,
-    city: accountDetails.city,
-    geom: accountDetails.geom,
-    geom_radius: accountDetails.geomRadius,
-    hosting_status: accountDetails.hostingStatus,
-    gender: accountDetails.gender,
-    accepted_tos: accountDetails.acceptedTOS,
-  });
+  return http.patch(
+    `signup_flows/${flowToken}/`,
+    {
+      username: accountDetails.username,
+      birthdate: accountDetails.birthdate,
+      city: accountDetails.city,
+      geom: accountDetails.geom,
+      geom_radius: accountDetails.geomRadius,
+      hosting_status: accountDetails.hostingStatus,
+      gender: accountDetails.gender,
+      accepted_tos: accountDetails.acceptedTOS,
+    },
+    { omitAuthentication: true }
+  );
 }
 
 export async function signupFlowFeedback(
   flowToken: string,
   feedback: Feedback
 ): Promise<SignupFlowRes> {
-  return client.patch(`signup_flows/${flowToken}/`, {
-    filled_feedback: true,
-    ideas: feedback.ideas,
-    features: feedback.features,
-    experience: feedback.experience,
-    contribute: feedback.contribute,
-    contribute_ways: feedback.contributeWaysList,
-    expertise: feedback.expertise,
-  });
+  return http.patch(
+    `signup_flows/${flowToken}/`,
+    {
+      filled_feedback: true,
+      ideas: feedback.ideas,
+      features: feedback.features,
+      experience: feedback.experience,
+      contribute: feedback.contribute,
+      contribute_ways: feedback.contributeWaysList,
+      expertise: feedback.expertise,
+    },
+    { omitAuthentication: true }
+  );
 }
 
-export async function activateUser(uid: string, token: string) {
-  return client.post<ActivateUserReq, ActivateUserRes>("users/activation/", {
-    uid,
-    token,
-  });
+export async function activateUser(
+  uid: string,
+  token: string
+): Promise<ActivateUserRes> {
+  return http.post(
+    "users/activation/",
+    {
+      uid,
+      token,
+    },
+    { omitAuthentication: true }
+  );
 }
 
 export async function signupFlowCommunityGuidelines(
   flowToken: string,
   guidelinesVersion: number
 ): Promise<SignupFlowRes> {
-  return client.patch(`signup_flows/${flowToken}/`, {
-    accepted_community_guidelines: guidelinesVersion,
-  });
+  return http.patch(
+    `signup_flows/${flowToken}/`,
+    {
+      accepted_community_guidelines: guidelinesVersion,
+    },
+    { omitAuthentication: true }
+  );
 }
 
 export async function validateUsername(username: string) {

@@ -1,10 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
-import {
-  EXPERTISE_LABEL,
-  SUBMIT,
-} from "components/ContributorForm/constants";
+import { EXPERTISE_LABEL, SUBMIT } from "components/ContributorForm/constants";
 import { service } from "service";
 import wrapper from "test/hookWrapper";
 import { MockedService } from "test/utils";

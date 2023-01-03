@@ -7,6 +7,7 @@ import { useQueryClient } from "react-query";
 import { service } from "service";
 import { SignupFlowRes } from "service/auth";
 import isGrpcError from "utils/isGrpcError";
+import isHttpError from "utils/isHttpError";
 
 type StorageType = "localStorage" | "sessionStorage";
 
@@ -57,6 +58,11 @@ export default function useAuthStore() {
     "auth.userId",
     null
   );
+  const [token, setToken] = usePersistedState<string | null>(
+    "auth.token",
+    null,
+    "sessionStorage"
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [flowState, setFlowState] = usePersistedState<SignupFlow | null>(
@@ -78,14 +84,21 @@ export default function useAuthStore() {
       clearError() {
         setError(null);
       },
+      async resetAuthState() {
+        setAuthenticated(false);
+        setUserId(null);
+        setToken(null);
+        window.sessionStorage.clear();
+        Sentry.setUser(null);
+      },
       async logout() {
         setError(null);
         setLoading(true);
         try {
-          await service.user.logout();
-          setAuthenticated(false);
-          setUserId(null);
-          Sentry.setUser({ id: undefined });
+          await service.user.logout().catch((e) => {
+            const isTokenError = isHttpError(e) && e.status_code === 401;
+            if (!isTokenError) throw e;
+          });
         } catch (e) {
           Sentry.captureException(e, {
             tags: {
@@ -93,9 +106,13 @@ export default function useAuthStore() {
               action: "logout",
             },
           });
-          setError(isGrpcError(e) ? e.message : fatalErrorMessage.current);
+          const errorMessage = isHttpError(e)
+            ? (e.error_messages || [])[0]
+            : fatalErrorMessage.current;
+          setError(errorMessage);
         }
-        window.sessionStorage.clear();
+
+        this.resetAuthState();
         setLoading(false);
       },
       async passwordLogin({
@@ -109,13 +126,13 @@ export default function useAuthStore() {
         setLoading(true);
         try {
           const auth = await service.user.passwordLogin(username, password);
-          setUserId(auth.userId);
-          Sentry.setUser({ id: auth.userId.toString() });
+          setToken(auth.auth_token);
+          setUserId(auth.user_id);
+          Sentry.setUser({ id: auth.user_id.toString() });
 
           //this must come after setting the userId, because calling setQueryData
           //will also cause that query to be background fetched, and it needs
           //userId to be set.
-          setJailed(auth.jailed);
           setAuthenticated(true);
         } catch (e) {
           Sentry.captureException(e, {
@@ -124,7 +141,10 @@ export default function useAuthStore() {
               action: "passwordLogin",
             },
           });
-          setError(isGrpcError(e) ? e.message : fatalErrorMessage.current);
+          const errorMessage = isHttpError(e)
+            ? (e.error_messages || [])[0]
+            : fatalErrorMessage.current;
+          setError(errorMessage);
         }
         setLoading(false);
       },
@@ -142,26 +162,6 @@ export default function useAuthStore() {
           setFlowState(null);
           return;
         }
-      },
-      async tokenLogin(loginToken: string) {
-        setError(null);
-        setLoading(true);
-        try {
-          const auth = await service.user.tokenLogin(loginToken);
-          setUserId(auth.userId);
-          Sentry.setUser({ id: auth.userId.toString() });
-          setJailed(auth.jailed);
-          setAuthenticated(true);
-        } catch (e) {
-          Sentry.captureException(e, {
-            tags: {
-              component: "auth/useAuthStore",
-              action: "tokenLogin",
-            },
-          });
-          setError(isGrpcError(e) ? e.message : fatalErrorMessage.current);
-        }
-        setLoading(false);
       },
       async updateJailStatus() {
         setError(null);
@@ -188,7 +188,14 @@ export default function useAuthStore() {
     }),
     //note: there should be no dependenices on the state or t, or
     //some useEffects will break. Eg. the token login in Login.tsx
-    [setAuthenticated, setJailed, setUserId, setFlowState, queryClient]
+    [
+      setAuthenticated,
+      setJailed,
+      setUserId,
+      setToken,
+      setFlowState,
+      queryClient,
+    ]
   );
 
   return {
@@ -199,6 +206,7 @@ export default function useAuthStore() {
       jailed,
       loading,
       userId,
+      token,
       flowState,
     },
   };

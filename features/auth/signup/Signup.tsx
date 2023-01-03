@@ -11,6 +11,7 @@ import { AUTH, GLOBAL } from "i18n/namespaces";
 import { useEffect } from "react";
 import vercelLogo from "resources/vercel.svg";
 import { loginRoute, tosRoute } from "routes";
+import { useRedirectAuthenticatedUsers } from "utils/hooks";
 import makeStyles from "utils/makeStyles";
 
 import { useAuthContext } from "../AuthProvider";
@@ -142,6 +143,7 @@ function CurrentForm() {
 export default function Signup() {
   const { t } = useTranslation([AUTH, GLOBAL]);
   const { authState, authActions } = useAuthContext();
+  useRedirectAuthenticatedUsers(authState);
   const isSignupComplete = authState.flowState?.isCompleted;
   const error = authState.error;
   const authClasses = useAuthStyles();

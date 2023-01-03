@@ -1,6 +1,5 @@
 import { renderHook } from "@testing-library/react-hooks";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
-import { StatusCode } from "grpc-web";
 import { act } from "react-test-renderer";
 import { service } from "service";
 
@@ -8,10 +7,8 @@ import wrapper from "../../test/hookWrapper";
 import { addDefaultUser } from "../../test/utils";
 import useAuthStore, { usePersistedState } from "./useAuthStore";
 
-const getUserMock = service.user.getUser as jest.Mock;
 const getCurrentUserMock = service.user.getCurrentUser as jest.Mock;
 const passwordLoginMock = service.user.passwordLogin as jest.Mock;
-const tokenLoginMock = service.user.tokenLogin as jest.Mock;
 const getIsJailedMock = service.jail.getIsJailed as jest.Mock;
 const logoutMock = service.user.logout as jest.Mock;
 
@@ -77,6 +74,22 @@ describe("useAuthStore hook", () => {
     expect(result.current.authState.authenticated).toBe(true);
     await act(() => result.current.authActions.logout());
     expect(result.current.authState.authenticated).toBe(false);
+    expect(result.current.authState.token).toBeNull();
+    expect(result.current.authState.error).toBeNull();
+    expect(result.current.authState.userId).toBeNull();
+  });
+
+  it("logs out with an expired token", async () => {
+    logoutMock.mockRejectedValue({
+      error_messages: ["Invalid token."],
+      status_code: 401,
+    });
+    addDefaultUser();
+    const { result } = renderHook(() => useAuthStore(), { wrapper });
+    expect(result.current.authState.authenticated).toBe(true);
+    await act(() => result.current.authActions.logout());
+    expect(result.current.authState.authenticated).toBe(false);
+    expect(result.current.authState.token).toBeNull();
     expect(result.current.authState.error).toBeNull();
     expect(result.current.authState.userId).toBeNull();
   });
@@ -94,9 +107,11 @@ describe("useAuthStore hook", () => {
 });
 
 describe("passwordLogin action", () => {
-  it("sets authenticated correctly", async () => {
-    passwordLoginMock.mockResolvedValue({ userId: 1, jailed: false });
-    getUserMock.mockResolvedValue(defaultUser);
+  it("sets authenticated state correctly", async () => {
+    passwordLoginMock.mockResolvedValue({
+      auth_token: "test-token",
+      user_id: 1,
+    });
     const { result } = renderHook(() => useAuthStore(), {
       wrapper,
     });
@@ -108,11 +123,14 @@ describe("passwordLogin action", () => {
       })
     );
     expect(result.current.authState.authenticated).toBe(true);
+    expect(result.current.authState.token).toBe("test-token");
+    expect(result.current.authState.userId).toBe(1);
   });
   it("sets error correctly for login fail", async () => {
     passwordLoginMock.mockRejectedValue({
-      code: StatusCode.PERMISSION_DENIED,
-      message: "Invalid username or password.",
+      error_messages: ["Unable to log in with provided credentials."],
+      errors: {},
+      status_code: 400,
     });
     const { result } = renderHook(() => useAuthStore(), { wrapper });
     expect(result.current.authState.authenticated).toBe(false);
@@ -124,30 +142,8 @@ describe("passwordLogin action", () => {
     );
     expect(result.current.authState.authenticated).toBe(false);
     expect(result.current.authState.error).toBe(
-      "Invalid username or password."
+      "Unable to log in with provided credentials."
     );
-  });
-});
-
-describe("tokenLogin action", () => {
-  it("sets authenticated correctly", async () => {
-    tokenLoginMock.mockResolvedValue({ userId: 1, jailed: false });
-    getCurrentUserMock.mockResolvedValue(defaultUser);
-    const { result } = renderHook(() => useAuthStore(), { wrapper });
-    expect(result.current.authState.authenticated).toBe(false);
-    await act(() => result.current.authActions.tokenLogin("token"));
-    expect(result.current.authState.authenticated).toBe(true);
-  });
-  it("sets error correctly for login fail", async () => {
-    tokenLoginMock.mockRejectedValue({
-      code: StatusCode.PERMISSION_DENIED,
-      message: "Invalid token.",
-    });
-    const { result } = renderHook(() => useAuthStore(), { wrapper });
-    expect(result.current.authState.authenticated).toBe(false);
-    await act(() => result.current.authActions.tokenLogin("token"));
-    expect(result.current.authState.authenticated).toBe(false);
-    expect(result.current.authState.error).toBe("Invalid token.");
   });
 });
 

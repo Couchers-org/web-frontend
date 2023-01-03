@@ -22,6 +22,7 @@ import { Trans, useTranslation } from "next-i18next";
 import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 import vercelLogo from "resources/vercel.svg";
+import { useRedirectAuthenticatedUsers } from "utils/hooks";
 import makeStyles from "utils/makeStyles";
 
 import {
@@ -88,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
 export default function LandingPage() {
   const { t } = useTranslation([GLOBAL, LANDING, AUTH]);
   const { authState } = useAuthContext();
+  useRedirectAuthenticatedUsers(authState);
   const flowState = authState.flowState;
 
   const router = useRouter();

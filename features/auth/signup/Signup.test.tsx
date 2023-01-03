@@ -7,7 +7,7 @@ import { hostingStatusLabels } from "features/profile/constants";
 import mockRouter from "next-router-mock";
 import { HostingStatus } from "proto/api_pb";
 import TagManager from "react-gtm-module";
-import { loginRoute, signupRoute } from "routes";
+import { dashboardRoute, loginRoute, signupRoute } from "routes";
 import { service } from "service";
 import wrapper from "test/hookWrapper";
 import {
@@ -142,7 +142,9 @@ describe("Signup", () => {
         screen.getByRole("button", { name: t("global:sign_up") })
       );
 
-      expect(await screen.findByText(t("auth:community_guidelines_form.header"))).toBeVisible();
+      expect(
+        await screen.findByText(t("auth:community_guidelines_form.header"))
+      ).toBeVisible();
     });
 
     it("guidelines -> contributor form works", async () => {
@@ -268,7 +270,9 @@ describe("Signup", () => {
     };
     window.localStorage.setItem("auth.flowState", JSON.stringify(state));
     render(<View />, { wrapper });
-    expect(await screen.findByText(t("auth:community_guidelines_form.header"))).toBeVisible();
+    expect(
+      await screen.findByText(t("auth:community_guidelines_form.header"))
+    ).toBeVisible();
   });
 
   it("displays the guidelines form when only it and feedback are pending", async () => {
@@ -281,7 +285,9 @@ describe("Signup", () => {
     };
     window.localStorage.setItem("auth.flowState", JSON.stringify(state));
     render(<View />, { wrapper });
-    expect(await screen.findByText(t("auth:community_guidelines_form.header"))).toBeVisible();
+    expect(
+      await screen.findByText(t("auth:community_guidelines_form.header"))
+    ).toBeVisible();
   });
 
   it("displays the feedback form when feedback is pending", async () => {
@@ -338,5 +344,11 @@ describe("Signup", () => {
     );
     mockConsoleError();
     await assertErrorAlert("Permission denied");
+  });
+
+  it("redirects authenticated users away from the signup flow", async () => {
+    window.localStorage.setItem("auth.authenticated", "true");
+    render(<View />, { wrapper });
+    await waitFor(() => expect(mockRouter.pathname).toBe(dashboardRoute));
   });
 });

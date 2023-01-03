@@ -1,3 +1,5 @@
+import isHttpError from "utils/isHttpError";
+
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export interface HttpError {
@@ -8,10 +10,30 @@ export interface HttpError {
   };
 }
 
-async function http<T>(
+interface HttpConfig {
+  init?: Omit<RequestInit, "body">;
+  omitAuthentication?: boolean;
+}
+
+let _unauthenticatedErrorHandler: (
+  e: HttpError
+) => Promise<void> = async () => {};
+export const setUnauthenticatedErrorHandler = (
+  f: (e: HttpError) => Promise<void>
+) => {
+  _unauthenticatedErrorHandler = f;
+};
+
+function getAuthToken(): string {
+  const rawToken = window.sessionStorage.getItem("auth.token");
+  const token = rawToken && rawToken?.length > 0 ? JSON.parse(rawToken) : "";
+  return token;
+}
+
+async function http<TResponse>(
   endpoint: string,
   configOverride: RequestInit
-): Promise<T> {
+): Promise<TResponse> {
   const url = new URL(endpoint, API_URL).toString();
   const config = {
     headers: {
@@ -31,34 +53,81 @@ async function http<T>(
   return responseBody;
 }
 
-export async function get<T>(path: string, config?: RequestInit): Promise<T> {
-  const init = { method: "get", ...config };
-  return await http<T>(path, init);
+async function authenticatedHttp<TResponse>(
+  endpoint: string,
+  configOverride: RequestInit
+): Promise<TResponse> {
+  const config = {
+    headers: {
+      "content-type": "application/json",
+      authorization: `token ${getAuthToken()}`,
+    },
+    mode: "cors" as RequestMode,
+    ...configOverride,
+  };
+
+  return http<TResponse>(endpoint, config).catch((error) => {
+    if (isHttpError(error) && error.status_code === 401) {
+      _unauthenticatedErrorHandler(error);
+    }
+    throw error;
+  });
 }
 
-export async function post<T, U>(
+export async function get<TResponse>(
   path: string,
-  body: T,
-  config?: Omit<RequestInit, "body">
-): Promise<U> {
-  const init = { method: "post", body: JSON.stringify(body), ...config };
-  return await http<U>(path, init);
+  config: HttpConfig = {}
+): Promise<TResponse> {
+  const init = {
+    method: "get",
+    ...(config.init || {}),
+  };
+  return config.omitAuthentication
+    ? http<TResponse>(path, init)
+    : authenticatedHttp<TResponse>(path, init);
 }
 
-export async function put<T, U>(
+export async function post<TBody, TResponse>(
   path: string,
-  body: T,
-  config?: Omit<RequestInit, "body">
-): Promise<U> {
-  const init = { method: "put", body: JSON.stringify(body), ...config };
-  return await http<U>(path, init);
+  body: TBody,
+  config: HttpConfig = {}
+): Promise<TResponse> {
+  const init = {
+    method: "post",
+    body: JSON.stringify(body),
+    ...(config.init || {}),
+  };
+  return config.omitAuthentication
+    ? http<TResponse>(path, init)
+    : authenticatedHttp<TResponse>(path, init);
 }
 
-export async function patch<T, U>(
+export async function put<TBody, TResponse>(
   path: string,
-  body: T,
-  config?: Omit<RequestInit, "body">
-): Promise<U> {
-  const init = { method: "PATCH", body: JSON.stringify(body), ...config };
-  return await http<U>(path, init);
+  body?: TBody,
+  config: HttpConfig = {}
+): Promise<TResponse> {
+  const init = {
+    method: "put",
+    body: JSON.stringify(body),
+    ...(config.init || {}),
+  };
+  return config.omitAuthentication
+    ? http<TResponse>(path, init)
+    : authenticatedHttp<TResponse>(path, init);
+}
+
+export async function patch<TBody, TResponse>(
+  path: string,
+  body: TBody,
+  config: HttpConfig = {}
+): Promise<TResponse> {
+  const init = {
+    method: "PATCH",
+    body: JSON.stringify(body),
+    ...(config.init || {}),
+  };
+  return config.omitAuthentication
+    ? http<TResponse>(path, init)
+    : authenticatedHttp<TResponse>(path, init);
 }
