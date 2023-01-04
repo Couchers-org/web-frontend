@@ -35,6 +35,9 @@ const signupFlowFeedbackMock = service.auth.signupFlowFeedback as MockedService<
 const validateUsernameMock = service.auth.validateUsername as MockedService<
   typeof service.auth.validateUsername
 >;
+const getSignupFlowMock = service.auth.getSignupFlow as MockedService<
+  typeof service.auth.getSignupFlow
+>;
 
 const View = () => {
   return <Signup />;
@@ -350,5 +353,31 @@ describe("Signup", () => {
     window.localStorage.setItem("auth.authenticated", "true");
     render(<View />, { wrapper });
     await waitFor(() => expect(mockRouter.pathname).toBe(dashboardRoute));
+  });
+
+  it("restores state from signup token", async () => {
+    mockRouter.setCurrentUrl(`${signupRoute}?token=test-token`);
+    getSignupFlowMock.mockResolvedValue({
+      flow_token: "test-token",
+      account_is_filled: true,
+    });
+
+    render(<View />, { wrapper });
+
+    expect(
+      await screen.findByText(t("auth:community_guidelines_form.header"))
+    ).toBeVisible();
+  });
+
+  it("handles bad signup token", async () => {
+    mockRouter.setCurrentUrl(`${signupRoute}?token=bad-token`);
+    getSignupFlowMock.mockRejectedValue({
+      error_messages: ["Invalid token"],
+      status_code: 400,
+    });
+
+    render(<View />, { wrapper });
+
+    await waitFor(() => expect(mockRouter.pathname).toBe(loginRoute));
   });
 });

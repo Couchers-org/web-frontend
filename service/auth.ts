@@ -187,6 +187,10 @@ export async function validateUsername(username: string) {
   return res.getValid();
 }
 
+export async function getSignupFlow(token: string): Promise<SignupFlowRes> {
+  return http.get(`signup_flows/${token}/`, { omitAuthentication: true });
+}
+
 export async function unsubscribe(payload: string, sig: string) {
   const req = new UnsubscribeReq();
   req.setPayload(payload);
