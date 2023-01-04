@@ -178,144 +178,144 @@ describe("Signup", () => {
         expect(screen.getByText(QUESTIONS_OPTIONAL)).toBeVisible();
       });
     });
-  });
 
-  it("contributor form -> success", async () => {
-    jest.spyOn(console, "warn").mockImplementation(undefined);
-    window.localStorage.setItem(
-      "auth.flowState",
-      JSON.stringify({
+    it("contributor form -> success", async () => {
+      jest.spyOn(console, "warn").mockImplementation(undefined);
+      window.localStorage.setItem(
+        "auth.flowState",
+        JSON.stringify({
+          flowToken: "token",
+          needAccount: false,
+          needAcceptCommunityGuidelines: false,
+          needFeedback: true,
+        })
+      );
+      signupFlowFeedbackMock.mockResolvedValue({
+        flow_token: "token",
+        user_created: true,
+        account_is_filled: true,
+        accepted_current_community_guidelines: true,
+        filled_feedback: true,
+      });
+
+      render(<View />, { wrapper });
+
+      userEvent.click(screen.getByRole("button", { name: t("global:submit") }));
+      await waitFor(() => expect(mockRouter.pathname).toBe(loginRoute));
+
+      expect(TagManager.dataLayer).toHaveBeenCalledTimes(1);
+      expect(TagManager.dataLayer).toHaveBeenCalledWith({
+        dataLayer: {
+          event: "sign_up",
+          signupMethod: "email",
+          userId: expect.any(String),
+          "gtm.elementUrl": expect.any(String),
+        },
+      });
+    });
+
+    it("displays the account form when account, feedback, and guidelines pending", async () => {
+      const state: SignupFlow = {
+        isCompleted: false,
+        needAccount: true,
+        needFeedback: true,
+        needAcceptCommunityGuidelines: true,
         flowToken: "token",
+      };
+      window.localStorage.setItem("auth.flowState", JSON.stringify(state));
+      render(<View />, { wrapper });
+      expect(
+        screen.getByLabelText(t("auth:account_form.username.field_label"))
+      ).toBeVisible();
+    });
+
+    it("displays the account form when account and guidelines are pending", async () => {
+      const state: SignupFlow = {
+        isCompleted: false,
+        needAccount: true,
+        needAcceptCommunityGuidelines: true,
+        needFeedback: false,
+        flowToken: "token",
+      };
+      window.localStorage.setItem("auth.flowState", JSON.stringify(state));
+      render(<View />, { wrapper });
+      expect(
+        screen.getByLabelText(t("auth:account_form.username.field_label"))
+      ).toBeVisible();
+    });
+
+    it("displays the account form when only account is pending", async () => {
+      const state: SignupFlow = {
+        isCompleted: false,
+        needAccount: true,
+        needAcceptCommunityGuidelines: false,
+        needFeedback: false,
+        flowToken: "token",
+      };
+      window.localStorage.setItem("auth.flowState", JSON.stringify(state));
+      render(<View />, { wrapper });
+      expect(
+        screen.getByLabelText(t("auth:account_form.username.field_label"))
+      ).toBeVisible();
+    });
+
+    it("displays the guidelines form when guidelines and feedback are pending", async () => {
+      const state: SignupFlow = {
+        isCompleted: false,
+        needAccount: false,
+        needAcceptCommunityGuidelines: true,
+        needFeedback: true,
+        flowToken: "token",
+      };
+      window.localStorage.setItem("auth.flowState", JSON.stringify(state));
+      render(<View />, { wrapper });
+      expect(
+        await screen.findByText(t("auth:community_guidelines_form.header"))
+      ).toBeVisible();
+    });
+
+    it("displays the guidelines form when only it and feedback are pending", async () => {
+      const state: SignupFlow = {
+        isCompleted: false,
+        needAccount: false,
+        needAcceptCommunityGuidelines: true,
+        needFeedback: true,
+        flowToken: "token",
+      };
+      window.localStorage.setItem("auth.flowState", JSON.stringify(state));
+      render(<View />, { wrapper });
+      expect(
+        await screen.findByText(t("auth:community_guidelines_form.header"))
+      ).toBeVisible();
+    });
+
+    it("displays the feedback form when feedback is pending", async () => {
+      const state: SignupFlow = {
+        isCompleted: false,
         needAccount: false,
         needAcceptCommunityGuidelines: false,
         needFeedback: true,
-      })
-    );
-    signupFlowFeedbackMock.mockResolvedValue({
-      flow_token: "token",
-      user_created: true,
-      account_is_filled: true,
-      accepted_current_community_guidelines: true,
-      filled_feedback: true,
+        flowToken: "token",
+      };
+      window.localStorage.setItem("auth.flowState", JSON.stringify(state));
+      render(<View />, { wrapper });
+      expect(screen.getByText(QUESTIONS_OPTIONAL)).toBeVisible();
     });
 
-    render(<View />, { wrapper });
-
-    userEvent.click(screen.getByRole("button", { name: t("global:submit") }));
-    await waitFor(() => expect(mockRouter.pathname).toBe(loginRoute));
-
-    expect(TagManager.dataLayer).toHaveBeenCalledTimes(1);
-    expect(TagManager.dataLayer).toHaveBeenCalledWith({
-      dataLayer: {
-        event: "sign_up",
-        signupMethod: "email",
-        userId: expect.any(String),
-        "gtm.elementUrl": expect.any(String),
-      },
+    it("displays the redirect message when signup is complete", async () => {
+      const state: SignupFlow = {
+        isCompleted: true,
+        needAccount: false,
+        needAcceptCommunityGuidelines: false,
+        needFeedback: false,
+        flowToken: "token",
+      };
+      window.localStorage.setItem("auth.flowState", JSON.stringify(state));
+      render(<View />, { wrapper });
+      expect(
+        await screen.findByText(t("auth:sign_up_confirmed_prompt"))
+      ).toBeVisible();
     });
-  });
-
-  it("displays the account form when account, feedback, and guidelines pending", async () => {
-    const state: SignupFlow = {
-      isCompleted: false,
-      needAccount: true,
-      needFeedback: true,
-      needAcceptCommunityGuidelines: true,
-      flowToken: "token",
-    };
-    window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    render(<View />, { wrapper });
-    expect(
-      screen.getByLabelText(t("auth:account_form.username.field_label"))
-    ).toBeVisible();
-  });
-
-  it("displays the account form when account and guidelines are pending", async () => {
-    const state: SignupFlow = {
-      isCompleted: false,
-      needAccount: true,
-      needAcceptCommunityGuidelines: true,
-      needFeedback: false,
-      flowToken: "token",
-    };
-    window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    render(<View />, { wrapper });
-    expect(
-      screen.getByLabelText(t("auth:account_form.username.field_label"))
-    ).toBeVisible();
-  });
-
-  it("displays the account form when only account is pending", async () => {
-    const state: SignupFlow = {
-      isCompleted: false,
-      needAccount: true,
-      needAcceptCommunityGuidelines: false,
-      needFeedback: false,
-      flowToken: "token",
-    };
-    window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    render(<View />, { wrapper });
-    expect(
-      screen.getByLabelText(t("auth:account_form.username.field_label"))
-    ).toBeVisible();
-  });
-
-  it("displays the guidelines form when guidelines and feedback are pending", async () => {
-    const state: SignupFlow = {
-      isCompleted: false,
-      needAccount: false,
-      needAcceptCommunityGuidelines: true,
-      needFeedback: true,
-      flowToken: "token",
-    };
-    window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    render(<View />, { wrapper });
-    expect(
-      await screen.findByText(t("auth:community_guidelines_form.header"))
-    ).toBeVisible();
-  });
-
-  it("displays the guidelines form when only it and feedback are pending", async () => {
-    const state: SignupFlow = {
-      isCompleted: false,
-      needAccount: false,
-      needAcceptCommunityGuidelines: true,
-      needFeedback: true,
-      flowToken: "token",
-    };
-    window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    render(<View />, { wrapper });
-    expect(
-      await screen.findByText(t("auth:community_guidelines_form.header"))
-    ).toBeVisible();
-  });
-
-  it("displays the feedback form when feedback is pending", async () => {
-    const state: SignupFlow = {
-      isCompleted: false,
-      needAccount: false,
-      needAcceptCommunityGuidelines: false,
-      needFeedback: true,
-      flowToken: "token",
-    };
-    window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    render(<View />, { wrapper });
-    expect(screen.getByText(QUESTIONS_OPTIONAL)).toBeVisible();
-  });
-
-  it("displays the redirect message when signup is complete", async () => {
-    const state: SignupFlow = {
-      isCompleted: true,
-      needAccount: false,
-      needAcceptCommunityGuidelines: false,
-      needFeedback: false,
-      flowToken: "token",
-    };
-    window.localStorage.setItem("auth.flowState", JSON.stringify(state));
-    render(<View />, { wrapper });
-    expect(
-      await screen.findByText(t("auth:sign_up_confirmed_prompt"))
-    ).toBeVisible();
   });
 
   it("displays an error when present", async () => {
