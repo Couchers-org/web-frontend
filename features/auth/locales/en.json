@@ -27,7 +27,7 @@
     "explanation": "You have not previously set a password for your account. Please create one now to continue."
   },
   "reset_password_form": {
-    "enter_email": "Enter your username/email",
+    "enter_email": "Enter your email",
     "success_message": "Check your email for a reset password link!"
   },
   "login_page": {

@@ -2,16 +2,12 @@ import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { StringValue } from "google-protobuf/google/protobuf/wrappers_pb";
 import {
   ChangeEmailReq,
-  ChangePasswordReq,
   ChangePhoneReq,
   DeleteAccountReq,
   VerifyPhoneReq,
 } from "proto/account_pb";
-import {
-  CompletePasswordResetReq,
-  ConfirmChangeEmailReq,
-  ResetPasswordReq,
-} from "proto/auth_pb";
+import { ConfirmChangeEmailReq } from "proto/auth_pb";
+import { http } from "service";
 import client from "service/client";
 
 import { Feedback } from "./auth";
@@ -26,28 +22,31 @@ export async function getAccountInfo() {
   return res.toObject();
 }
 
-export function resetPassword(userId: string) {
-  const req = new ResetPasswordReq();
-  req.setUser(userId);
-  return client.auth.resetPassword(req);
+export function resetPassword(email: string): Promise<void> {
+  return http.post(
+    "users/reset_password/",
+    { email },
+    { omitAuthentication: true }
+  );
 }
 
-export function completePasswordReset(resetToken: string) {
-  const req = new CompletePasswordResetReq();
-  req.setPasswordResetToken(resetToken);
-  return client.auth.completePasswordReset(req);
+export function completePasswordReset(
+  uid: string,
+  token: string,
+  new_password: string
+): Promise<void> {
+  return http.post(
+    "users/reset_password_confirm/",
+    { uid, token, new_password },
+    { omitAuthentication: true }
+  );
 }
 
-export function changePassword(oldPassword?: string, newPassword?: string) {
-  const req = new ChangePasswordReq();
-  if (oldPassword) {
-    req.setOldPassword(new StringValue().setValue(oldPassword));
-  }
-  if (newPassword) {
-    req.setNewPassword(new StringValue().setValue(newPassword));
-  }
-
-  return client.account.changePassword(req);
+export function changePassword(
+  current_password: string,
+  new_password: string
+): Promise<void> {
+  return http.post("users/set_password/", { new_password, current_password });
 }
 
 export function changeEmail(newEmail: string, currentPassword?: string) {

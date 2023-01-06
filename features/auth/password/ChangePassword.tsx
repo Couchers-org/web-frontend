@@ -4,32 +4,27 @@ import Button from "components/Button";
 import TextField from "components/TextField";
 import useChangeDetailsFormStyles from "features/auth/useChangeDetailsFormStyles";
 import { accountInfoQueryKey } from "features/queryKeys";
-import { Empty } from "google-protobuf/google/protobuf/empty_pb";
-import { RpcError } from "grpc-web";
 import { useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { service } from "service";
+import { HttpError } from "service/http";
 
 interface ChangePasswordVariables {
-  oldPassword?: string;
-  newPassword?: string;
+  oldPassword: string;
+  newPassword: string;
 }
 
 interface ChangePasswordFormData extends ChangePasswordVariables {
-  passwordConfirmation?: string;
+  passwordConfirmation: string;
 }
 
 interface ChangePasswordProps {
-  hasPassword: boolean;
   className?: string;
 }
 
-export default function ChangePassword({
-  className,
-  hasPassword,
-}: ChangePasswordProps) {
+export default function ChangePassword({ className }: ChangePasswordProps) {
   const { t } = useTranslation([AUTH, GLOBAL]);
   const classes = useChangeDetailsFormStyles();
   const theme = useTheme();
@@ -55,7 +50,7 @@ export default function ChangePassword({
     isSuccess: isChangePasswordSuccess,
     mutate: changePassword,
     variables: changePasswordVariables,
-  } = useMutation<Empty, RpcError, ChangePasswordVariables>(
+  } = useMutation<void, HttpError, ChangePasswordVariables>(
     ({ oldPassword, newPassword }) =>
       service.account.changePassword(oldPassword, newPassword),
     {
@@ -66,14 +61,14 @@ export default function ChangePassword({
     }
   );
 
+  const error = (changePasswordError?.error_messages || [])[0];
+
   return (
     <div className={className}>
       <Typography variant="h2">
         {t("auth:change_password_form.title")}
       </Typography>
-      {changePasswordError && (
-        <Alert severity="error">{changePasswordError.message}</Alert>
-      )}
+      {error && <Alert severity="error">{error}</Alert>}
       {isChangePasswordSuccess && (
         <Alert severity="success">
           {changePasswordVariables?.newPassword
@@ -82,19 +77,17 @@ export default function ChangePassword({
         </Alert>
       )}
       <form className={classes.form} onSubmit={onSubmit}>
-        {hasPassword && (
-          <TextField
-            id="oldPassword"
-            inputRef={register({ required: true })}
-            label={t("auth:change_password_form.old_password")}
-            name="oldPassword"
-            type="password"
-            fullWidth={!isMdOrWider}
-          />
-        )}
+        <TextField
+          id="oldPassword"
+          inputRef={register({ required: true })}
+          label={t("auth:change_password_form.old_password")}
+          name="oldPassword"
+          type="password"
+          fullWidth={!isMdOrWider}
+        />
         <TextField
           id="newPassword"
-          inputRef={register({ required: !hasPassword })}
+          inputRef={register({ required: true })}
           label={t("auth:change_password_form.new_password")}
           name="newPassword"
           type="password"

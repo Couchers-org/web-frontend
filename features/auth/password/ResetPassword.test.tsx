@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { service } from "service";
 import wrapper from "test/hookWrapper";
 import { MockedService, t } from "test/utils";
@@ -13,7 +12,7 @@ const resetPasswordMock = service.account.resetPassword as MockedService<
 
 describe("ResetPassword", () => {
   beforeEach(() => {
-    resetPasswordMock.mockResolvedValue(new Empty());
+    resetPasswordMock.mockResolvedValue();
   });
 
   it("shows the reset password form correctly", async () => {
@@ -80,7 +79,11 @@ describe("ResetPassword", () => {
 
   it("shows an error alert if the reset password request failed", async () => {
     jest.spyOn(console, "error").mockReturnValue(undefined);
-    resetPasswordMock.mockRejectedValue(new Error("GRPC error"));
+    resetPasswordMock.mockRejectedValue({
+      errors: { email: ["Enter a valid email address."] },
+      error_messages: ["The data submitted was invalid"],
+      status_code: 400,
+    });
     render(<ResetPassword />, { wrapper });
 
     userEvent.type(
@@ -91,7 +94,7 @@ describe("ResetPassword", () => {
 
     const errorAlert = await screen.findByRole("alert");
     expect(errorAlert).toBeVisible();
-    expect(errorAlert).toHaveTextContent("GRPC error");
+    expect(errorAlert).toHaveTextContent("The data submitted was invalid");
     expect(
       screen.queryByText(t("auth:reset_password_form.success_message"))
     ).not.toBeInTheDocument();
