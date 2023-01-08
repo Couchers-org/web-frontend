@@ -67,9 +67,17 @@ export default function useUsers(
     isRefetching,
   };
 }
+interface UseUserRes {
+    data: User, 
+    error: string, 
+    isError: boolean, 
+    isFetching: boolean, 
+    isLoading: boolean
+}
 
-export function useUser(id: number | undefined, invalidate = false) {
+export function useUser(id: number | undefined, invalidate = false): UseUserRes{
   const result = useUsers([id], invalidate);
+  console.log({result})
   return {
     data: result.data?.get(id),
     error: result.errors.join("\n"),

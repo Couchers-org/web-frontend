@@ -3,14 +3,14 @@ import Divider from "components/Divider";
 import Markdown from "components/Markdown";
 import { useTranslation } from "i18n";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
-import { User } from "proto/api_pb";
 import makeStyles from "utils/makeStyles";
 
+import { User } from "../../../types/User.type";
 import { useRegions } from "../hooks/useRegions";
 import { AgeGenderLanguagesLabels, RemainingAboutLabels } from "./userLabels";
 
 interface AboutProps {
-  user: User.AsObject;
+  user: User;
 }
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,8 +64,8 @@ export default function About({ user }: AboutProps) {
         {t("profile:heading.travel_section")}
       </Typography>
       <Typography variant="body1">
-        {regions && user.regionsVisitedList.length > 0
-          ? user.regionsVisitedList
+        {regions && user.regionsLived.length > 0
+          ? user.regionsVisited
               .map((country) => regions[country])
               .join(`, `)
           : t("profile:regions_empty_state")}
@@ -73,8 +73,8 @@ export default function About({ user }: AboutProps) {
       <Divider className={classes.marginTop3} />
       <Typography variant="h1">{t("profile:heading.lived_section")}</Typography>
       <Typography variant="body1">
-        {regions && user.regionsLivedList.length > 0
-          ? user.regionsLivedList.map((country) => regions[country]).join(`, `)
+        {regions && user.regionsLived.length > 0
+          ? user.regionsLived.map((country) => regions[country]).join(`, `)
           : t("profile:regions_empty_state")}
       </Typography>
     </div>
