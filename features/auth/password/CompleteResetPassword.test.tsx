@@ -81,11 +81,11 @@ describe("CompleteResetPassword", () => {
 
     // Check form has been cleared
     expect(
-      screen.getByLabelText(t("auth:change_password_form.new_password"))
-    ).not.toHaveValue();
+      screen.queryByLabelText(t("auth:change_password_form.new_password"))
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByLabelText(t("auth:change_password_form.confirm_password"))
-    ).not.toHaveValue();
+      screen.queryByLabelText(t("auth:change_password_form.confirm_password"))
+    ).not.toBeInTheDocument();
 
     // Login link can be followed after password reset
     userEvent.click(
