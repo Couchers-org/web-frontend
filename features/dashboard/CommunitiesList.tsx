@@ -3,13 +3,11 @@ import { Skeleton } from "@material-ui/lab";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import StyledLink from "components/StyledLink";
-import { useListSubCommunities } from "features/communities/hooks";
 import useUserCommunities from "features/userQueries/useUserCommunities";
 import { useTranslation } from "i18n";
 import { DASHBOARD } from "i18n/namespaces";
 import React from "react";
 import { routeToCommunity } from "routes";
-import hasAtLeastOnePage from "utils/hasAtLeastOnePage";
 
 const useStyles = makeStyles((theme) => ({
   communityLink: {
@@ -21,18 +19,23 @@ const useStyles = makeStyles((theme) => ({
       borderTop: `solid 1px ${theme.palette.divider}`,
     },
   },
+  loadMoreButton: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
-export default function CommunitiesList({ all = false }: { all?: boolean }) {
+export default function CommunitiesList() {
   const { t } = useTranslation([DASHBOARD]);
   const classes = useStyles();
   const userCommunities = useUserCommunities();
-  const allCommunities = useListSubCommunities(0);
-  const communities = all ? allCommunities : userCommunities;
+  const communities = userCommunities;
+
+  const hasAtLeastOnePage = (communities?.data?.pages || []).length > 0;
+
   return (
     <div>
-      {communities.error?.message && (
-        <Alert severity="error">{communities.error.message}</Alert>
+      {communities.error && (
+        <Alert severity="error">{communities.error.error_messages[0]}</Alert>
       )}
       {communities.isLoading ? (
         <div className={classes.communityLink}>
@@ -45,14 +48,14 @@ export default function CommunitiesList({ all = false }: { all?: boolean }) {
         </div>
       ) : (
         communities.data &&
-        (hasAtLeastOnePage(communities.data, "communitiesList") ? (
+        (hasAtLeastOnePage ? (
           <>
             {communities.data.pages
-              .flatMap((page) => page.communitiesList)
+              .flatMap((page) => page.results)
               .map((community) => (
                 <StyledLink
-                  href={routeToCommunity(community.communityId, community.slug)}
-                  key={`community-link-${community.communityId}`}
+                  href={routeToCommunity(community.id, community.slug)}
+                  key={`community-link-${community.id}`}
                   className={classes.communityLink}
                 >
                   <Typography variant="h2" component="span">
@@ -60,7 +63,7 @@ export default function CommunitiesList({ all = false }: { all?: boolean }) {
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {t("dashboard:member_count", {
-                      count: community.memberCount,
+                      count: community.user_count,
                     })}
                   </Typography>
                 </StyledLink>
@@ -69,6 +72,7 @@ export default function CommunitiesList({ all = false }: { all?: boolean }) {
               <Button
                 onClick={() => communities.fetchNextPage()}
                 loading={communities.isFetching}
+                className={classes.loadMoreButton}
               >
                 {t("dashboard:load_more")}
               </Button>
