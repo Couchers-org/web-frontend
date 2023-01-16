@@ -1,13 +1,7 @@
-import { Empty } from "google-protobuf/google/protobuf/empty_pb";
-import wrappers from "google-protobuf/google/protobuf/wrappers_pb";
 import {
-  LanguageAbility,
   NullableBoolValue,
   NullableStringValue,
   NullableUInt32Value,
-  PingReq,
-  RepeatedLanguageAbilityValue,
-  RepeatedStringValue,
   UpdateProfileReq,
 //   User,
 } from "proto/api_pb";
@@ -104,12 +98,12 @@ export async function getUser(user: string): Promise<User> {
  * Updates user profile
  */
 
-export async function updateProfile(profile: UpdateUserProfileData) {
+export async function updateProfile(profile: UpdateUserProfileData): Promise<User> {
     console.log("profile data in updateProfile: ")
     console.log({profile})
     const snakeCaseProfile = camelToSnakeKeysObject(profile);
     console.log({snakeCaseProfile})
-    return await http.patch(
+    return http.patch(
         "users/me/",
         snakeCaseProfile
     )

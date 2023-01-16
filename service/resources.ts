@@ -1,4 +1,5 @@
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
+import { http } from "service";
 import client from "service/client";
 
 export async function getTermsOfService() {
@@ -6,9 +7,27 @@ export async function getTermsOfService() {
   return res.toObject();
 }
 
-export async function getRegions() {
-  const regions = await client.resources.getRegions(new Empty());
-  return regions.toObject();
+
+export async function getRegions(): Promise<Region[]> {
+    let req =  await http.get<RegionsResponse>("regions");
+    let res = req.results;
+    // Get all regions, not paginated results
+    while (req.next) {
+        const nextReq = await http.get<RegionsResponse>(req.next);
+        res = res.concat(nextReq.results);
+        req = nextReq;
+    }
+    return res;
+}
+interface RegionsResponse {
+    count: number,
+    next: string,
+    results: Region[]
+}
+export interface Region {
+    id: number,
+    code: string,
+    name: string,
 }
 
 export async function getLanguages() {

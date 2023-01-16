@@ -398,7 +398,7 @@ export default function EditProfileForm() {
               <>
                 <Controller
                   control={control}
-                  defaultValue={user.revionsVisited.map(
+                  defaultValue={user.regionsVisited.map(
                     (region) => regions[region]
                   )}
                   name="regionsVisited"
