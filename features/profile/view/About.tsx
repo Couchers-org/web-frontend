@@ -64,7 +64,7 @@ export default function About({ user }: AboutProps) {
         {t("profile:heading.travel_section")}
       </Typography>
       <Typography variant="body1">
-        {regions && user.regionsLived.length > 0
+        {regions && user.regionsVisited.length > 0
           ? user.regionsVisited
               .map((country) => regions[country])
               .join(`, `)
@@ -74,7 +74,7 @@ export default function About({ user }: AboutProps) {
       <Typography variant="h1">{t("profile:heading.lived_section")}</Typography>
       <Typography variant="body1">
         {regions && user.regionsLived.length > 0
-          ? user.regionsLived.map((country) => regions[country]).join(`, `)
+          ? user.regionsLived.join(', ')
           : t("profile:regions_empty_state")}
       </Typography>
     </div>
