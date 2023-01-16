@@ -23,8 +23,12 @@ import client from "service/client";
 import { duration2pb } from "utils/date";
 import { Duration } from "utils/dayjs";
 import isGrpcError from "utils/isGrpcError";
+import { http } from "service";
 
-export async function listGroupChats(lastMessageId = 0, count = 10) {
+export async function listGroupChats(lastMessageId = 0, count = 10) : Promise<Object> {
+  return await http.get("group_chats");
+
+  /*
   const req = new ListGroupChatsReq();
   req.setLastMessageId(lastMessageId);
   req.setNumber(count);
@@ -32,13 +36,18 @@ export async function listGroupChats(lastMessageId = 0, count = 10) {
   const response = await client.conversations.listGroupChats(req);
 
   return response.toObject();
+  */
 }
 
 export async function getGroupChat(id: number) {
+
+  return await http.get(`group_chats/${id}`);  
+  /*
   const req = new GetGroupChatReq();
   req.setGroupChatId(id);
   const response = await client.conversations.getGroupChat(req);
   return response.toObject();
+  */
 }
 
 export async function getGroupChatMessages(
@@ -60,6 +69,12 @@ export async function createGroupChat(
   title: string,
   users: User.AsObject[]
 ): Promise<number> {
+
+  /*
+  const usersArray = users.map((user) => user.userId);
+  return http.post("group_chats",  {title: title, users: usersArray});
+  */
+
   const req = new CreateGroupChatReq();
   req.setRecipientUserIdsList(users.map((user) => user.userId));
   req.setTitle(new StringValue().setValue(title));

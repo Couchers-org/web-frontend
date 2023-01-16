@@ -30,66 +30,59 @@ export default function GroupChatsTab() {
     queryClient.invalidateQueries([groupChatsListKey]);
   }, [unseenMessageCount, queryClient]);
 
-  const {
-    data,
-    isLoading,
-    error,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery<ListGroupChatsRes.AsObject, RpcError>(
-    groupChatsListKey,
-    ({ pageParam: lastMessageId }) =>
-      service.conversations.listGroupChats(lastMessageId),
-    {
-      getNextPageParam: (lastPage) =>
-        lastPage.noMore ? undefined : lastPage.lastMessageId,
-    }
-  );
+  const { data, isLoading, error, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery
+    <ListGroupChatsRes.AsObject, RpcError>(
+      groupChatsListKey,
+      ({ pageParam: lastMessageId }) => service.conversations.listGroupChats(lastMessageId),
+      {
+        getNextPageParam: (lastPage) =>
+          lastPage.noMore ? undefined : lastPage.lastMessageId,
+      }
+    );
 
   const loadMoreChats = () => fetchNextPage();
 
   return (
     <div className={classes.root}>
       {error && <Alert severity="error">{error.message}</Alert>}
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        data && (
-          <List className={classes.list}>
-            <CreateGroupChat className={classes.listItem} />
-            {data.pages.map((groupChatsRes, pageNumber) =>
-              pageNumber === 0 && groupChatsRes.groupChatsList.length === 0 ? (
-                <TextBody key="no-chats-text">
-                  {t("group_chats_tab.no_chats_message")}
-                </TextBody>
-              ) : (
-                <React.Fragment key={`group-chats-page-${pageNumber}`}>
-                  {groupChatsRes.groupChatsList.map((groupChat) => (
-                    <Link
-                      key={groupChat.groupChatId}
-                      href={routeToGroupChat(groupChat.groupChatId)}
-                    >
-                      <a>
-                        <GroupChatListItem
-                          groupChat={groupChat}
-                          className={classes.listItem}
-                        />
-                      </a>
-                    </Link>
-                  ))}
-                </React.Fragment>
-              )
-            )}
 
-            {hasNextPage && (
-              <Button onClick={loadMoreChats} loading={isFetchingNextPage}>
-                {t("group_chats_tab.load_more_button_label")}
-              </Button>
-            )}
-          </List>
-        )
-      )}
+      {isLoading && <CircularProgress />}
+
+      {!isLoading && data && (
+        <List className={classes.list}>
+          <CreateGroupChat className={classes.listItem} />
+          {data.pages && data.pages.map((groupChatsRes, pageNumber) =>
+            pageNumber === 0 && groupChatsRes.results.length === 0 ? (
+              <TextBody key="no-chats-text">
+                {t("group_chats_tab.no_chats_message")}
+              </TextBody>
+            ) : (
+              <React.Fragment key={`group-chats-page-${pageNumber}`}>
+                {groupChatsRes.results.map((groupChat) => (
+                  <Link
+                    key={groupChat.id}
+                    href={routeToGroupChat(groupChat.id)}
+                  >
+                    <a>
+                      <GroupChatListItem
+                        groupChat={groupChat}
+                        className={classes.listItem}
+                      />
+                    </a>
+                  </Link>
+                ))}
+              </React.Fragment>
+            )
+          )}
+
+          {hasNextPage && (
+            <Button onClick={loadMoreChats} loading={isFetchingNextPage}>
+              {t("group_chats_tab.load_more_button_label")}
+            </Button>
+          )}
+        </List>
+      )
+      }
     </div>
   );
 }

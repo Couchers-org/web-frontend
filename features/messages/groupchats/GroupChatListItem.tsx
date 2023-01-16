@@ -1,20 +1,10 @@
-import {
-  ListItem,
-  ListItemAvatar,
-  ListItemProps,
-  ListItemText,
-} from "@material-ui/core";
+import { ListItem, ListItemAvatar, ListItemProps, ListItemText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Skeleton } from "@material-ui/lab";
 import Avatar from "components/Avatar";
 import { MuteIcon } from "components/Icons";
 import { useAuthContext } from "features/auth/AuthProvider";
-import {
-  controlMessage,
-  groupChatTitleText,
-  isControlMessage,
-  messageTargetId,
-} from "features/messages/utils";
+import { controlMessage, groupChatTitleText, isControlMessage, messageTargetId } from "features/messages/utils";
 import useUsers from "features/userQueries/useUsers";
 import { useTranslation } from "i18n";
 import { MESSAGES } from "i18n/namespaces";
@@ -28,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
   unread: { fontWeight: "bold" },
 }));
 
+// FIXME: Use the correct interface here
 export interface GroupChatListItemProps extends ListItemProps {
   groupChat: GroupChat.AsObject;
 }
@@ -39,16 +30,16 @@ export default function GroupChatListItem({
   const { t } = useTranslation(MESSAGES);
   const classes = useStyles();
   const currentUserId = useAuthContext().authState.userId!;
-  const latestMessageAuthorId = groupChat.latestMessage?.authorUserId;
+  const latestMessageAuthorId = groupChat.latest_message?.user;
   const isUnreadClass =
-    groupChat.lastSeenMessageId !== groupChat.latestMessage?.messageId
+    groupChat.lastSeenMessageId !== groupChat.latest_message?.id
       ? classes.unread
       : "";
 
   //It is possible the last message is sent by someone who has left
   //so include it just in case
   const groupChatMembersQuery = useUsers([
-    ...groupChat.memberUserIdsList,
+    ...groupChat.users,
     latestMessageAuthorId,
   ]);
 
@@ -57,32 +48,35 @@ export default function GroupChatListItem({
   const avatarUserId =
     latestMessageAuthorId !== null && latestMessageAuthorId !== currentUserId
       ? latestMessageAuthorId
-      : groupChat.memberUserIdsList.find((id) => id !== currentUserId) ??
-        currentUserId;
+      : groupChat.users.find((id) => id !== currentUserId) ??
+      currentUserId;
+
   //title is the chat title, or all the member's names except current user joined together
   const title = groupChatTitleText(
     groupChat,
     groupChatMembersQuery,
     currentUserId
   );
+
   //text is the control message text or message text
   let text = "";
   const authorName = firstName(
-    groupChatMembersQuery.data?.get(groupChat.latestMessage?.authorUserId)?.name
+    groupChatMembersQuery.data?.get(groupChat.latest_message?.user)?.name
   );
-  if (groupChat.latestMessage && isControlMessage(groupChat.latestMessage)) {
+
+  if (groupChat.latest_message && isControlMessage(groupChat.latest_message)) {
     const targetName = firstName(
-      groupChatMembersQuery.data?.get(messageTargetId(groupChat.latestMessage))
+      groupChatMembersQuery.data?.get(messageTargetId(groupChat.latest_message))
         ?.name
     );
     text = controlMessage({
       user: authorName,
       target_user: targetName,
       t,
-      message: groupChat.latestMessage,
+      message: groupChat.latest_message,
     });
   } else {
-    text = `${authorName}: ${groupChat.latestMessage?.text?.text || ""}`;
+    text = `${authorName}: ${groupChat.latest_message?.text || ""}`;
   }
 
   return (

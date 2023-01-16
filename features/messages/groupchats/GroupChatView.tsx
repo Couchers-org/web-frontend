@@ -17,15 +17,9 @@ import MembersDialog from "features/messages/groupchats/MembersDialog";
 import MuteDialog from "features/messages/groupchats/MuteDialog";
 import InfiniteMessageLoader from "features/messages/messagelist/InfiniteMessageLoader";
 import MessageList from "features/messages/messagelist/MessageList";
-import useMarkLastSeen, {
-  MarkLastSeenVariables,
-} from "features/messages/useMarkLastSeen";
+import useMarkLastSeen, { MarkLastSeenVariables } from "features/messages/useMarkLastSeen";
 import { getDmUsername, groupChatTitleText } from "features/messages/utils";
-import {
-  groupChatKey,
-  groupChatMessagesKey,
-  groupChatsListKey,
-} from "features/queryKeys";
+import { groupChatKey, groupChatMessagesKey, groupChatsListKey } from "features/queryKeys";
 import useUsers from "features/userQueries/useUsers";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { RpcError } from "grpc-web";
@@ -35,15 +29,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { GetGroupChatMessagesRes, GroupChat } from "proto/conversations_pb";
 import { useRef, useState } from "react";
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 import { groupChatsRoute } from "routes";
 import { service } from "service";
-
 import { GROUP_CHAT_REFETCH_INTERVAL } from "./constants";
 
 export const useGroupChatViewStyles = makeStyles((theme) => ({
@@ -159,8 +147,8 @@ export default function GroupChatView({ chatId }: { chatId: number }) {
 
   //for title text
   const currentUserId = useAuthContext().authState.userId!;
-  const isChatAdmin = groupChat?.adminUserIdsList.includes(currentUserId);
-  const groupChatMembersQuery = useUsers(groupChat?.memberUserIdsList ?? []);
+  const isChatAdmin = groupChat?.admins.includes(currentUserId);
+  const groupChatMembersQuery = useUsers(groupChat?.users ?? []);
 
   const {
     data: messagesRes,
@@ -338,7 +326,7 @@ export default function GroupChatView({ chatId }: { chatId: number }) {
                             ]
                           : null,
 
-                        groupChat?.memberUserIdsList.includes(currentUserId) ? (
+                        groupChat?.users.includes(currentUserId) ? (
                           <MenuItem
                             onClick={() => handleClick("leave")}
                             key="leave"
