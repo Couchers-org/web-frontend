@@ -139,8 +139,8 @@ export const RemainingAboutLabels = ({ user }: Props) => {
       <LabelAndText
         label={t("profile:heading.joined")}
         text={
-          user.joined
-            ? dateTimeFormatter(locale).format(timestamp2Date(user.joined))
+          user.createdAt
+            ? dateTimeFormatter(locale).format(Date.parse("2023-01-09T01:51:32.765332+13:00"))
             : ""
         }
       />
