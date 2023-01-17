@@ -2,9 +2,6 @@ import { TFunction } from "i18n";
 import {
   HostingStatus,
   MeetupStatus,
-  ParkingDetails,
-  SleepingArrangement,
-  SmokingLocation,
 } from "proto/api_pb";
 import { ReferenceType } from "proto/references_pb";
 
@@ -44,17 +41,24 @@ export const referenceBadgeLabel = (t: TFunction) => ({
   ),
 });
 
+export enum SmokingLocation {
+    YES = 'yes',
+    OUTSIDE = 'outside',
+    NO = 'no',
+    WINDOW = 'window',
+    UNSPECIFIED = 'unspecified'
+}
+
 export const smokingLocationLabels = (t: TFunction) => ({
-  [SmokingLocation.SMOKING_LOCATION_NO]: t("profile:smoking_location.no"),
-  [SmokingLocation.SMOKING_LOCATION_OUTSIDE]: t(
+  [SmokingLocation.NO]: t("profile:smoking_location.no"),
+  [SmokingLocation.OUTSIDE]: t(
     "profile:smoking_location.outside"
   ),
-  [SmokingLocation.SMOKING_LOCATION_WINDOW]: t(
+  [SmokingLocation.WINDOW]: t(
     "profile:smoking_location.window"
   ),
-  [SmokingLocation.SMOKING_LOCATION_YES]: t("profile:smoking_location.yes"),
-  [SmokingLocation.SMOKING_LOCATION_UNKNOWN]: t("profile:unspecified_info"),
-  [SmokingLocation.SMOKING_LOCATION_UNSPECIFIED]: t("profile:unspecified_info"),
+  [SmokingLocation.YES]: t("profile:smoking_location.yes"),
+  [SmokingLocation.UNSPECIFIED]: t("profile:unspecified_info"),
 });
 
 export const hostingStatusLabels = (t: TFunction) => ({
@@ -89,42 +93,54 @@ export const meetupStatusLabels = (t: TFunction) => ({
   ),
 });
 
+export enum SleepingArrangement {
+    PRIVATE = 'private',
+    COMMON = 'common',
+    SHARED_SPACE = 'shared_space',
+    SHARED_ROOM = 'shared_room',
+    UNSPECIFIED = 'unspecified'
+}
+
 export const sleepingArrangementLabels = (t: TFunction) => ({
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_PRIVATE]: t(
+  [SleepingArrangement.PRIVATE]: t(
     "profile:sleeping_arrangement.private"
   ),
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_COMMON]: t(
+  [SleepingArrangement.COMMON]: t(
     "profile:sleeping_arrangement.common"
   ),
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_SHARED_ROOM]: t(
+  [SleepingArrangement.SHARED_ROOM]: t(
     "profile:sleeping_arrangement.shared_room"
   ),
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_SHARED_SPACE]: t(
+  [SleepingArrangement.SHARED_SPACE]: t(
     "profile:sleeping_arrangement.shared_space"
   ),
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_UNSPECIFIED]: t(
+  [SleepingArrangement.UNSPECIFIED]: t(
     "profile:unspecified_info"
-  ),
-  [SleepingArrangement.SLEEPING_ARRANGEMENT_UNKNOWN]: t(
-    "profile:unspecified_info"
-  ),
+  )
 });
 
+export enum ParkingDetails {
+    FREE_ONSITE = 'free_onsite',
+    FREE_OFFSITE = 'free_offsite',
+    PAID_ONSITE = 'paid_onsite',
+    PAID_OFFSITE = 'paid_offsite',
+    UNSPECIFIED = 'unspecified'
+}
+
 export const parkingDetailsLabels = (t: TFunction) => ({
-  [ParkingDetails.PARKING_DETAILS_FREE_ONSITE]: t(
+  [ParkingDetails.FREE_ONSITE]: t(
     "profile:parking_details.free_onsite"
   ),
-  [ParkingDetails.PARKING_DETAILS_FREE_OFFSITE]: t(
+  [ParkingDetails.FREE_OFFSITE]: t(
     "profile:parking_details.free_offsite"
   ),
-  [ParkingDetails.PARKING_DETAILS_PAID_ONSITE]: t(
+  [ParkingDetails.PAID_ONSITE]: t(
     "profile:parking_details.paid_onsite"
   ),
-  [ParkingDetails.PARKING_DETAILS_PAID_OFFSITE]: t(
+  [ParkingDetails.PAID_OFFSITE]: t(
     "profile:parking_details.paid_offsite"
   ),
-  [ParkingDetails.PARKING_DETAILS_UNSPECIFIED]: t("profile:unspecified_info"),
-  [ParkingDetails.PARKING_DETAILS_UNKNOWN]: t("profile:unspecified_info"),
+  [ParkingDetails.UNSPECIFIED]: t("profile:unspecified_info"),
 });
 
 export function booleanConversion(t: TFunction, value: boolean | undefined) {

@@ -7,7 +7,7 @@ const Markdown = dynamic(() => import("components/MarkdownNoSSR"), {
 export default Markdown;
 
 export function increaseMarkdownHeaderLevel(
-  source: string,
+  source = "" ,
   topHeaderLevel: number
 ) {
   let convertedSource = source;

@@ -1,3 +1,4 @@
+import { ParkingDetails, SleepingArrangement, SmokingLocation } from "features/profile/constants";
 
 export type User = {
     id: number;
@@ -40,17 +41,17 @@ export type User = {
     hasHousemates: boolean;
     housemateDetails: string;
     wheelchairAccessible: boolean;
-    smokingAllowed: string;
+    smokingAllowed: SmokingLocation;
     smokesAtHome: boolean;
     drinkingAllowed: boolean;
-    drinkstHome: boolean;
+    drinksAtHome: boolean;
     otherHostInfo: string;
-    sleepingArrangement: string;
+    sleepingArrangement: SleepingArrangement;
     sleepingDetails: string;
     area: string;
     houseRules: string;
     parking: boolean;
-    parkingDetails: string;
+    parkingDetails: ParkingDetails;
     campingOk: boolean;
     acceptedTos: number;
     acceptedCommunityGuidelines: number;
