@@ -1,8 +1,4 @@
 import { TFunction } from "i18n";
-import {
-  HostingStatus,
-  MeetupStatus,
-} from "proto/api_pb";
 import { ReferenceType } from "proto/references_pb";
 
 export const referencesQueryStaleTime = 10 * 60 * 1000;
@@ -29,6 +25,7 @@ export const referencesFilterLabels = (t: TFunction) => ({
   all: t("profile:reference_filter_label.all"),
   given: t("profile:reference_filter_label.given"),
 });
+
 export const referenceBadgeLabel = (t: TFunction) => ({
   [ReferenceType.REFERENCE_TYPE_FRIEND]: t(
     "profile:reference_badge_label.friend"
@@ -61,34 +58,43 @@ export const smokingLocationLabels = (t: TFunction) => ({
   [SmokingLocation.UNSPECIFIED]: t("profile:unspecified_info"),
 });
 
+export enum HostingStatus {
+    CAN = 'can_host',
+    MAYBE = 'maybe',
+    CANT = 'cant_host',
+    UNSPECIFIED = 'unspecified'
+}
+
 export const hostingStatusLabels = (t: TFunction) => ({
-  [HostingStatus.HOSTING_STATUS_CAN_HOST]: t("global:hosting_status.can_host"),
-  [HostingStatus.HOSTING_STATUS_MAYBE]: t("global:hosting_status.maybe"),
-  [HostingStatus.HOSTING_STATUS_CANT_HOST]: t(
+  [HostingStatus.CAN]: t("global:hosting_status.can_host"),
+  [HostingStatus.MAYBE]: t("global:hosting_status.maybe"),
+  [HostingStatus.CANT]: t(
     "global:hosting_status.cant_host"
   ),
-  [HostingStatus.HOSTING_STATUS_UNSPECIFIED]: t(
-    "global:hosting_status.unspecified_info"
-  ),
-  [HostingStatus.HOSTING_STATUS_UNKNOWN]: t(
+  [HostingStatus.UNSPECIFIED]: t(
     "global:hosting_status.unspecified_info"
   ),
 });
 
+
+export enum MeetupStatus {
+    CAN = 'wants_to_meetup',
+    MAYBE = 'open_to_meetup',
+    WONT = 'does_not_want_to_meetup',
+    UNSPECIFIED = 'unspecified'
+}
+
 export const meetupStatusLabels = (t: TFunction) => ({
-  [MeetupStatus.MEETUP_STATUS_WANTS_TO_MEETUP]: t(
+  [MeetupStatus.CAN]: t(
     "global:meetup_status.wants_to_meetup"
   ),
-  [MeetupStatus.MEETUP_STATUS_OPEN_TO_MEETUP]: t(
+  [MeetupStatus.MAYBE]: t(
     "global:meetup_status.open_to_meetup"
   ),
-  [MeetupStatus.MEETUP_STATUS_DOES_NOT_WANT_TO_MEETUP]: t(
+  [MeetupStatus.WONT]: t(
     "global:meetup_status.does_not_want_to_meetup"
   ),
-  [MeetupStatus.MEETUP_STATUS_UNSPECIFIED]: t(
-    "global:meetup_status.unspecified_info"
-  ),
-  [MeetupStatus.MEETUP_STATUS_UNKNOWN]: t(
+  [MeetupStatus.UNSPECIFIED]: t(
     "global:meetup_status.unspecified_info"
   ),
 });

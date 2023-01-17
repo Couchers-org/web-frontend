@@ -1,4 +1,4 @@
-import { ParkingDetails, SleepingArrangement, SmokingLocation } from "features/profile/constants";
+import { HostingStatus, MeetupStatus, ParkingDetails, SleepingArrangement, SmokingLocation } from "features/profile/constants";
 
 export type User = {
     id: number;
@@ -20,8 +20,8 @@ export type User = {
     pronouns: string;
     birthdate: string;
     fullName: string;
-    hostingStatus: string;
-    meetupStatus: string;
+    hostingStatus: HostingStatus;
+    meetupStatus: MeetupStatus;
     communityStanding: number;
     occupation: string;
     education: string;
