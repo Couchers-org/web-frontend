@@ -248,5 +248,30 @@ describe("AccountForm", () => {
       );
       await assertErrorAlert("Generic error");
     });
+
+    it("validates the username is available before submit", async () => {
+      validateUsernameMock.mockRejectedValue({
+        errors: {
+          username: "Username is taken",
+        },
+        status_code: 400,
+      });
+
+      userEvent.type(
+        await screen.findByLabelText(
+          t("auth:account_form.username.field_label")
+        ),
+        "test"
+      );
+      userEvent.tab();
+
+      await waitFor(async () =>
+        expect(
+          await screen.findByText(
+            t("auth:account_form.username.username_taken_error")
+          )
+        ).toBeVisible()
+      );
+    });
   });
 });

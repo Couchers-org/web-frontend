@@ -1,0 +1,10 @@
+{
+  "id": 5,
+  "name": "Americas Community",
+  "description": "This is the Couchers.org Americas Community, including both North America and Latin America.",
+  "created_at": "2022-06-09T17:33:56.051218+12:00",
+  "official_cluster": true,
+  "parent_node": 4,
+  "user_count": 123,
+  "slug": "americas-community"
+}
