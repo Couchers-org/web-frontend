@@ -48,11 +48,19 @@ export interface User {
     parkingDetails: ParkingDetails,
     campingOk: boolean,
     timezoneArea: string,
-    // languageAbilities: any,
-    // regionsVisited: any[],
+    languageAbilities: {string: string},
+    regionsVisited: string[],
     regionsLived: string[],
     numberOfReferences: number,
     numberOfFriends: number,
-    // avatar: any,
-    // avatarThumbnail: any
+    avatar: string,
+    avatarThumbnail: string
   };
+
+  interface LanguageAbility {
+    "id": number,
+    "name": string,
+    "fluency": string,
+    "user": number,
+    "language": number
+}

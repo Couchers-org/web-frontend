@@ -42,7 +42,7 @@ export default function ProfilePage({ tab = "about" }: { tab?: UserTab }) {
   return (
     <>
       <HtmlMeta title={t("global:nav.profile")} />
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="error">{error.message}</Alert>}
       {isLoading ? (
         <CircularProgress />
       ) : user ? (

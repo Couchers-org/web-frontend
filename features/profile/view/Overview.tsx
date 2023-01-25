@@ -8,7 +8,6 @@ import UserOverview from "features/profile/view/UserOverview";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { HostingStatus } from "proto/api_pb";
 import { useState } from "react";
 import {
   connectionsRoute,
@@ -18,6 +17,7 @@ import {
 } from "routes";
 import makeStyles from "utils/makeStyles";
 
+import { HostingStatus } from "../constants";
 import { useProfileUser } from "../hooks/useProfileUser";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +63,7 @@ function DefaultActions({
   const classes = useStyles();
   const user = useProfileUser();
   const disableHosting =
-    user.hostingStatus === HostingStatus.HOSTING_STATUS_CANT_HOST;
+    user.hostingStatus === HostingStatus.CANT;
 
   const [mutationError, setMutationError] = useState("");
 
@@ -80,8 +80,8 @@ function DefaultActions({
 
       <FlagButton
         className={classes.flagButton}
-        contentRef={`profile/${user.userId}`}
-        authorUser={user.userId}
+        contentRef={`profile/${user.id}`}
+        authorUser={user.id}
       />
 
       {mutationError && <Alert severity="error">{mutationError}</Alert>}

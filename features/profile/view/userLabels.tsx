@@ -107,9 +107,7 @@ export const AgeGenderLanguagesLabels = ({ user }: Props) => {
         <LabelAndText
           label={t("heading.languages_fluent")}
           text={
-            user.languageAbilitiesList
-              .map((ability) => languages[ability.code])
-              .join(", ") || t("languages_fluent_false")
+            Object.keys((user.languageAbilities)).join(', ') || t("languages_fluent_false")
           }
         />
       )}
