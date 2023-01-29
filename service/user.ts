@@ -7,6 +7,7 @@ import {
 } from "proto/api_pb";
 import { http } from "service";
 import client from "service/client";
+import { CurrentUser } from "types/CurrentUser.type";
 import { User } from "types/User.type";
 import { ProtoToJsTypes } from "utils/types";
 
@@ -70,7 +71,7 @@ export async function passwordLogin(
  * Returns User record of logged in user
  *
  */
-export async function getCurrentUser(): Promise<User> {
+export async function getCurrentUser(): Promise<CurrentUser> {
     // const req = new PingReq();
 
     // const response = await client.api.ping(req);
@@ -98,7 +99,7 @@ export async function getUser(user: string): Promise<User> {
  * Updates user profile
  */
 
-export async function updateProfile(profile: UpdateUserProfileData): Promise<User> {
+export async function updateProfile(profile: UpdateUserProfileData): Promise<CurrentUser> {
     console.log("profile data in updateProfile: ")
     console.log({profile})
     const snakeCaseProfile = camelToSnakeKeysObject(profile);

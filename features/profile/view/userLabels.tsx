@@ -3,37 +3,38 @@ import { useLanguages } from "features/profile/hooks/useLanguages";
 import { responseRateKey } from "features/queryKeys";
 import { useTranslation } from "i18n";
 import { COMMUNITIES, GLOBAL, PROFILE } from "i18n/namespaces";
-import { User } from "proto/api_pb";
 import { useQuery } from "react-query";
 import { service } from "service";
+import { User } from "types/User.type";
 import { dateTimeFormatter, timestamp2Date } from "utils/date";
 import dayjs from "utils/dayjs";
 import { timeAgoI18n } from "utils/timeAgo";
 
 interface Props {
-  user: User.AsObject;
+  user: User;
 }
 
 export const ReferencesLastActiveLabels = ({ user }: Props) => {
   const { t } = useTranslation(PROFILE);
   //workaround for not being able to type timeAgoI18n properly
   const { t: tGlobal } = useTranslation(GLOBAL);
+  console.log({user})
   return (
     <>
       <LabelAndText
         label={t("heading.references")}
-        text={`${user.numReferences || 0}`}
+        text={`${user.numberOfReferences || 0}`}
       />
       <LabelAndText
         label={t("heading.last_active")}
-        text={
-          user.lastActive
-            ? timeAgoI18n({
-                input: timestamp2Date(user.lastActive),
-                t: tGlobal,
-              })
-            : t("last_active_false")
-        }
+        text="??????"
+        //   user.updatedAt
+        //     ? timeAgoI18n({
+        //         input: timestamp2Date(user.updatedAt),
+        //         t: tGlobal,
+        //       })
+        //     : t("last_active_false")
+        // }
       />
     </>
   );
@@ -41,8 +42,8 @@ export const ReferencesLastActiveLabels = ({ user }: Props) => {
 
 export const ResponseRateLabel = ({ user }: Props) => {
   const { t } = useTranslation("profile");
-  const query = useQuery(responseRateKey(user.userId), () =>
-    service.requests.getResponseRate(user.userId)
+  const query = useQuery(responseRateKey(user.id), () =>
+    service.requests.getResponseRate(user.id)
   );
 
   let rateText = undefined;
@@ -144,7 +145,7 @@ export const RemainingAboutLabels = ({ user }: Props) => {
       />
       <LabelAndText
         label={t("profile:heading.local_time")}
-        text={dayjs().tz(user.timezone).format("LT")}
+        text={dayjs().tz(user.timezoneArea).format("LT")}
       />
     </>
   );

@@ -4,8 +4,7 @@ import { useRouter } from "next/router";
 import { useMutation, useQueryClient } from "react-query";
 import { routeToProfile } from "routes";
 import { service, UpdateUserProfileData } from "service/index";
-import { snakeToCamelKeysObject } from "service/user";
-import { User } from "types/User.type";
+import { CurrentUser } from "types/CurrentUser.type";
 import { SetMutationError } from "utils/types";
 
 interface UpdateUserProfileVariables {
@@ -29,8 +28,8 @@ export default function useUpdateUserProfile() {
     isLoading,
     isError,
     status,
-  } = useMutation<User, UpdateUserProfileErrorRes, UpdateUserProfileVariables>(
-    ({ profileData }): Promise<User> => service.user.updateProfile(profileData),
+  } = useMutation<CurrentUser, UpdateUserProfileErrorRes, UpdateUserProfileVariables>(
+    ({ profileData }): Promise<CurrentUser> => service.user.updateProfile(profileData),
     {
       onError: (error, { setMutationError }) => {
         //TODO: make this error translatable and include specific problems
