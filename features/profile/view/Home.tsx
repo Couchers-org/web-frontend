@@ -10,7 +10,7 @@ import {
 } from "features/profile/constants";
 import { useTranslation } from "i18n";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
-import { User } from "proto/api_pb";
+import { User } from "types/User.type";
 import makeStyles from "utils/makeStyles";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface HomeProps {
-  user: User.AsObject;
+  user: User;
 }
 
 export default function Home({ user }: HomeProps) {
@@ -47,31 +47,31 @@ export default function Home({ user }: HomeProps) {
           </Typography>
           <LabelAndText
             label={t("profile:home_info_headings.last_minute")}
-            text={booleanConversion(t, user.lastMinute?.value)}
+            text={booleanConversion(t, user.lastMinute)}
           />
           <LabelAndText
             label={t("profile:home_info_headings.wheelchair")}
-            text={booleanConversion(t, user.wheelchairAccessible?.value)}
+            text={booleanConversion(t, user.wheelchairAccessible)}
           />
           <LabelAndText
             label={t("profile:edit_home_questions.accept_camping")}
-            text={booleanConversion(t, user.campingOk?.value)}
+            text={booleanConversion(t, user.campingOk)}
           />
           <LabelAndText
             label={t("profile:home_info_headings.max_guests")}
-            text={`${user.maxGuests?.value || t("profile:unspecified_info")}`}
+            text={`${user.maxGuests || t("profile:unspecified_info")}`}
           />
           <LabelAndText
             label={t("profile:edit_home_questions.accept_kids")}
-            text={booleanConversion(t, user.acceptsKids?.value)}
+            text={booleanConversion(t, user.acceptsKids)}
           />
           <LabelAndText
             label={t("profile:edit_home_questions.accept_pets")}
-            text={booleanConversion(t, user.acceptsPets?.value)}
+            text={booleanConversion(t, user.acceptsPets)}
           />
           <LabelAndText
             label={t("profile:edit_home_questions.accept_drinking")}
-            text={booleanConversion(t, user.drinkingAllowed?.value)}
+            text={booleanConversion(t, user.drinkingAllowed)}
           />
           <LabelAndText
             label={t("profile:edit_home_questions.accept_smoking")}
@@ -88,7 +88,7 @@ export default function Home({ user }: HomeProps) {
           />
           <LabelAndText
             label={t("profile:home_info_headings.parking")}
-            text={booleanConversion(t, user.parking?.value)}
+            text={booleanConversion(t, user.parking)}
           />
           <LabelAndText
             label={t("profile:home_info_headings.parking_details")}
@@ -96,31 +96,31 @@ export default function Home({ user }: HomeProps) {
           />
           <LabelAndText
             label={t("profile:home_info_headings.has_housemates")}
-            text={`${booleanConversion(t, user.hasHousemates?.value)}${
-              user.housemateDetails?.value
-                ? `, ${user.housemateDetails?.value}`
+            text={`${booleanConversion(t, user.hasHousemates)}${
+              user.housemateDetails
+                ? `, ${user.housemateDetails}`
                 : ""
             }`}
           />
           <LabelAndText
             label={t("profile:home_info_headings.host_kids")}
-            text={`${booleanConversion(t, user.hasKids?.value)}${
-              user.kidDetails?.value ? `, ${user.kidDetails?.value}` : ""
+            text={`${booleanConversion(t, user.hasKids)}${
+              user.kidDetails ? `, ${user.kidDetails}` : ""
             }`}
           />
           <LabelAndText
             label={t("profile:home_info_headings.host_pets")}
-            text={`${booleanConversion(t, user.hasPets?.value)}${
-              user.petDetails?.value ? `, ${user.petDetails?.value}` : ""
+            text={`${booleanConversion(t, user.hasPets)}${
+              user.petDetails ? `, ${user.petDetails}` : ""
             }`}
           />
           <LabelAndText
             label={t("profile:home_info_headings.host_drinking")}
-            text={booleanConversion(t, user.drinksAtHome?.value)}
+            text={booleanConversion(t, user.drinksAtHome)}
           />
           <LabelAndText
             label={t("profile:home_info_headings.host_smoking")}
-            text={booleanConversion(t, user.smokesAtHome?.value)}
+            text={booleanConversion(t, user.smokesAtHome)}
           />
         </div>
       </div>
@@ -139,7 +139,7 @@ export default function Home({ user }: HomeProps) {
           <Typography variant="h1">
             {t("profile:home_info_headings.local_area")}
           </Typography>
-          <Markdown source={user.area?.value} />
+          <Markdown source={user.area} />
           <Divider className={classes.marginTop3} />
         </>
       )}
@@ -148,7 +148,7 @@ export default function Home({ user }: HomeProps) {
           <Typography variant="h1">
             {t("profile:home_info_headings.sleeping_arrangement")}
           </Typography>
-          <Markdown source={user.sleepingDetails?.value} />
+          <Markdown source={user.sleepingDetails} />
           <Divider className={classes.marginTop3} />
         </>
       )}
@@ -157,7 +157,7 @@ export default function Home({ user }: HomeProps) {
           <Typography variant="h1">
             {t("profile:home_info_headings.house_rules")}
           </Typography>
-          <Markdown source={user.houseRules?.value} />
+          <Markdown source={user.houseRules} />
           <Divider className={classes.marginTop3} />
         </>
       )}
@@ -166,7 +166,7 @@ export default function Home({ user }: HomeProps) {
           <Typography variant="h1">
             {t("profile:heading.additional_information_section")}
           </Typography>
-          <Markdown source={user.otherHostInfo?.value} />
+          <Markdown source={user.otherHostInfo} />
         </>
       )}
     </>

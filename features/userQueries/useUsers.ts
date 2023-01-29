@@ -1,9 +1,9 @@
 import { userKey } from "features/queryKeys";
 import { userStaleTime } from "features/userQueries/constants";
-import { User } from "proto/api_pb";
 import { useCallback, useEffect, useRef } from "react";
 import { useQueries, useQueryClient } from "react-query";
 import { service } from "service";
+import { User } from "types/User.type";
 import { arrayEq } from "utils/arrayEq";
 
 export default function useUsers(
@@ -33,7 +33,7 @@ export default function useUsers(
     }
   });
 
-  const queries = useQueries<User.AsObject, Error>(
+  const queries = useQueries<User, Error>(
     ids
       .filter((id): id is number => !!id)
       .map((id) => ({
@@ -67,9 +67,17 @@ export default function useUsers(
     isRefetching,
   };
 }
+interface UseUserRes {
+    data: User | undefined, 
+    error: string, 
+    isError: boolean, 
+    isFetching: boolean, 
+    isLoading: boolean
+}
 
-export function useUser(id: number | undefined, invalidate = false) {
+export function useUser(id: number | undefined, invalidate = false): UseUserRes{
   const result = useUsers([id], invalidate);
+  console.log({result})
   return {
     data: result.data?.get(id),
     error: result.errors.join("\n"),

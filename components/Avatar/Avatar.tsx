@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Skeleton } from "@material-ui/lab";
 import classNames from "classnames";
 import Link from "next/link";
-import { User } from "proto/api_pb";
 import React from "react";
 import { routeToUser } from "routes";
+import { User } from "types/User.type";
 
 import { getProfileLinkA11yLabel } from "./constants";
 
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface AvatarProps {
   children?: React.ReactNode;
-  user?: User.AsObject;
+  user?: User;
   grow?: boolean;
   className?: string;
   isProfileLink?: boolean;
@@ -80,9 +80,9 @@ export default function Avatar({
               <MuiAvatar
                 className={classes.avatar}
                 alt={user.name}
-                src={user.avatarUrl}
+                src={user.avatar}
               >
-                {user.name.split(/\s+/).map((name) => name[0])}
+                {user.name?.split(/\s+/).map((name) => name[0])}
               </MuiAvatar>
             </a>
           </Link>
@@ -90,9 +90,9 @@ export default function Avatar({
           <MuiAvatar
             className={classes.avatar}
             alt={user.name}
-            src={user.avatarUrl}
+            src={user.avatar}
           >
-            {user.name.split(/\s+/).map((name) => name[0])}
+            {user.name?.split(/\s+/).map((name) => name[0])}
           </MuiAvatar>
         )
       ) : otherProps.children ? (

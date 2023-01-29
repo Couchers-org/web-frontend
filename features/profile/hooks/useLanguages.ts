@@ -1,29 +1,28 @@
 import { languagesKey } from "features/queryKeys";
 import { useQuery } from "react-query";
 import { service } from "service";
+import { Language } from "service/resources";
 
 export const useLanguages = () => {
-  const { data: { languages, languagesLookup } = {}, ...rest } = useQuery(
-    languagesKey,
-    () =>
-      service.resources.getLanguages().then((result) =>
-        result.languagesList.reduce(
-          (languagesResult, { code, name }) => {
-            languagesResult.languages[code] = name;
-            languagesResult.languagesLookup[name] = code;
-            return languagesResult;
-          },
-          {
-            languages: {} as { [code: string]: string },
-            languagesLookup: {} as { [name: string]: string },
-          }
-        )
-      )
-  );
+    const { data, ...rest } = useQuery(languagesKey, async () => {
+      const languages = await service.resources.getLanguages();
+      return formatLanguagesData(languages)
+    });
 
-  return {
-    languages,
-    languagesLookup,
-    ...rest,
-  };
-};
+    return {
+      languages: data?.languagesIdLookup,
+      languagesIdLookup: data?.languagesNameLookup,
+      ...rest
+    };
+}
+
+export function formatLanguagesData(languages: Language[]) {
+    return languages.reduce((languagesResult, language) => {
+      languagesResult.languagesIdLookup[language.id] = language.name;
+      languagesResult.languagesNameLookup[language.name] = language.id;
+      return languagesResult;
+    }, {
+      languagesIdLookup: {} as { [id: number]: string },
+      languagesNameLookup: {} as { [name: string]: number }
+    });
+}
