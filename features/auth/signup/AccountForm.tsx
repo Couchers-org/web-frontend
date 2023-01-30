@@ -29,6 +29,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { service } from "service";
 import { HostingStatus } from "service/auth";
+import isHttpError from "utils/isHttpError";
 import makeStyles from "utils/makeStyles";
 import {
   lowercaseAndTrimField,
@@ -157,6 +158,16 @@ export default function AccountForm() {
                 value: usernameValidationPattern,
               },
               required: t("auth:account_form.username.required_error"),
+              validate: async (username: string) => {
+                const valid = await service.auth
+                  .validateUsername(lowercaseAndTrimField(username))
+                  .then(() => true)
+                  // An error present in the "username" field tells us the username is unavailable
+                  .catch((e) => isHttpError(e) && !e.errors["username"]);
+                return (
+                  valid || t("auth:account_form.username.username_taken_error")
+                );
+              },
             });
           }}
           helperText={errors?.username?.message ?? " "}

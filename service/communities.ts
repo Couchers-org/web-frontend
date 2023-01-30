@@ -10,9 +10,23 @@ import {
   ListMembersReq,
   ListNearbyUsersReq,
   ListPlacesReq,
-  ListUserCommunitiesReq,
 } from "proto/communities_pb";
+import { http } from "service";
 import client from "service/client";
+import { Paginated } from "types/paginatedResponse";
+
+export interface Community {
+  id: number;
+  description: string;
+  name: string;
+  created_at: string;
+  official_cluster: boolean;
+  parent_node: number;
+  slug: string;
+  user_count: number;
+}
+
+export type CommunityListRes = Paginated<Community>;
 
 export async function getCommunity(communityId: number) {
   const req = new GetCommunityReq();
@@ -116,9 +130,6 @@ export async function leaveCommunity(communityId: number) {
   req.setCommunityId(communityId);
   await client.communities.leaveCommunity(req);
 }
-
-export async function listUserCommunities(pageToken?: string) {
-  const req = new ListUserCommunitiesReq();
-  if (pageToken) req.setPageToken(pageToken);
-  return (await client.communities.listUserCommunities(req)).toObject();
+export async function listUserCommunities(page = 1): Promise<CommunityListRes> {
+  return http.get(`clusters/?page=${page}`);
 }
