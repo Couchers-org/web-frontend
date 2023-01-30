@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react";
 import { mockedService } from "stories/serviceMocks";
-import community from "test/fixtures/community.json";
+import community from "test/fixtures/community_v2.json";
 
 import CommunitiesList from "./CommunitiesList";
 
@@ -34,10 +34,20 @@ function setMocks({ shouldSucceed, hasMore }: Required<CommunitiesListArgs>) {
   const mock = async () =>
     shouldSucceed
       ? {
-          communitiesList: [community],
-          nextPageToken: hasMore ? "more" : "",
+          count: 1,
+          next: hasMore ? "https://example.com/?page=2" : null,
+          previous: null,
+          results: [community],
         }
-      : Promise.reject(new Error("Error listing communities"));
+      : Promise.reject({
+          error_messages: ["Error listing communities"],
+          status_code: 500,
+        });
+
   mockedService.communities.listUserCommunities = mock;
-  mockedService.communities.listCommunities = mock;
+  mockedService.communities.listCommunities = () =>
+    Promise.reject({
+      error_messages: ["Error listing communities"],
+      status_code: 500,
+    });
 }

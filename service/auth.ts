@@ -1,9 +1,7 @@
 import {
   ConfirmDeleteAccountReq,
-  LoginReq,
   RecoverAccountReq,
   UnsubscribeReq,
-  UsernameValidReq,
 } from "proto/auth_pb";
 import { http } from "service";
 import client from "service/client";
@@ -91,13 +89,6 @@ export async function createUser(
   );
 }
 
-export async function checkUsername(username: string) {
-  const req = new LoginReq();
-  req.setUser(username);
-  const res = await client.auth.login(req);
-  return res.getNextStep();
-}
-
 export async function startSignup(
   name: string,
   email: string,
@@ -181,10 +172,7 @@ export async function signupFlowCommunityGuidelines(
 }
 
 export async function validateUsername(username: string) {
-  const req = new UsernameValidReq();
-  req.setUsername(username);
-  const res = await client.auth.usernameValid(req);
-  return res.getValid();
+  return http.post("users/", { username }, { omitAuthentication: true });
 }
 
 export async function getSignupFlow(token: string): Promise<SignupFlowRes> {
