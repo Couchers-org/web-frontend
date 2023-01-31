@@ -86,11 +86,10 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * Returns User record by Username or id
  *
  * @param {string} user
- * @returns {Promise<User.AsObject>}
+ * @returns {Promise<User>}
  */
 export async function getUser(user: string): Promise<User> {
     const snakeCaseRes = await  http.get(`users/${user}/`);
-    console.log({snakeCaseRes});
     const res =  snakeToCamelKeysObject(snakeCaseRes);
     return res;
 }
