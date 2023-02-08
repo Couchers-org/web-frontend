@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import mockRouter from "next-router-mock";
 import { loginRoute } from "routes";
 import { service } from "service";
@@ -14,55 +13,112 @@ const completePasswordResetMock = service.account
   typeof service.account.completePasswordReset
 >;
 
-function renderPage() {
-  mockRouter.setCurrentUrl("?token=P4w0rdR3seTtok3n");
-  render(<CompleteResetPassword />, { wrapper });
-}
-
 describe("CompleteResetPassword", () => {
-  it("shows the loading state on initial load", async () => {
-    completePasswordResetMock.mockImplementation(
-      () => new Promise(() => void 0)
+  beforeEach(async () => {
+    completePasswordResetMock.mockResolvedValue();
+    mockRouter.setCurrentUrl("?uid=test-uid&token=test-token");
+    render(<CompleteResetPassword />, { wrapper });
+  });
+
+  it("shows the change password form", async () => {
+    expect(
+      screen.getByRole("heading", {
+        name: t("auth:jail_set_password_form.title"),
+      })
+    ).toBeVisible();
+    expect(
+      screen.getByLabelText(t("auth:change_password_form.new_password"))
+    ).toBeVisible();
+    expect(
+      screen.getByLabelText(t("auth:change_password_form.confirm_password"))
+    ).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: t("global:submit") })
+    ).toBeVisible();
+  });
+
+  it("does not try to submit the form if the new and confirm password values don't match", async () => {
+    userEvent.type(
+      await screen.findByLabelText(t("auth:change_password_form.new_password")),
+      "password"
     );
-    renderPage();
+    userEvent.type(
+      screen.getByLabelText(t("auth:change_password_form.confirm_password")),
+      "password1"
+    );
+    userEvent.click(screen.getByRole("button", { name: t("global:submit") }));
 
-    expect(await screen.findByRole("progressbar")).toBeVisible();
+    expect(
+      await screen.findByText(
+        t("auth:change_password_form.password_mismatch_error")
+      )
+    ).toBeVisible();
+    expect(completePasswordResetMock).not.toHaveBeenCalled();
   });
 
-  describe("when the reset password completes successfully", () => {
-    beforeEach(async () => {
-      completePasswordResetMock.mockResolvedValue(new Empty());
-      renderPage();
-    });
+  it("updates the user's password successfully", async () => {
+    userEvent.type(
+      screen.getByLabelText(t("auth:change_password_form.new_password")),
+      "new_password"
+    );
+    userEvent.type(
+      screen.getByLabelText(t("auth:change_password_form.confirm_password")),
+      "new_password"
+    );
+    userEvent.click(screen.getByRole("button", { name: t("global:submit") }));
 
-    it("shows the success alert", async () => {
-      const successAlert = await screen.findByRole("alert");
-      expect(successAlert).toBeVisible();
-      expect(successAlert).toHaveTextContent(t("auth:reset_password_success"));
-      expect(completePasswordResetMock).toHaveBeenCalledTimes(1);
-      expect(completePasswordResetMock).toHaveBeenLastCalledWith(
-        "P4w0rdR3seTtok3n"
-      );
-    });
+    const successAlert = await screen.findByRole("alert");
+    expect(successAlert).toBeVisible();
+    expect(successAlert).toHaveTextContent(
+      t("auth:change_password_form.password_changed_success")
+    );
+    expect(completePasswordResetMock).toHaveBeenCalledTimes(1);
+    expect(completePasswordResetMock).toHaveBeenCalledWith(
+      "test-uid",
+      "test-token",
+      "new_password"
+    );
 
-    it("shows a link that takes you to the login page when clicked", async () => {
-      userEvent.click(
-        await screen.findByRole("link", { name: t("auth:login_prompt") })
-      );
+    // Check form has been cleared
+    expect(
+      screen.queryByLabelText(t("auth:change_password_form.new_password"))
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText(t("auth:change_password_form.confirm_password"))
+    ).not.toBeInTheDocument();
 
-      expect(mockRouter.pathname).toBe(loginRoute);
-    });
+    // Login link can be followed after password reset
+    userEvent.click(
+      await screen.findByRole("link", { name: t("auth:login_prompt") })
+    );
+    expect(mockRouter.pathname).toBe(loginRoute);
   });
 
-  it("shows an error alert if the reset password process failed to complete", async () => {
+  it("shows an error alert if change password request failed", async () => {
     jest.spyOn(console, "error").mockReturnValue(undefined);
-    completePasswordResetMock.mockRejectedValue(new Error("Invalid token"));
-    renderPage();
+    completePasswordResetMock.mockRejectedValue({
+      error_messages: ["Invalid token"],
+      status_code: 500,
+    });
+
+    userEvent.type(
+      screen.getByLabelText(t("auth:change_password_form.new_password")),
+      "new_password"
+    );
+    userEvent.type(
+      screen.getByLabelText(t("auth:change_password_form.confirm_password")),
+      "new_password"
+    );
+    userEvent.click(screen.getByRole("button", { name: t("global:submit") }));
 
     const errorAlert = await screen.findByRole("alert");
     expect(errorAlert).toBeVisible();
-    expect(errorAlert).toHaveTextContent(
-      t("auth:reset_password_error", { message: "Invalid token" })
-    );
+    expect(errorAlert).toHaveTextContent("Invalid token");
+
+    expect(
+      screen.queryByText(
+        t("auth:change_password_form.password_changed_success")
+      )
+    ).not.toBeInTheDocument();
   });
 });

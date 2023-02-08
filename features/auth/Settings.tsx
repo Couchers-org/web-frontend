@@ -66,16 +66,13 @@ export default function Settings() {
             email={accountInfo.email}
             hasPassword={accountInfo.hasPassword}
           />
-          <ChangePassword
-            className={classes.section}
-            hasPassword={accountInfo.hasPassword}
-          />
           <DeleteAccount
             className={classes.section}
             username={accountInfo.username}
           />
         </>
       ) : null}
+      <ChangePassword className={classes.section} />
     </>
   );
 }
