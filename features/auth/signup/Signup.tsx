@@ -1,6 +1,8 @@
 import { Divider, Typography } from "@material-ui/core";
+import * as Sentry from "@sentry/react";
 import classNames from "classnames";
 import Alert from "components/Alert";
+import CircularProgress from "components/CircularProgress";
 import HtmlMeta from "components/HtmlMeta";
 import Redirect from "components/Redirect";
 import StyledLink from "components/StyledLink";
@@ -8,11 +10,15 @@ import MobileAuthBg from "features/auth/resources/mobile-auth-bg.jpg";
 import CommunityGuidelinesForm from "features/auth/signup/CommunityGuidelinesForm";
 import { Trans, useTranslation } from "i18n";
 import { AUTH, GLOBAL } from "i18n/namespaces";
-import { useEffect } from "react";
+import Router, { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import vercelLogo from "resources/vercel.svg";
 import { loginRoute, tosRoute } from "routes";
+import { service } from "service";
 import { useRedirectAuthenticatedUsers } from "utils/hooks";
+import isHttpError from "utils/isHttpError";
 import makeStyles from "utils/makeStyles";
+import stringOrFirstString from "utils/stringOrFirstString";
 
 import { useAuthContext } from "../AuthProvider";
 import useAuthStyles from "../useAuthStyles";
@@ -148,6 +154,10 @@ export default function Signup() {
   const error = authState.error;
   const authClasses = useAuthStyles();
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+  const urlToken = stringOrFirstString(router.query.token);
 
   useEffect(() => {
     authActions.clearError();
@@ -156,6 +166,31 @@ export default function Signup() {
   useEffect(() => {
     if (authState.error) window.scroll({ top: 0, behavior: "smooth" });
   }, [authState.error]);
+
+  useEffect(() => {
+    (async () => {
+      if (!urlToken) return;
+      setLoading(true);
+      try {
+        const signupFlow = await service.auth.getSignupFlow(urlToken);
+        authActions.updateSignupState(signupFlow);
+      } catch (err) {
+        Sentry.captureException(err, {
+          tags: {
+            component: "auth/signup/Signup",
+          },
+        });
+        authActions.authError(
+          isHttpError(err)
+            ? err.error_messages[0]
+            : t("global:error.fatal_message")
+        );
+        Router.push(loginRoute);
+        return;
+      }
+      setLoading(false);
+    })();
+  }, [urlToken, authActions, t]);
 
   return (
     <>
@@ -203,7 +238,7 @@ export default function Signup() {
               {error}
             </Alert>
           )}
-          <CurrentForm />
+          {loading ? <CircularProgress /> : <CurrentForm />}
         </div>
         {process.env.NEXT_PUBLIC_COUCHERS_ENV !== "prod" && (
           <a
