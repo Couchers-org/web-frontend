@@ -8,6 +8,7 @@ export const accountInfoQueryKey = "accountInfo";
 export const notificationSettingsQueryKey = "notificationSettings";
 export const tosQueryKey = "tos";
 export const communityGuidelinesQueryKey = "communityGuidelines";
+export const currentUserKey = "currentUser";
 
 export function userKey(userId?: number) {
   return userId === undefined ? "user" : ["user", userId];

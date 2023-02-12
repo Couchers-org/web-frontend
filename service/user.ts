@@ -86,10 +86,12 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * Returns User record by Username or id
  *
  * @param {string} user
- * @returns {Promise<User.AsObject>}
+ * @returns {Promise<User>}
  */
-export async function getUser(user: string): Promise<User.AsObject> {
-  return http.get(`users/${user}/`);
+export async function getUser(user: string): Promise<User> {
+    const snakeCaseRes = await  http.get(`users/${user}/`);
+    const res =  snakeToCamelKeysObject(snakeCaseRes);
+    return res;
 }
 
 /**
@@ -263,4 +265,36 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  */
 export function logout() {
   return http.post("logout/", {});
+}
+
+
+export function snakeToCamelKeysObject(object: any) {
+
+    function snakeToCamel(str: string){
+        return str.toLowerCase().replace(/([-_][a-z])/g, group =>
+        group
+          .toUpperCase()
+          .replace('-', '')
+          .replace('_', '')
+      );
+    }
+    const camelCaseObj: any  = {};
+    for (const snakeCaseKey of Object.keys(object)) {
+      const newKey = snakeToCamel(snakeCaseKey);
+      camelCaseObj[newKey as keyof typeof camelCaseObj] = object[snakeCaseKey];
+    }
+    return camelCaseObj;
+  }
+
+export function camelToSnakeKeysObject(object: any) {
+    const snakeCaseObj: any  = {};
+    function camelToSnake(str: string) {
+        return str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)
+    }
+
+    for (const snakeCaseKey of Object.keys(object)) {
+      const newKey = camelToSnake(snakeCaseKey);
+      snakeCaseObj[newKey as keyof typeof snakeCaseObj] = object[snakeCaseKey];
+    }
+    return snakeCaseObj;
 }

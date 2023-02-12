@@ -14,12 +14,12 @@ export default {
 const user = {
   avatarUrl: "https://loremflickr.com/200/200",
   name: "Test User",
-} as AvatarProps["user"];
+} as unknown as AvatarProps["user"];
 
 const userNoImage = {
   avatarUrl: "",
   name: "Test User",
-} as AvatarProps["user"];
+} as unknown as AvatarProps["user"];
 
 const Template: Story<AvatarProps> = (args) => (
   <>
