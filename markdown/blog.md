@@ -6,6 +6,14 @@ title: Blog
 
 If you'd like to contribute to the blog, please [sign up](/volunteer) and let us know!
 
+## [Blogrs](/blog/2023/02/15/blogrs)
+
+2023/02/15.
+
+This is not a blog
+
+[Read more.](/blog/2023/02/15/blogrs)
+
 ## [Couch surfing in a post-COVID world](/blog/2022/10/11/traveling-in-a-post-covid-world)
 
 2022/10/11.
