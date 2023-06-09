@@ -106,24 +106,24 @@ export default function EditProfileForm() {
         {
           profileData: {
             ...data,
-            regionsVisited: regionsVisited.map(
-              (region) => (regionsLookup || {})[region]
-            ),
-            regionsLived: regionsLived.map(
-              (region) => (regionsLookup || {})[region]
-            ),
-            languageAbilities: {
-              valueList: fluentLanguages.map((language) => ({
-                code: (languagesLookup || {})[language],
-                fluency: LanguageAbility.Fluency.FLUENCY_FLUENT,
-              })),
-            },
-            aboutMe: DEFAULT_ABOUT_ME_HEADINGS.includes(data.aboutMe)
+            // regionsVisited: regionsVisited.map(
+            //   (region) => (regionsLookup || {})[region]
+            // ),
+            // regionsLived: regionsLived.map(
+            //   (region) => (regionsLookup || {})[region]
+            // ),
+            // languageAbilities: {
+            //   valueList: fluentLanguages.map((language) => ({
+            //     code: (languagesLookup || {})[language],
+            //     fluency: LanguageAbility.Fluency.FLUENCY_FLUENT,
+            //   })),
+            
+            aboutMe: DEFAULT_ABOUT_ME_HEADINGS.includes(data.aboutMe as string)
               ? ""
               : data.aboutMe,
-            thingsILike: DEFAULT_HOBBIES_HEADINGS.includes(data.thingsILike)
-              ? ""
-              : data.thingsILike,
+        //     thingsILike: DEFAULT_HOBBIES_HEADINGS.includes(data.thingsILike)
+        //       ? ""
+        //       : data.thingsILike,
           },
           setMutationError: setErrorMessage,
         },
@@ -331,7 +331,7 @@ export default function EditProfileForm() {
             {languages && (
               <Controller
                 control={control}
-                defaultValue={user.languageAbilitiesList.map(
+                defaultValue={user.languageAbilities.map(
                   (ability) => languages[ability.code]
                 )}
                 name="fluentLanguages"
@@ -398,7 +398,7 @@ export default function EditProfileForm() {
               <>
                 <Controller
                   control={control}
-                  defaultValue={user.regionsVisitedList.map(
+                  defaultValue={user.regionsVisited.map(
                     (region) => regions[region]
                   )}
                   name="regionsVisited"
@@ -414,7 +414,7 @@ export default function EditProfileForm() {
                 />
                 <Controller
                   control={control}
-                  defaultValue={user.regionsLivedList.map(
+                  defaultValue={user.regionsLived.map(
                     (region) => regions[region]
                   )}
                   name="regionsLived"

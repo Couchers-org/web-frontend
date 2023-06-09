@@ -5,12 +5,13 @@ import Divider from "components/Divider";
 import { CouchIcon, LocationIcon } from "components/Icons";
 import IconText from "components/IconText";
 import {
+  HostingStatus,
   hostingStatusLabels,
+  MeetupStatus,
   meetupStatusLabels,
 } from "features/profile/constants";
 import { useTranslation } from "i18n";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
-import { HostingStatus, MeetupStatus } from "proto/api_pb";
 import React from "react";
 import makeStyles from "utils/makeStyles";
 
@@ -109,7 +110,7 @@ export default function UserOverview({
             icon={CouchIcon}
             text={
               hostingStatusLabels(t)[
-                user.hostingStatus || HostingStatus.HOSTING_STATUS_UNKNOWN
+                user.hostingStatus || HostingStatus.UNSPECIFIED
               ]
             }
           />
@@ -117,7 +118,7 @@ export default function UserOverview({
             icon={LocationIcon}
             text={
               meetupStatusLabels(t)[
-                user.meetupStatus || MeetupStatus.MEETUP_STATUS_UNKNOWN
+                user.meetupStatus || MeetupStatus.UNSPECIFIED
               ]
             }
           />

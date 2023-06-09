@@ -1,15 +1,21 @@
 import { useAuthContext } from "features/auth/AuthProvider";
 import { accountInfoQueryKey, userKey } from "features/queryKeys";
-import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { useRouter } from "next/router";
 import { useMutation, useQueryClient } from "react-query";
 import { routeToProfile } from "routes";
 import { service, UpdateUserProfileData } from "service/index";
+import { CurrentUser } from "types/CurrentUser.type";
 import { SetMutationError } from "utils/types";
 
 interface UpdateUserProfileVariables {
   profileData: UpdateUserProfileData;
   setMutationError: SetMutationError;
+}
+
+interface UpdateUserProfileErrorRes {
+    error_messages: string[],
+    errors: {string: string[]}[],
+    status_code: number
 }
 
 export default function useUpdateUserProfile() {
@@ -22,11 +28,12 @@ export default function useUpdateUserProfile() {
     isLoading,
     isError,
     status,
-  } = useMutation<Empty, Error, UpdateUserProfileVariables>(
-    ({ profileData }) => service.user.updateProfile(profileData),
+  } = useMutation<CurrentUser, UpdateUserProfileErrorRes, UpdateUserProfileVariables>(
+    ({ profileData }): Promise<CurrentUser> => service.user.updateProfile(profileData),
     {
       onError: (error, { setMutationError }) => {
-        setMutationError(error.message);
+        //TODO: make this error translatable and include specific problems
+        setMutationError("Error in " + Object.keys(error.errors).join(', '));
       },
       onMutate: ({ setMutationError }) => {
         setMutationError(null);

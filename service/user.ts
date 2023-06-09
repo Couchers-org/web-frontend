@@ -1,18 +1,14 @@
-import { Empty } from "google-protobuf/google/protobuf/empty_pb";
-import wrappers from "google-protobuf/google/protobuf/wrappers_pb";
 import {
-  LanguageAbility,
   NullableBoolValue,
   NullableStringValue,
   NullableUInt32Value,
-  PingReq,
-  RepeatedLanguageAbilityValue,
-  RepeatedStringValue,
   UpdateProfileReq,
-  User,
+//   User,
 } from "proto/api_pb";
 import { http } from "service";
 import client from "service/client";
+import { CurrentUser } from "types/CurrentUser.type";
+import { User } from "types/User.type";
 import { ProtoToJsTypes } from "utils/types";
 
 export interface LoginRes {
@@ -69,18 +65,22 @@ export async function passwordLogin(
   );
 }
 
+
+// This isn't actually used anywhere at the moment. ATM we're using getUser with the current user's id instead.
 /**
  * Returns User record of logged in user
  *
- * @returns {Promise<User.AsObject>}
  */
-export async function getCurrentUser(): Promise<User.AsObject> {
-  const req = new PingReq();
+export async function getCurrentUser(): Promise<CurrentUser> {
+    // const req = new PingReq();
 
-  const response = await client.api.ping(req);
-
-  return response.getUser()!.toObject();
-}
+    // const response = await client.api.ping(req);
+        const snakeCaseRes = await http.get(
+            "users/me",
+        )
+        return snakeToCamelKeysObject(snakeCaseRes);
+  }
+  
 
 /**
  * Returns User record by Username or id
@@ -88,77 +88,91 @@ export async function getCurrentUser(): Promise<User.AsObject> {
  * @param {string} user
  * @returns {Promise<User.AsObject>}
  */
-export async function getUser(user: string): Promise<User.AsObject> {
-  return http.get(`users/${user}/`);
+export async function getUser(user: string): Promise<User> {
+    const snakeCaseRes = await  http.get(`users/${user}/`);
+    console.log({snakeCaseRes});
+    const res =  snakeToCamelKeysObject(snakeCaseRes);
+    return res;
 }
 
 /**
  * Updates user profile
  */
-export async function updateProfile(
-  profile: UpdateUserProfileData
-): Promise<Empty> {
-  const req = new UpdateProfileReq();
 
-  const avatarKey = profile.avatarKey
-    ? new NullableStringValue().setValue(profile.avatarKey)
-    : undefined;
-  const name = new wrappers.StringValue().setValue(profile.name);
-  const city = new wrappers.StringValue().setValue(profile.city);
-  const hometown = new NullableStringValue().setValue(profile.hometown);
-  const lat = new wrappers.DoubleValue().setValue(profile.lat);
-  const lng = new wrappers.DoubleValue().setValue(profile.lng);
-  const radius = new wrappers.DoubleValue().setValue(profile.radius);
-  const pronouns = new NullableStringValue().setValue(profile.pronouns);
-  const occupation = new NullableStringValue().setValue(profile.occupation);
-  const education = new NullableStringValue().setValue(profile.education);
-  const aboutMe = new NullableStringValue().setValue(profile.aboutMe);
-  const myTravels = new NullableStringValue().setValue(profile.myTravels);
-  const thingsILike = new NullableStringValue().setValue(profile.thingsILike);
-  const hostingStatus = profile.hostingStatus;
-  const meetupStatus = profile.meetupStatus;
-
-  const regionsVisited = new RepeatedStringValue().setValueList(
-    profile.regionsVisited
-  );
-  const regionsLived = new RepeatedStringValue().setValueList(
-    profile.regionsLived
-  );
-  const additionalInformation = new NullableStringValue().setValue(
-    profile.additionalInformation
-  );
-
-  const languageAbilities = new RepeatedLanguageAbilityValue().setValueList(
-    profile.languageAbilities.valueList.map((languageAbility) =>
-      new LanguageAbility()
-        .setCode(languageAbility.code)
-        .setFluency(languageAbility.fluency)
+export async function updateProfile(profile: UpdateUserProfileData): Promise<CurrentUser> {
+    console.log("profile data in updateProfile: ")
+    console.log({profile})
+    const snakeCaseProfile = camelToSnakeKeysObject(profile);
+    console.log({snakeCaseProfile})
+    return http.patch(
+        "users/me/",
+        snakeCaseProfile
     )
-  );
-
-  req
-    .setAvatarKey(avatarKey)
-    .setName(name)
-    .setCity(city)
-    .setHometown(hometown)
-    .setLat(lat)
-    .setLng(lng)
-    .setRadius(radius)
-    .setPronouns(pronouns)
-    .setOccupation(occupation)
-    .setEducation(education)
-    .setLanguageAbilities(languageAbilities)
-    .setAboutMe(aboutMe)
-    .setMyTravels(myTravels)
-    .setThingsILike(thingsILike)
-    .setHostingStatus(hostingStatus)
-    .setMeetupStatus(meetupStatus)
-    .setRegionsVisited(regionsVisited)
-    .setRegionsLived(regionsLived)
-    .setAdditionalInformation(additionalInformation);
-
-  return client.api.updateProfile(req);
 }
+// export async function updateProfile(
+//   profile: UpdateUserProfileData
+// ): Promise<Empty> {
+//   const req = new UpdateProfileReq();
+
+//   const avatarKey = profile.avatarKey
+//     ? new NullableStringValue().setValue(profile.avatarKey)
+//     : undefined;
+//   const name = new wrappers.StringValue().setValue(profile.name);
+//   const city = new wrappers.StringValue().setValue(profile.city);
+//   const hometown = new NullableStringValue().setValue(profile.hometown);
+//   const lat = new wrappers.DoubleValue().setValue(profile.lat);
+//   const lng = new wrappers.DoubleValue().setValue(profile.lng);
+//   const radius = new wrappers.DoubleValue().setValue(profile.radius);
+//   const pronouns = new NullableStringValue().setValue(profile.pronouns);
+//   const occupation = new NullableStringValue().setValue(profile.occupation);
+//   const education = new NullableStringValue().setValue(profile.education);
+//   const aboutMe = new NullableStringValue().setValue(profile.aboutMe);
+//   const myTravels = new NullableStringValue().setValue(profile.myTravels);
+//   const thingsILike = new NullableStringValue().setValue(profile.thingsILike);
+//   const hostingStatus = profile.hostingStatus;
+//   const meetupStatus = profile.meetupStatus;
+
+//   const regionsVisited = new RepeatedStringValue().setValueList(
+//     profile.regionsVisited
+//   );
+//   const regionsLived = new RepeatedStringValue().setValueList(
+//     profile.regionsLived
+//   );
+//   const additionalInformation = new NullableStringValue().setValue(
+//     profile.additionalInformation
+//   );
+
+//   const languageAbilities = new RepeatedLanguageAbilityValue().setValueList(
+//     profile.languageAbilities.valueList.map((languageAbility) =>
+//       new LanguageAbility()
+//         .setCode(languageAbility.code)
+//         .setFluency(languageAbility.fluency)
+//     )
+//   );
+
+//   req
+//     .setAvatarKey(avatarKey)
+//     .setName(name)
+//     .setCity(city)
+//     .setHometown(hometown)
+//     .setLat(lat)
+//     .setLng(lng)
+//     .setRadius(radius)
+//     .setPronouns(pronouns)
+//     .setOccupation(occupation)
+//     .setEducation(education)
+//     .setLanguageAbilities(languageAbilities)
+//     .setAboutMe(aboutMe)
+//     .setMyTravels(myTravels)
+//     .setThingsILike(thingsILike)
+//     .setHostingStatus(hostingStatus)
+//     .setMeetupStatus(meetupStatus)
+//     .setRegionsVisited(regionsVisited)
+//     .setRegionsLived(regionsLived)
+//     .setAdditionalInformation(additionalInformation);
+
+//   return client.api.updateProfile(req);
+// }
 
 export function updateAvatar(avatarKey: string) {
   const req = new UpdateProfileReq();
@@ -263,4 +277,36 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
  */
 export function logout() {
   return http.post("logout/", {});
+}
+
+
+export function snakeToCamelKeysObject(object: any) {
+
+    function snakeToCamel(str: string){
+        return str.toLowerCase().replace(/([-_][a-z])/g, group =>
+        group
+          .toUpperCase()
+          .replace('-', '')
+          .replace('_', '')
+      );
+    }
+    const camelCaseObj: any  = {};
+    for (const snakeCaseKey of Object.keys(object)) {
+      const newKey = snakeToCamel(snakeCaseKey);
+      camelCaseObj[newKey as keyof typeof camelCaseObj] = object[snakeCaseKey];
+    }
+    return camelCaseObj;
+  }
+
+export function camelToSnakeKeysObject(object: any) {
+    const snakeCaseObj: any  = {};
+    function camelToSnake(str: string) {
+        return str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)
+    }
+
+    for (const snakeCaseKey of Object.keys(object)) {
+      const newKey = camelToSnake(snakeCaseKey);
+      snakeCaseObj[newKey as keyof typeof snakeCaseObj] = object[snakeCaseKey];
+    }
+    return snakeCaseObj;
 }
