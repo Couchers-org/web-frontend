@@ -71,9 +71,9 @@
     },
     "edit_home_questions": {
         "accept_drinking": "Okay with drinking",
-        "accept_pets": "Can host pets",
+        "accept_pets": "Hosts pets",
         "accept_smoking": "Okay with smoking",
-        "accept_kids": "Can host children",
+        "accept_kids": "Hosts children",
         "accept_camping": "Tent camping available"
     },
     "unspecified_info": "Ask me",
