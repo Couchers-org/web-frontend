@@ -62,6 +62,8 @@ export default function ResetPassword() {
           label={t("auth:reset_password_form.enter_email")}
           name="userId"
           variant="standard"
+          type="email"
+          autocomplete="username"
           fullWidth
         />
         <Button loading={isLoading} type="submit">
