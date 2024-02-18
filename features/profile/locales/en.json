@@ -144,7 +144,9 @@
     "request_form": {
         "send_request": "Send {{name}} a request",
         "arrival_date": "Arrival Date",
+        "arrival_date_empty": "Please specify an arrival Date",
         "departure_date": "Departure Date",
+        "departure_date_empty": "Please specify a departure Date",
         "meetup_only": "Meet up only",
         "overnight_stay": "Overnight stay",
         "request": "Request",
