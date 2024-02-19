@@ -85,15 +85,7 @@ export type CreateHostRequestWrapper = Omit<
   "toDate" | "fromDate"
 > & { toDate: Dayjs; fromDate: Dayjs };
 
-export async function createHostRequest(data: CreateHostRequestWrapper, empty_arrival: string, empty_departure: string) {
-  if (data.fromDate === null) {
-    throw new Error(empty_arrival);
-  }
-
-  if (data.toDate === null) {
-    throw new Error(empty_departure);
-  }
-
+export async function createHostRequest(data: CreateHostRequestWrapper) {
   const req = new CreateHostRequestReq();
   req.setHostUserId(data.hostUserId);
   req.setFromDate(data.fromDate.format().split("T")[0]);

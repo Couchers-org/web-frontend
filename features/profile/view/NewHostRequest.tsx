@@ -85,16 +85,27 @@ export default function NewHostRequest({
   });
 
   useEffect(() => register("hostUserId"));
-  const empty_arrival_date = t("profile:request_form.arrival_date_empty");
-  const empty_departure_date = t("profile:request_form.departure_date_empty");
 
   const { error, mutate } = useMutation<
     number,
     RpcError,
     CreateHostRequestWrapper
   >(
-    (data: CreateHostRequestWrapper) =>
-      service.requests.createHostRequest(data, empty_arrival_date, empty_departure_date),
+    (data: CreateHostRequestWrapper) => {      
+      if (data.fromDate === null || data.fromDate === '') {
+        throw new Error(t("profile:request_form.arrival_date_empty"));
+      }
+    
+      if (data.toDate === null || data.toDate === '') {
+        throw new Error(t("profile:request_form.departure_date_empty"));
+      }
+  
+      if (data.text === '') {
+        throw new Error(t("profile:request_form.request_description_empty")); 
+      }
+
+      service.requests.createHostRequest(data);
+    },
     {
       onSuccess: () => {
         setIsRequesting(false);
@@ -105,7 +116,9 @@ export default function NewHostRequest({
 
   const { isLoading: hostLoading, error: hostError } = useUser(user.userId);
 
-  const onSubmit = handleSubmit((data) => mutate(data));
+  const onSubmit = handleSubmit((data) => {
+    mutate(data);
+  });
 
   const guests = Array.from({ length: 8 }, (_, i) => {
     const num = i + 1;
@@ -118,7 +131,11 @@ export default function NewHostRequest({
 
   const watchFromDate = watch("fromDate", null);
   useEffect(() => {
-    if (watchFromDate && getValues("toDate") && isSameOrFutureDate(watchFromDate, getValues("toDate"))) {
+    if (
+      watchFromDate &&
+      getValues("toDate") &&
+      isSameOrFutureDate(watchFromDate, getValues("toDate"))
+    ) {
       setValue("toDate", watchFromDate.add(1, "day"));
     }
   });
@@ -133,7 +150,7 @@ export default function NewHostRequest({
         )}
       </Typography>
       {error && <Alert severity="error">{error.message}</Alert>}
-            {hostError ? (
+      {hostError ? (
         <Alert severity={"error"}>{hostError}</Alert>
       ) : (
         <form onSubmit={onSubmit}>
@@ -189,7 +206,7 @@ export default function NewHostRequest({
               }
               id="to-date"
               label={t("profile:request_form.departure_date")}
-              minDate={ watchFromDate && watchFromDate.add(1, "day").toDate()}
+              minDate={watchFromDate ? watchFromDate.add(1, "day").toDate() : new Date()}
               name="toDate"
               defaultValue={null}
             />

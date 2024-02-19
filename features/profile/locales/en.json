@@ -151,6 +151,7 @@
         "overnight_stay": "Overnight stay",
         "request": "Request",
         "request_description": "Share your plans for the visit and include why you're requesting to stay with this particular host",
+        "request_description_empty": "Please write a request message",
         "stay_type_a11y_text": "stay type",
         "success": "Request sent!"
     },
