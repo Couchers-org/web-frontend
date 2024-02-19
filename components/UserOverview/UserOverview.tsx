@@ -14,8 +14,12 @@ import { HostingStatus, MeetupStatus } from "proto/api_pb";
 import React from "react";
 import makeStyles from "utils/makeStyles";
 
-import { useProfileUser } from "../hooks/useProfileUser";
-import { ReferencesLastActiveLabels, ResponseRateLabel } from "./userLabels";
+import { useProfileUser } from "../../features/profile/hooks/useProfileUser";
+import {
+  ReferencesLastActiveLabels,
+  ResponseRateLabel,
+} from "../../features/profile/view/userLabels";
+import { HTML_SYMBOLS } from "../constants";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -33,17 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   intro: {
-    display: "flex",
-    justifyContent: "center",
     wordBreak: "break-word",
     overflowWrap: "break-word",
-    textAlign: "center",
   },
 
   wrapper: {
     marginTop: theme.spacing(2),
     "& h1": {
-      textAlign: "center",
       marginBottom: theme.spacing(0.5),
     },
   },
@@ -52,12 +52,17 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "stretch",
-    padding: theme.spacing(0.5),
+    padding: "0px",
     "& > *": {
       margin: theme.spacing(0.5),
     },
     "& > :not(:first-child)": {
       marginLeft: theme.spacing(0.5),
+      marginTop: theme.spacing(1.5),
+    },
+    "& > button": {
+      fontWeight: "bold",
+      padding: theme.spacing(1.6),
     },
   },
 
@@ -72,8 +77,6 @@ type UserOverviewProps = {
   actions?: React.ReactNode;
 };
 
-// @todo: move this into /components and decouple it from features/profile because it's used
-//        from the dashboard as well
 export default function UserOverview({
   showHostAndMeetAvailability,
   actions,
@@ -81,6 +84,7 @@ export default function UserOverview({
   const { t } = useTranslation([GLOBAL, PROFILE]);
   const classes = useStyles();
   const user = useProfileUser();
+  const { username, name, city } = user;
 
   return (
     <Card className={classes.card}>
@@ -89,19 +93,21 @@ export default function UserOverview({
       </div>
 
       <div className={classes.wrapper}>
-        <Typography variant="h1" className={classes.intro}>
-          {user.name}
+        <Typography variant="h1" className={classes.intro} align={"left"}>
+          {name}
         </Typography>
-        <Typography variant="body1" className={classes.intro}>
-          {user.city}
-        </Typography>
+        <Typography
+          color={"textSecondary"}
+        >{`${HTML_SYMBOLS["@"]}${username}`}</Typography>
       </div>
 
       <Divider />
 
-      {actions && (
-        <CardActions className={classes.cardActions}>{actions}</CardActions>
-      )}
+      <Typography color={"primary"} variant="body1" className={classes.intro}>
+        {city}
+      </Typography>
+
+      <Divider />
 
       {showHostAndMeetAvailability && (
         <>
@@ -125,7 +131,14 @@ export default function UserOverview({
       )}
 
       {Boolean(showHostAndMeetAvailability || actions) && (
-        <Divider spacing={3} />
+        <Divider spacing={2} />
+      )}
+
+      {actions && (
+        <>
+          <CardActions className={classes.cardActions}>{actions}</CardActions>
+          <Divider spacing={2} />
+        </>
       )}
 
       {process.env.NEXT_PUBLIC_IS_VERIFICATION_ENABLED && (
@@ -140,6 +153,7 @@ export default function UserOverview({
             label={t("global:verification_score")}
             description={t("global:verification_score_description")}
           />
+          <Divider spacing={2} />
         </>
       )}
       <div className={classes.info}>

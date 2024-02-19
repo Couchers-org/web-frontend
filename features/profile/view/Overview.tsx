@@ -1,10 +1,10 @@
 import Alert from "components/Alert";
 import Button from "components/Button";
+import UserOverview from "components/UserOverview/UserOverview";
 import { useAuthContext } from "features/auth/AuthProvider";
 import FlagButton from "features/FlagButton";
 import FriendActions from "features/profile/actions/FriendActions";
 import MessageUserButton from "features/profile/actions/MessageUserButton";
-import UserOverview from "features/profile/view/UserOverview";
 import { GLOBAL, PROFILE } from "i18n/namespaces";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";

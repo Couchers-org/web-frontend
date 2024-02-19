@@ -1,10 +1,10 @@
 import Hidden from "@material-ui/core/Hidden";
 import Alert from "components/Alert";
 import CircularProgress from "components/CircularProgress";
+import UserOverview from "components/UserOverview/UserOverview";
 import { useListAvailableReferences } from "features/profile/hooks/referencesHooks";
 import { ProfileUserProvider } from "features/profile/hooks/useProfileUser";
 import ReferenceForm from "features/profile/view/leaveReference/ReferenceForm";
-import UserOverview from "features/profile/view/UserOverview";
 import { useUser } from "features/userQueries/useUsers";
 import { useTranslation } from "i18n";
 import { GLOBAL, PROFILE } from "i18n/namespaces";

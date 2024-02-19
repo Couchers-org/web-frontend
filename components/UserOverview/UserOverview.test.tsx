@@ -3,8 +3,11 @@ import { HostingStatus, MeetupStatus } from "proto/api_pb";
 import wrapper from "test/hookWrapper";
 import { addDefaultUser, t } from "test/utils";
 
-import { hostingStatusLabels, meetupStatusLabels } from "../constants";
-import { ProfileUserProvider } from "../hooks/useProfileUser";
+import {
+  hostingStatusLabels,
+  meetupStatusLabels,
+} from "../../features/profile/constants";
+import { ProfileUserProvider } from "../../features/profile/hooks/useProfileUser";
 import UserOverview from "./UserOverview";
 
 describe("UserOverview", () => {
@@ -13,7 +16,16 @@ describe("UserOverview", () => {
   });
 
   describe("when user is loaded and provided via context", () => {
-    it("should display the user name", () => {
+    it("should display the username", () => {
+      render(
+        <ProfileUserProvider user={defaultUser}>
+          <UserOverview showHostAndMeetAvailability={false} />
+        </ProfileUserProvider>,
+        { wrapper }
+      );
+      expect(screen.getByText(`@${defaultUser.username}`)).toBeInTheDocument();
+    });
+    it("should display the user's name", () => {
       render(
         <ProfileUserProvider user={defaultUser}>
           <UserOverview showHostAndMeetAvailability={false} />
