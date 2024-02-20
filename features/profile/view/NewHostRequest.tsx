@@ -91,7 +91,7 @@ export default function NewHostRequest({
     RpcError,
     CreateHostRequestWrapper
   >(
-    (data: CreateHostRequestWrapper) => {      
+    (data: CreateHostRequestWrapper) => {
       if (data.fromDate === null) {
         throw new Error(t("profile:request_form.arrival_date_empty"));
       }
@@ -129,7 +129,7 @@ export default function NewHostRequest({
     );
   });
 
-  const watchFromDate = watch("fromDate", null);
+  const watchFromDate = watch("fromDate", undefined);
   useEffect(() => {
     if (
       watchFromDate &&
