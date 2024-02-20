@@ -92,16 +92,16 @@ export default function NewHostRequest({
     CreateHostRequestWrapper
   >(
     (data: CreateHostRequestWrapper) => {
-      if (data.fromDate === null) {
+      if (data.fromDate === undefined) {
         throw new Error(t("profile:request_form.arrival_date_empty"));
       }
-    
-      if (data.toDate === null) {
+
+      if (data.toDate === undefined) {
         throw new Error(t("profile:request_form.departure_date_empty"));
       }
-  
-      if (data.text === '') {
-        throw new Error(t("profile:request_form.request_description_empty")); 
+
+      if (data.text === "") {
+        throw new Error(t("profile:request_form.request_description_empty"));
       }
 
       return service.requests.createHostRequest(data);
@@ -194,7 +194,7 @@ export default function NewHostRequest({
               id="from-date"
               label={t("profile:request_form.arrival_date")}
               name="fromDate"
-              defaultValue={null}
+              defaultValue={undefined}
             />
             <Datepicker
               className={classes.date}
@@ -206,9 +206,13 @@ export default function NewHostRequest({
               }
               id="to-date"
               label={t("profile:request_form.departure_date")}
-              minDate={watchFromDate ? watchFromDate.add(1, "day").toDate() : new Date()}
+              minDate={
+                watchFromDate
+                  ? watchFromDate.add(1, "day").toDate()
+                  : new Date()
+              }
               name="toDate"
-              defaultValue={null}
+              defaultValue={undefined}
             />
             {isPostBetaEnabled && (
               <Select
