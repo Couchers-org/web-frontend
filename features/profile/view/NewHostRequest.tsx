@@ -104,7 +104,7 @@ export default function NewHostRequest({
         throw new Error(t("profile:request_form.request_description_empty")); 
       }
 
-      service.requests.createHostRequest(data);
+      return service.requests.createHostRequest(data);
     },
     {
       onSuccess: () => {
