@@ -92,11 +92,11 @@ export default function NewHostRequest({
     CreateHostRequestWrapper
   >(
     (data: CreateHostRequestWrapper) => {      
-      if (data.fromDate === null || data.fromDate === '') {
+      if (data.fromDate === null) {
         throw new Error(t("profile:request_form.arrival_date_empty"));
       }
     
-      if (data.toDate === null || data.toDate === '') {
+      if (data.toDate === null) {
         throw new Error(t("profile:request_form.departure_date_empty"));
       }
   
