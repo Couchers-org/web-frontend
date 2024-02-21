@@ -19,7 +19,7 @@ const getLocaleFormat = () => {
 interface DatepickerProps {
   className?: string;
   control: Control;
-  defaultValue?: Dayjs;
+  defaultValue?: Dayjs | null;
   error: boolean;
   helperText: React.ReactNode;
   id: string;

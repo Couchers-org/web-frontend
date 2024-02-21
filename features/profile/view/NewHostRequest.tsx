@@ -92,11 +92,11 @@ export default function NewHostRequest({
     CreateHostRequestWrapper
   >(
     (data: CreateHostRequestWrapper) => {
-      if (data.fromDate === undefined) {
+      if (data.fromDate === null) {
         throw new Error(t("profile:request_form.arrival_date_empty"));
       }
 
-      if (data.toDate === undefined) {
+      if (data.toDate === null) {
         throw new Error(t("profile:request_form.departure_date_empty"));
       }
 
@@ -194,7 +194,7 @@ export default function NewHostRequest({
               id="from-date"
               label={t("profile:request_form.arrival_date")}
               name="fromDate"
-              defaultValue={undefined}
+              defaultValue={null}
             />
             <Datepicker
               className={classes.date}
@@ -212,7 +212,7 @@ export default function NewHostRequest({
                   : new Date()
               }
               name="toDate"
-              defaultValue={undefined}
+              defaultValue={null}
             />
             {isPostBetaEnabled && (
               <Select
