@@ -50,12 +50,12 @@ logs: deps
 
 # This will shell you into the running web container
 shell: deps
-	docker exec -ti web-frontend-web-frontend-1 /bin/sh
+	docker exec -ti web-frontend_web-frontend_1 /bin/sh
 
 # This will run formatting and fix linting on the repo
 format: deps
-	docker exec -ti web-frontend-web-frontend-1 /bin/sh -c "yarn format && yarn lint --fix"
+	docker exec -ti web-frontend_web-frontend_1 /bin/sh -c "yarn format && yarn lint --fix"
 
 # This will show any linting warnings
 lint: deps
-	docker exec -ti web-frontend-web-frontend-1 /bin/sh -c "yarn lint" 
+	docker exec -ti web-frontend_web-frontend_1 /bin/sh -c "yarn lint" 

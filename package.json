@@ -17,7 +17,7 @@
     "serve": "next start",
     "storybook": "start-storybook -p 6006 -s public",
     "test-ci": "tsc && cross-env CI=true TZ=UTC jest --runInBand --coverageReporters=\"cobertura\" --coverageReporters=\"lcov\" --reporters=\"default\" --reporters=\"jest-junit\" --coverage",
-    "test": "cross-env TZ=UTC jest --watch",
+    "test": "cross-env TZ=UTC jest --watchAll",
     "typecheck": "tsc"
   },
   "dependencies": {
