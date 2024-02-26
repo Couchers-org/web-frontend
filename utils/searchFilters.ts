@@ -37,6 +37,14 @@ export function parsedQueryToSearchFilters(urlQuery: ParsedUrlQuery) {
         if (float) filters[key] = float;
         break;
 
+      case "bbox":
+        const list:any = urlQuery[key];
+        if (list && list.length) {
+          const parsedList = list.map((value: string) => Number.parseFloat(value));
+          filters[key] = parsedList
+        }
+        break;
+
       //others
       case "hostingStatusOptions":
         const rawOptions = urlQuery[key];

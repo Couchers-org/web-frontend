@@ -20,7 +20,7 @@ import FilterDialog from "features/search/FilterDialog";
 import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import { useTranslation } from "i18n";
 import { GLOBAL, SEARCH } from "i18n/namespaces";
-import { LngLat } from "maplibre-gl";
+import { LngLat, Map as MaplibreMap } from "maplibre-gl";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useQueryClient } from "react-query";
@@ -45,11 +45,13 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchBox({
   className,
   searchFilters,
+  updateMapBoundingBox,
 }: {
   className?: string;
   searchFilters: ReturnType<typeof useRouteWithSearchFilters>;
+  updateMapBoundingBox: (newBoundingBox: [number, number, number, number] | undefined) => void;
 }) {
-  const { t } = useTranslation([GLOBAL, SEARCH]);
+    const { t } = useTranslation([GLOBAL, SEARCH]);
   const classes = useStyles();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [searchType, setSearchType] = useState<"location" | "keyword">(() =>
@@ -76,6 +78,9 @@ export default function SearchBox({
       searchFilters.change("location", value.simplifiedName);
       searchFilters.change("lat", value.location.lat);
       searchFilters.change("lng", value.location.lng);
+      searchFilters.change("bbox", value.bbox);
+
+      updateMapBoundingBox(value.bbox);
     }
     //necessary because we don't want to cache every search for each filter
     //but we do want react-query to handle pagination
@@ -89,7 +94,10 @@ export default function SearchBox({
     searchFilters.remove("location");
     searchFilters.remove("lat");
     searchFilters.remove("lng");
+    searchFilters.remove("bbox");
+
     setValue("location", "");
+
     if (event === "") {
       searchFilters.remove("query");
     } else {
@@ -151,7 +159,8 @@ export default function SearchBox({
                   location: new LngLat(
                     searchFilters.active.lng ?? 0,
                     searchFilters.active.lat ?? 0
-                  ),
+                    ),
+                  bbox: searchFilters.active.bbox ?? [0, 0, 0, 0],
                 }
               : ""
           }
