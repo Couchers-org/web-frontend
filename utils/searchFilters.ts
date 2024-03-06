@@ -38,9 +38,8 @@ export function parsedQueryToSearchFilters(urlQuery: ParsedUrlQuery) {
         break;
 
       case "bbox":
-        const list:any = urlQuery[key];
-        if (list && list.length) {
-          const parsedList = list.map((value: string) => Number.parseFloat(value));
+       if (urlQuery && Array.isArray(urlQuery[key])) {
+          const parsedList = urlQuery[key].map((value: string) => Number.parseFloat(value));
           filters[key] = parsedList
         }
         break;
