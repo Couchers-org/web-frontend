@@ -104,6 +104,8 @@ export default function LoginForm() {
           inputRef={register({ required: true })}
           name="username"
           variant="standard"
+          type="email"
+          autocomplete="username"
         />
         {!loginWithLink && (
           <>
