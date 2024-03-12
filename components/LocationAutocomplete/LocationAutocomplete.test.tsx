@@ -134,6 +134,7 @@ describe("LocationAutocomplete component", () => {
         name: "test location",
         simplifiedName: "test location",
         location: new LngLat(1, 2),
+        bbox: [0, 0, 0, 0],
       },
       onChange
     );
