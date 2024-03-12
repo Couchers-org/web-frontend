@@ -90,7 +90,9 @@ interface SearchResultsListProps {
   }): void;
   map: MutableRefObject<MaplibreMap | undefined>;
   selectedResult?: number;
-  updateMapBoundingBox: (newBoundingBox: [number, number, number, number] | undefined) => void;
+  updateMapBoundingBox: (
+    newBoundingBox: [number, number, number, number] | undefined
+  ) => void;
   searchFilters: ReturnType<typeof useRouteWithSearchFilters>;
 }
 
@@ -106,9 +108,10 @@ export default function SearchResultsList({
   const classes = useStyles();
   const selectedUser = useUser(selectedResult);
 
-  const { query, lat, lng, lastActive, hostingStatusOptions, numGuests, bbox } = searchFilters.active;
+  const { query, lat, lng, lastActive, hostingStatusOptions, numGuests, bbox } =
+    searchFilters.active;
   const radius = 50000;
-  
+
   const {
     data: results,
     error,
@@ -135,40 +138,40 @@ export default function SearchResultsList({
     {
       getNextPageParam: (lastPage) =>
         lastPage.nextPageToken ? lastPage.nextPageToken : undefined,
-        onSuccess(results) {
-          map.current?.stop();
+      onSuccess(results) {
+        map.current?.stop();
 
-          const resultUsers = results.pages
-            .flatMap((page) => page.resultsList)
-            .map((result) => {
-              return result.user;
-            })
-            //only return defined users
-            .filter((user): user is User.AsObject => !!user);
+        const resultUsers = results.pages
+          .flatMap((page) => page.resultsList)
+          .map((result) => {
+            return result.user;
+          })
+          //only return defined users
+          .filter((user): user is User.AsObject => !!user);
 
-          const setFilter = () => {
-            map.current &&
-              filterUsers(
-                map.current,
-                Object.keys(searchFilters.active).length > 0
-                  ? resultUsers.map((user) => user.userId)
-                  : null,
-                handleMapUserClick
-              );
+        const setFilter = () => {
+          map.current &&
+            filterUsers(
+              map.current,
+              Object.keys(searchFilters.active).length > 0
+                ? resultUsers.map((user) => user.userId)
+                : null,
+              handleMapUserClick
+            );
 
-              if (bbox && bbox.join() !== "0,0,0,0") {
-                map.current?.fitBounds(bbox, {
-                  maxZoom: selectedUserZoom,
-                });
-              }
-          };
-
-          if (map.current?.loaded()) {
-            setFilter();
-          } else {
-            map.current?.once("load", setFilter);
+          if (bbox && bbox.join() !== "0,0,0,0") {
+            map.current?.fitBounds(bbox, {
+              maxZoom: selectedUserZoom,
+            });
           }
-        },
+        };
+
+        if (map.current?.loaded()) {
+          setFilter();
+        } else {
+          map.current?.once("load", setFilter);
+        }
+      },
     }
   );
   const isSearching = Object.keys(searchFilters.active).length !== 0;
@@ -177,7 +180,10 @@ export default function SearchResultsList({
     <Paper className={classes.mapResults}>
       {error && <Alert severity="error">{error.message}</Alert>}
       <Hidden smDown>
-        <SearchBox searchFilters={searchFilters} updateMapBoundingBox={updateMapBoundingBox} />
+        <SearchBox
+          searchFilters={searchFilters}
+          updateMapBoundingBox={updateMapBoundingBox}
+        />
       </Hidden>
       {isSearching ? (
         isLoading ? (

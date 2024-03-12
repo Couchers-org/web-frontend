@@ -157,7 +157,12 @@ export default function FilterDialog({
                         searchFilters.active.lng ?? 0,
                         searchFilters.active.lat ?? 0
                       ),
-                      bbox: searchFilters.active.bbox as [number, number, number, number]
+                      bbox: searchFilters.active.bbox as [
+                        number,
+                        number,
+                        number,
+                        number
+                      ],
                     }
                   : ""
               }

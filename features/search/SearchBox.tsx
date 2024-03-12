@@ -49,9 +49,11 @@ export default function SearchBox({
 }: {
   className?: string;
   searchFilters: ReturnType<typeof useRouteWithSearchFilters>;
-  updateMapBoundingBox: (newBoundingBox: [number, number, number, number] | undefined) => void;
+  updateMapBoundingBox: (
+    newBoundingBox: [number, number, number, number] | undefined
+  ) => void;
 }) {
-    const { t } = useTranslation([GLOBAL, SEARCH]);
+  const { t } = useTranslation([GLOBAL, SEARCH]);
   const classes = useStyles();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [searchType, setSearchType] = useState<"location" | "keyword">(() =>
@@ -159,7 +161,7 @@ export default function SearchBox({
                   location: new LngLat(
                     searchFilters.active.lng ?? 0,
                     searchFilters.active.lat ?? 0
-                    ),
+                  ),
                   bbox: searchFilters.active.bbox ?? [0, 0, 0, 0],
                 }
               : ""

@@ -111,19 +111,21 @@ const useGeocodeQuery = () => {
         } else {
           const filteredResults = filterDuplicatePlaces(nominatimResults);
           const formattedResults = filteredResults.map((result) => {
-            
-            const firstElem:any = result["boundingbox"].shift();
-            const lastElem:any = result["boundingbox"].pop();
+            const firstElem: any = result["boundingbox"].shift();
+            const lastElem: any = result["boundingbox"].pop();
             result["boundingbox"].push(firstElem);
             result["boundingbox"].unshift(lastElem);
 
             return {
-              location: new LngLat(Number(result["lon"]), Number(result["lat"])),
+              location: new LngLat(
+                Number(result["lon"]),
+                Number(result["lat"])
+              ),
               name: result["display_name"],
               simplifiedName: simplifyPlaceDisplayName(result),
               isRegion: !nonRegionKeys.some((k) => k in result.address),
               bbox: result["boundingbox"],
-            }
+            };
           });
 
           setResults(formattedResults);

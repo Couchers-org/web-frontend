@@ -53,7 +53,7 @@ export default function HeroSearch() {
                 HostingStatus.HOSTING_STATUS_CAN_HOST,
                 HostingStatus.HOSTING_STATUS_MAYBE,
               ],
-              bbox: value.bbox
+              bbox: value.bbox,
             });
             router.push(searchRouteWithSearchQuery);
           }

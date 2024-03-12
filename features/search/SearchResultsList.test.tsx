@@ -98,7 +98,7 @@ describe("SearchResultsList", () => {
     getUserMock.mockRejectedValue(new Error("fetch error"));
     render(
       <SearchResultsList
-        updateMapBoundingBox={(bbox) => console.log(bbox)}      
+        updateMapBoundingBox={(bbox) => console.log(bbox)}
         selectedResult={1}
         handleResultClick={mockHandleResultClick}
         handleMapUserClick={mockHandleMapUserClick}

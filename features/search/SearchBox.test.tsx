@@ -19,7 +19,14 @@ const View = ({
   useEffect(() => {
     setActive?.(filters.active);
   }, [filters.active, setActive]);
-  return <SearchBox updateMapBoundingBox={(bbox) => {console.log(bbox)}} searchFilters={filters} />;
+  return (
+    <SearchBox
+      updateMapBoundingBox={(bbox) => {
+        console.log(bbox);
+      }}
+      searchFilters={filters}
+    />
+  );
 };
 
 describe("SearchBox", () => {
