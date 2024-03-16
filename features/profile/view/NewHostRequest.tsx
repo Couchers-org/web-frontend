@@ -115,9 +115,9 @@ export default function NewHostRequest({
     );
   });
 
-  const watchFromDate = watch("fromDate", dayjs());
+  const watchFromDate = watch("fromDate", null);
   useEffect(() => {
-    if (isSameOrFutureDate(watchFromDate, getValues("toDate"))) {
+    if (watchFromDate && getValues("toDate") && isSameOrFutureDate(watchFromDate, getValues("toDate"))) {
       setValue("toDate", watchFromDate.add(1, "day"));
     }
   });
@@ -176,6 +176,7 @@ export default function NewHostRequest({
               id="from-date"
               label={t("profile:request_form.arrival_date")}
               name="fromDate"
+              defaultValue={null}
             />
             <Datepicker
               className={classes.date}
@@ -187,8 +188,9 @@ export default function NewHostRequest({
               }
               id="to-date"
               label={t("profile:request_form.departure_date")}
-              minDate={watchFromDate.add(1, "day").toDate()}
+              minDate={ watchFromDate && watchFromDate.add(1, "day").toDate()}
               name="toDate"
+              defaultValue={null}
             />
             {isPostBetaEnabled && (
               <Select
