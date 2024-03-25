@@ -20,7 +20,7 @@ import FilterDialog from "features/search/FilterDialog";
 import useRouteWithSearchFilters from "features/search/useRouteWithSearchFilters";
 import { useTranslation } from "i18n";
 import { GLOBAL, SEARCH } from "i18n/namespaces";
-import { LngLat, Map as MaplibreMap } from "maplibre-gl";
+import { LngLat } from "maplibre-gl";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useQueryClient } from "react-query";

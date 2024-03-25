@@ -86,7 +86,12 @@ export default function SearchPage() {
         updateMapBoundingBox(searchFilters.active.bbox);
       }, theme.transitions.duration.standard);
     }
-  }, [searchFilters.any, selectedResult, theme.transitions.duration.standard]);
+  }, [
+    searchFilters.any,
+    selectedResult,
+    theme.transitions.duration.standard,
+    searchFilters.active.bbox,
+  ]);
 
   const flyToUser = useCallback((user: Pick<User.AsObject, "lng" | "lat">) => {
     map.current?.stop();
