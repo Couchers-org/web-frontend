@@ -67,7 +67,7 @@ describe("SearchBox", () => {
           location: "test city, test country",
           lng: 1.0,
           lat: 2.0,
-          bbox: [0, 0, 0, 0],
+          bbox: [1, 1, 1, 1],
         });
       });
     });

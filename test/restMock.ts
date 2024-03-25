@@ -17,7 +17,7 @@ const server = setupServer(
             lon: 1.0,
             lat: 2.0,
             display_name: "test city, test county, test country",
-            bbox: [0, 0, 0, 0],
+            boundingbox: [1, 1, 1, 1],
           },
         ])
       );
