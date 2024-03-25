@@ -11,7 +11,12 @@ const Template: Story<any> = () => {
   const searchFilters = useRouteWithSearchFilters("");
   return (
     <>
-      <SearchBox searchFilters={searchFilters} />
+      <SearchBox
+        updateMapBoundingBox={(bbox) => {
+          console.log(bbox);
+        }}
+        searchFilters={searchFilters}
+      />
     </>
   );
 };

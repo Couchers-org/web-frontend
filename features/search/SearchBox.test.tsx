@@ -19,7 +19,14 @@ const View = ({
   useEffect(() => {
     setActive?.(filters.active);
   }, [filters.active, setActive]);
-  return <SearchBox searchFilters={filters} />;
+  return (
+    <SearchBox
+      updateMapBoundingBox={(bbox) => {
+        console.log(bbox);
+      }}
+      searchFilters={filters}
+    />
+  );
 };
 
 describe("SearchBox", () => {
@@ -60,6 +67,7 @@ describe("SearchBox", () => {
           location: "test city, test country",
           lng: 1.0,
           lat: 2.0,
+          bbox: [1, 1, 1, 1],
         });
       });
     });
