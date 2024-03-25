@@ -24,7 +24,6 @@ import { useMutation } from "react-query";
 import { service } from "service";
 import { CreateHostRequestWrapper } from "service/requests";
 import { isSameOrFutureDate } from "utils/date";
-import dayjs from "utils/dayjs";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -92,8 +91,21 @@ export default function NewHostRequest({
     RpcError,
     CreateHostRequestWrapper
   >(
-    (data: CreateHostRequestWrapper) =>
-      service.requests.createHostRequest(data),
+    (data: CreateHostRequestWrapper) => {
+      if (data.fromDate === null) {
+        throw new Error(t("profile:request_form.arrival_date_empty"));
+      }
+
+      if (data.toDate === null) {
+        throw new Error(t("profile:request_form.departure_date_empty"));
+      }
+
+      if (data.text === "") {
+        throw new Error(t("profile:request_form.request_description_empty"));
+      }
+
+      return service.requests.createHostRequest(data);
+    },
     {
       onSuccess: () => {
         setIsRequesting(false);
@@ -104,7 +116,9 @@ export default function NewHostRequest({
 
   const { isLoading: hostLoading, error: hostError } = useUser(user.userId);
 
-  const onSubmit = handleSubmit((data) => mutate(data));
+  const onSubmit = handleSubmit((data) => {
+    mutate(data);
+  });
 
   const guests = Array.from({ length: 8 }, (_, i) => {
     const num = i + 1;
@@ -115,9 +129,13 @@ export default function NewHostRequest({
     );
   });
 
-  const watchFromDate = watch("fromDate", dayjs());
+  const watchFromDate = watch("fromDate", undefined);
   useEffect(() => {
-    if (isSameOrFutureDate(watchFromDate, getValues("toDate"))) {
+    if (
+      watchFromDate &&
+      getValues("toDate") &&
+      isSameOrFutureDate(watchFromDate, getValues("toDate"))
+    ) {
       setValue("toDate", watchFromDate.add(1, "day"));
     }
   });
@@ -176,6 +194,7 @@ export default function NewHostRequest({
               id="from-date"
               label={t("profile:request_form.arrival_date")}
               name="fromDate"
+              defaultValue={null}
             />
             <Datepicker
               className={classes.date}
@@ -187,8 +206,13 @@ export default function NewHostRequest({
               }
               id="to-date"
               label={t("profile:request_form.departure_date")}
-              minDate={watchFromDate.add(1, "day").toDate()}
+              minDate={
+                watchFromDate
+                  ? watchFromDate.add(1, "day").toDate()
+                  : new Date()
+              }
               name="toDate"
+              defaultValue={null}
             />
             {isPostBetaEnabled && (
               <Select
